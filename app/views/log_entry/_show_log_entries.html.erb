@@ -1,0 +1,16 @@
+<% if !log_entries.nil?%>
+
+	<% for entry in log_entries %>
+		<% if entry.has_key? 'changeRequestNumber' %>
+		
+			<%= render :partial => "log_entry/change_request/change_request_show", :locals => {:changeRequest => entry}%>
+		
+		<% elsif entry.has_key? 'oldCrew' %>
+		
+			<%= render :partial => "log_entry/crew_change/crew_change_show", :locals => {:crewChange => entry}%>
+		
+		<% end %>
+
+	<% end %>
+
+<% end %>

@@ -1,0 +1,21 @@
+<table>
+	<tr>
+		<td>Site ID </td>
+		<td>Old Crew</td>
+		<td>New Crew  </td>
+		<td> Submitted by </td>
+	</tr>
+	<tr>
+		<td><%= crewChange['siteId'] %> </td>
+		<td><%= crewChange['oldCrew'] %> </td>
+		<td><%= crewChange['newCrew'] %> </td>
+		
+		<% if crewChange['person'].nil? %>
+			<td> unknown </td>
+		<%else %>
+			<td><%= link_to crewChange['person'], :controller => 'person', :action => 'show', :id => crewChange['person'] %>
+		<%end%>
+		
+	</tr>
+	<br>
+</table>

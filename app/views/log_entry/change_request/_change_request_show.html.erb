@@ -1,0 +1,32 @@
+<table>
+	<tr>
+		<td>Site ID </td>
+		<td>Change Request Number</td>
+		<td>Change Request Price  </td>
+		<td>Written Proof Available? </td>
+		<td> Submitted by </td>
+		<td> Time of Submit </td>
+	</tr>
+	<tr>
+		<td><%= changeRequest['siteId'] %> </td>
+		<td><%= changeRequest['changeRequestNumber'] %> </td>
+		<td><%= changeRequest['changeRequestPrice'] %> </td>
+		
+		<%if changeRequest['written_proof'] == "no"%> 
+			<td> No </td>
+		<% else %>
+			<td> <%= link_to 'Yes', :controller => 'log_entry', :action => 'show_cr_written_proof', :id => changeRequest['changeRequestNumber']%> </td>
+		<% end %>
+
+		<% if changeRequest['person'].nil? %>
+			<td> unknown </td>
+		<%else %>
+			<td><%= link_to changeRequest['person'], :controller => 'person', :action => 'show', :id => changeRequest['person'] %> </td>
+		<%end%>
+		
+		<td> <%= changeRequest['time'] %> </td>
+		<td> <%= link_to 'edit', controller: 'log_entry', action: 'edit', id: changeRequest['_id'] %> </td>
+	</tr>
+	<br>
+</table>
+

@@ -1,0 +1,11 @@
+<%= render :partial => "new"%>
+
+<%if !@allSites.nil? %>
+	<h1>All Sites:</h1>
+	<% for entry in @allSites %>
+	    <%= render partial: "show", locals: {site: entry} %> <br>
+	<% end %>
+<%else%>
+	no sites have been entered into system <br>
+	<%= link_to 'Enter Some Sites', :controller => 'site', :action => 'new'%>
+<%end%>

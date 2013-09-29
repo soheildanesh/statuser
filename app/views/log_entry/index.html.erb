@@ -1,0 +1,11 @@
+
+<%= @log_entries%>
+
+<%= render :partial => "log_entry/change_request/change_request_form"%>
+
+<h1>All Log Entries:</h1>
+<% if  !@whoseEntries.nil?  and @whoseEntries != ""%>
+	<h2> for <%= @whoseEntries %> </h2>
+<% end %>
+
+<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries}%>

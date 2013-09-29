@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<title>Statuser</title>
+  	<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  	<%= csrf_meta_tags %>
+</head>
+<body>
+
+	<% if !current_user.nil? %>
+		<%= link_to current_user['email'], :controller => 'person', :action => 'show', :id => current_user['email'] %> | 
+		<%= link_to "logout", {:controller => "login_session", :action => "destroy", :id => "1"}, :method => :delete %>
+	<% else %>
+		<%= link_to "login",  {:controller => "login_session", :action => "new" } %>
+	<% end %>
+	
+	<%if current_user and current_user['role'] == "admin" %>
+		<br><br>Admin Tools: 
+		<%= link_to "Advanced Search",  :controller => 'search', :action => 'index' %>
+		| <%= link_to "Manage People",  :controller => 'person', :action => 'index' %>
+		| <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %>
+		| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>
+		
+		
+		<%= form_for :search, url: '/quick_search' do |f| %>
+			Search by 
+			
+			<%= select_tag(:searchByAttribute, options_for_select([ ['cr written proof?', 'written_proof'], ['cr price', 'changeRequestRrice'],  ['cr number', 'changeRequestNumber'] ,['site id', 'siteId'], ['Employee Email', 'person']])) %>
+			
+			<%= f.text_field :query, {style: "position: relative; middle: 600px;", size: 40, class: 'clearOnClick' }  %>
+			<%= f.submit "Submit" %>
+		<% end %>
+	<%end%>
+		
+	<br></br>
+	
+	<% flash.each do |key, value| %>
+       <div class="alert alert-<%= key %>"><%= value %></div>
+     <% end %>
+	<br>
+
+	<%= yield %>
+
+</body>
+</html>

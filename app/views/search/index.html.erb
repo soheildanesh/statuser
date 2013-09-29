@@ -1,0 +1,8 @@
+
+Enter Search Parametrs Below:
+<%= render :partial => "new"%>
+
+<%= puts("log_entries = #{@log_entries}") %>
+
+Results in log entries:
+<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries}%>

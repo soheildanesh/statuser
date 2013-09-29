@@ -1,0 +1,27 @@
+<%= form_for :search, url: '/search' do |f| %>
+<p>
+	
+	<p> 
+		Written proof of change request received? <br>
+		<%= radio_button("search", "written_proof", "yes") %> Yes <br>
+		<%= radio_button("search", "written_proof", "no") %> No
+	</p>
+	
+	
+	<%= f.label :siteId, "Site Id" %>
+	<%= f.text_field :siteId%><br>
+	
+	<%= f.label :changeRequestNumber, "Change Request Number" %>
+	<%= f.text_field :changeRequestNumber%><br>
+	
+	<%= f.label :changeRequestRrice, "Change Request Price" %>
+	<%= f.text_field :changeRequestRrice%><br>
+	
+	<%= f.label :person, "Person's Email" %>
+	<%= f.text_field :person%><br>
+
+</p>
+<p>
+	<%= f.submit "Submit" %>
+</p>
+<% end %>

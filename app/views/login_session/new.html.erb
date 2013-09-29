@@ -1,0 +1,16 @@
+enter your Email and password to log in
+
+<%= form_for :login_session, url: '/login_session' do |f| %>
+<p>
+	<%= f.label :email, "Email" %>
+	<%= f.text_field :email%><br>
+	
+	<%= f.label :password, "Password" %>
+	<%= f.password_field :password%><br>
+</p>
+<p>
+	<%= f.submit "Submit" %>
+</p>
+<% end %>
+
+<%= link_to "Can't remember password?", '' %>

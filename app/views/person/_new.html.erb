@@ -1,0 +1,27 @@
+New User Form:
+
+<%= form_for :person, url: '/person' do |f| %>
+<p>
+	<%= f.label :email, "Email" %>
+	<%= f.text_field :email%><br>
+	
+	<%= f.label :password, "Password" %>
+	<%= f.text_field :password%><br>
+	
+	<p> 
+ 		Person's Role:<br>
+		<%= radio_button("person", "role", "cite manager") %> cite manager <br>
+		<%= radio_button("person", "role", "project manager") %> project manager <br>
+		<%= radio_button("person", "role", "admin") %> Admin. this person can do whatever!!<br>
+	</p>
+	
+	<%= f.label :name, "Name" %>
+	<%= f.text_field :name%><br>
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

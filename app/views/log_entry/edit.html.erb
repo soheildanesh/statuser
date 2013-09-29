@@ -1,0 +1,27 @@
+<h1>Editing Log Entry</h1>
+ 
+<%= form_for :log_entry, url: {controller: 'log_entry', action: 'update', id: @log_entry['_id']}, method: :patch do |f| %>
+	<p>
+    	
+		<p>
+			<%= f.label :siteId, 'Site ID'%><br>
+			<%= text_field_tag 'log_entry[siteId]', "#{@log_entry['siteId']}" %>
+		</p>
+		
+		<p>
+			<%= f.label :changeRequestNumber, 'Change Request Number' %><br>
+	    	<%= text_field_tag 'log_entry[changeRequestNumber]', "#{@log_entry['changeRequestNumber']}"%>
+		</p>
+
+		<p>
+			<%= f.label :changeRequestPrice, 'Price'%><br>
+			<%= text_field_tag 'log_entry[changeRequestPrice]', "#{@log_entry['changeRequestPrice']}" %>
+		</p>
+
+  	</p>
+
+	<p>
+		<%= f.submit %>
+	</p>
+	
+<% end %>

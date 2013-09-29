@@ -1,0 +1,149 @@
+class LogEntryController < ApplicationController
+    # TODO: when submit is pressed, create something in the session via js, before create check to see if it's set, after creating the object clear what was in the session, now a refresh or back button wont' resubmit and create duplicate object 
+    
+    def edit
+        #bookmark
+        @log_entry = $log_entry_collection.find({"_id" => params["id"].to_i}).to_a[0]
+    end
+    
+    def update
+        #find and remove record to be updated
+        record = $log_entry_collection.find({"_id" => params["id"].to_i}).to_a[0]
+        if(siteExists?(record['siteId']))
+            $log_entry_collection.remove(record)
+
+            #assign new ID by incrementing latest 
+            params["log_entry"]["_id"] = $log_entry_collection.find().sort( :_id => :desc ).to_a[0]["_id"]+1
+
+            #update respective fields in the old record
+            params["log_entry"].each do |key, value|
+                if(record.has_key?(key))
+                    record[key] = value
+                end
+            end
+        
+        
+            #insert new updated record
+            $log_entry_collection.insert(record)
+            redirect_to controller: "log_entry", action: "index"
+        end
+    end
+    
+    def show_cr_written_proof
+        log_entry = $log_entry_collection.find_one({'changeRequestNumber' => params[:id]})
+        @writtenProofEvidence = log_entry['writtenProofEvidence']
+        render 'log_entry/change_request/show_cr_written_proof'
+    end
+    
+    def index
+        @whoseEntries = ""
+        if(current_user.nil?)
+            flash[:notice] = "LOGin to see the LOG!"
+            render '/login_session/new'
+            return
+        elsif(current_user['role'] == 'admin')
+            if(!params[:id].nil? )
+                @log_entries = $log_entry_collection.find({:person => params[:id]}).sort( :_id => :desc ).to_a
+                @whoseEntries = params[:id]
+            else
+                @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a
+            end
+        else
+            
+            @log_entries = $log_entry_collection.find({:person => current_user['email']}).sort( :_id => :desc ).to_a
+            @whoseEntries = current_user['email']
+        end  
+        render 'index'
+    end
+  
+    def new
+    end
+  
+    def show_crew_change_form
+        respond_to do |format|
+            format.js {render 'log_entry/crew_change/show_crew_change_form'}
+        end
+    end
+  
+    def show_change_request_form
+        respond_to do |format|
+            format.js {render 'log_entry/change_request/show_change_request_form'}
+        end
+    end
+  
+    def create
+        params[:log_entry][:person] = current_user['email']
+        
+        #increment the id of the last entry and use it for this one
+        last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
+        if(last_entry.nil? or last_entry.empty?)
+            id = 1
+        else
+
+            #check for false resubmits due to page refresh or back button by seeing if the last event and current are the same (and ignore _id in comparison or they'd never be)
+            
+            #equalize fields that are guaranteed to be different
+            params[:log_entry]['_id'] = last_entry[0]['_id']
+            params[:log_entry]['time'] = last_entry[0]['time']
+            if(params[:log_entry] == last_entry[0])
+                
+                redirect_to '/log_entry'
+                return
+            end
+                        
+            id = last_entry[0]['_id'] + 1
+        end
+        params[:log_entry]['_id'] = id
+        params[:log_entry][:time] = Time.now
+      
+        #check to see if the site id is valid
+        if(!siteExists?(params[:log_entry][:siteId]))
+            return false
+        end
+      # existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
+      # if(existingSite.nil?)
+      #     flash[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
+      #     redirect_to '/log_entry'
+      #     return
+      # end
+        
+        #if it's a crew change event, ensure all emails belong are valid
+        if(params[:log_entry].has_key? "oldCrew")
+            oldCrew = params[:log_entry]["oldCrew"]
+            newCrew = params[:log_entry]["newCrew"]    
+
+            emails = oldCrew + " " + newCrew
+            if(!validateCrew emails)
+                return
+            end
+        end
+        
+        #if it's a change request, make sure crNumber is unique, update sep 24: talked to sina, he said the change request number is assiend to us by ericson, and not entered at the time of event entry, so removing this constraint for now to allow potential repeats between different sites, and also allow empty string crNumbers for when we don't have a crNum yet bue event is being entered 
+    #    if(params[:log_entry].has_key? "changeRequestNumber")
+    #        existingCr = $log_entry_collection.find({:changeRequestNumber => params[:log_entry][:changeRequestNumber]}).to_a[0]
+    #        if(!existingCr.nil?)
+    #            flash[:note] = "the change request number you entered exists in the data base already, enter a new cr number"
+    #            redirect_to '/log_entry'
+    #            return
+    #        end
+    #    end
+        
+        
+        
+        $log_entry_collection.insert(params[:log_entry])
+
+        #ensure write actually took place by checking mongodb errors. By default mongodb doesn't guarantee write happened
+        #mongodb and ruby documentation for get_last_error:
+        #http://docs.mongodb.org/manual/reference/command/getLastError/#dbcmd.getLastError
+        #http://docs.mongodb.org/manual/reference/write-concern/
+        #http://api.mongodb.org/ruby/current/Mongo/DB.html#get_last_error-instance_method
+        mongodbLastError = $testDb.get_last_error({:w => 1})
+        if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
+            raise "mongodb returend error after write, write might not have happened!"  
+        end
+      
+        @log_entries = last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
+        render 'index'
+
+    end
+end
