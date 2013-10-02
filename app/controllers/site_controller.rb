@@ -30,7 +30,7 @@ class SiteController < ApplicationController
         end
         
         existing_site = ($site_collection.find({:siteId => params[:site][:siteId]}).to_a)[0]
-        puts("existing site = #{existing_site}")
+
         #TODO check to see if the people listed in the crew exist in the db
         if(!existing_site.nil?)
             flash[:notice] = "Site with this ID exists already"
