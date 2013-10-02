@@ -1,5 +1,7 @@
 <%= render :partial => "new"%>
 
+<%= @allSites %>
+
 <%if !@allSites.nil? %>
 	<h1>All Sites:</h1>
 	<% for entry in @allSites %>

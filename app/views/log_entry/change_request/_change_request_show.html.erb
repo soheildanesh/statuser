@@ -21,7 +21,7 @@
 		<% if changeRequest['person'].nil? %>
 			<td> unknown </td>
 		<%else %>
-			<td><%= link_to changeRequest['person'], :controller => 'person', :action => 'show', :id => changeRequest['person'] %> </td>
+			<td><%= link_to changeRequest['person'], :controller => 'person', :action => 'show', :id => changeRequest['person_id'] %> </td>
 		<%end%>
 		
 		<td> <%= changeRequest['time'] %> </td>

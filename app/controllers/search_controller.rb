@@ -17,15 +17,4 @@ class SearchController < ApplicationController
         render 'index'
     end
     
-    
-    
-    def quick_search
-        
-        @query = params[:search][:query].downcase
-        searchBy = params[:searchByAttribute] #the attribute to search by
-        searchString = ".*#{@query}.*"
-        @log_entries = $log_entry_collection.find({ searchBy => Regexp.new(searchString)} )
-        render 'index'
-    end
-    
 end

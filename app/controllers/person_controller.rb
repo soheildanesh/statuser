@@ -1,5 +1,19 @@
 class PersonController < ApplicationController
   
+    def destroy
+        if(current_user.nil?)
+            redirect_to controller:'login_session', action:'new'
+            return
+        elsif(current_user['role'] != 'admin')
+            redirect_to controller:'login_session', action:'new'
+            return
+        else
+            $person_collection.remove({_id: params['id'].to_i})
+            redirect_to controller:'person', action:'index'
+            return
+        end
+    end
+    
     def show
         if(params[:id].nil?)
             #in this case it shows the current user's log entries
@@ -23,8 +37,13 @@ class PersonController < ApplicationController
     end
   
     def create
-      
-        if( !current_user.nil? and current_user['role'] != 'admin')
+        
+        if(current_user.nil?)
+            flash[:notice] = "only an admin can create other users!"
+            render :controller => 'log_entry', :action => 'index'
+            return
+        
+        elsif( current_user['role'] != 'admin')
         
             flash[:notice] = "only an admin can create other users!"
             render :controller => 'log_entry', :action => 'index'
@@ -38,7 +57,17 @@ class PersonController < ApplicationController
             if(!existing_person.nil?)
                 flash[:notice] = "Person with this email exists already, can't use email to create new person"
             else
+                #produce an incremented id
+                last_entry = $person_collection.find().sort( :_id => :desc ).to_a
+                if(last_entry[0].nil? or last_entry.empty?)
+                    id = 1
+                else
+                    id = last_entry[0]['_id'] + 1
+                end
+                params[:person]['_id'] = id
+                
                 params[:person][:time] = Time.now
+                params[:person][:email].downcase! 
                 
                 #otherwise insert him into database
                 $person_collection.insert(params[:person])

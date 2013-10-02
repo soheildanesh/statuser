@@ -9,24 +9,42 @@ class LogEntryController < ApplicationController
     def update
         #find and remove record to be updated
         record = $log_entry_collection.find({"_id" => params["id"].to_i}).to_a[0]
-        if(siteExists?(record['siteId']))
-            $log_entry_collection.remove(record)
-
-            #assign new ID by incrementing latest 
-            params["log_entry"]["_id"] = $log_entry_collection.find().sort( :_id => :desc ).to_a[0]["_id"]+1
-
-            #update respective fields in the old record
-            params["log_entry"].each do |key, value|
-                if(record.has_key?(key))
-                    record[key] = value
-                end
-            end
+        oldId = record['_id']
         
-        
-            #insert new updated record
-            $log_entry_collection.insert(record)
-            redirect_to controller: "log_entry", action: "index"
+        #assign new ID by incrementing latest 
+        last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
+        if(last_entry[0].nil? or last_entry.empty?)
+            id = 1
+        else
+            id = last_entry[0]["_id"]+1
         end
+        
+        params["log_entry"]["_id"] = id
+        
+        #update respective fields in the old record
+        params["log_entry"].each do |key, value|
+            if(record.has_key?(key))
+                record[key] = value
+            end
+        end
+        
+        #check to see if the site id is valid
+        if(!siteExists?(record['siteId']))
+            return false
+        end
+        
+        #insert new updated record
+        $log_entry_collection.insert(record)
+        
+        mongodbLastError = $testDb.get_last_error({:w => 1})
+        if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
+            
+            raise "mongodb returend error after write, write might not have happened!"  
+        else
+            $log_entry_collection.remove({'_id' => oldId})
+        end
+        
+        redirect_to controller: "log_entry", action: "index"
     end
     
     def show_cr_written_proof
@@ -43,14 +61,14 @@ class LogEntryController < ApplicationController
             return
         elsif(current_user['role'] == 'admin')
             if(!params[:id].nil? )
-                @log_entries = $log_entry_collection.find({:person => params[:id]}).sort( :_id => :desc ).to_a
-                @whoseEntries = params[:id]
+                @log_entries = $log_entry_collection.find({'person_id' => params[:id].to_i }).sort( :_id => :desc ).to_a
+                @whoseEntries = @log_entries[0]['person']
             else
                 @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a
             end
         else
             
-            @log_entries = $log_entry_collection.find({:person => current_user['email']}).sort( :_id => :desc ).to_a
+            @log_entries = $log_entry_collection.find({:person_id => current_user['_id']}).sort( :_id => :desc ).to_a
             @whoseEntries = current_user['email']
         end  
         render 'index'
@@ -73,16 +91,17 @@ class LogEntryController < ApplicationController
   
     def create
         params[:log_entry][:person] = current_user['email']
-        
+        params[:log_entry][:person_id] = current_user['_id']
+        debugger
         #increment the id of the last entry and use it for this one
         last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
-        if(last_entry.nil? or last_entry.empty?)
+        if(last_entry[0].nil? or last_entry.empty?)
             id = 1
         else
 
             #check for false resubmits due to page refresh or back button by seeing if the last event and current are the same (and ignore _id in comparison or they'd never be)
             
-            #equalize fields that are guaranteed to be different
+            #equalize fields that are guaranteed to be different so we can compare this enry with last entry
             params[:log_entry]['_id'] = last_entry[0]['_id']
             params[:log_entry]['time'] = last_entry[0]['time']
             if(params[:log_entry] == last_entry[0])
