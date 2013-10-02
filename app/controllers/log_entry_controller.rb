@@ -92,7 +92,7 @@ class LogEntryController < ApplicationController
     def create
         params[:log_entry][:person] = current_user['email']
         params[:log_entry][:person_id] = current_user['_id']
-        debugger
+        
         #increment the id of the last entry and use it for this one
         last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
         if(last_entry[0].nil? or last_entry.empty?)

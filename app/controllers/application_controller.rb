@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   def current_user
     if($current_user.nil?)
       $current_user = $person_collection.find({:email => session[:current_user_email] }).to_a[0]
-      debugger
     end
     return $current_user
   end

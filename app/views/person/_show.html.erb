@@ -15,7 +15,7 @@
 		<td>
 			<%= person['email'] %>
 		</td>
-			<td><%= link_to 'Delete', {action: 'destroy', id: person['_id']}, {method: :delete} %>
+			<td><%= link_to 'Delete', {action: 'destroy', id: person['_id']}, {method: :delete, data: 'sure?'} %>
 		</td>
 	</tr>
 </table>

@@ -1,5 +1,18 @@
 class SiteController < ApplicationController
 
+    def destroy
+        if(current_user.nil?)
+            redirect_to controller:'login_session', action:'new'
+            return
+        elsif(current_user['role'] != 'admin')
+            redirect_to controller:'login_session', action:'new'
+            return
+        else
+            $site_collection.remove({_id: params['id'].to_i})
+            redirect_to controller:'site', action:'index'
+            return
+        end
+    end
     
     def new
     end

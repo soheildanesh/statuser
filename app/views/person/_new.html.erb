@@ -10,9 +10,9 @@ New User Form:
 	
 	<p> 
  		Person's Role:<br>
-		<%= radio_button("person", "role", "cite manager") %> cite manager <br>
-		<%= radio_button("person", "role", "project manager") %> project manager <br>
-		<%= radio_button("person", "role", "admin") %> Admin. this person can do whatever!!<br>
+		<%#= radio_button("person", "role", "cite manager") %> <!-- cite manager --> <br>
+		<%= radio_button("person", "role", "project manager") %> project manager: Only sees own log entries <br>
+		<%= radio_button("person", "role", "admin") %> Admin: full access<br>
 	</p>
 	
 	<%= f.label :name, "Name" %>
