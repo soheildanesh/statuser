@@ -14,8 +14,9 @@
 	<%= f.label :changeRequestNumber, "Change Request Number" %>
 	<%= f.text_field :changeRequestNumber%><br>
 	
-	<%= f.label :changeRequestRrice, "Change Request Price" %>
-	<%= f.text_field :changeRequestRrice%><br>
+	<%= f.label :changeRequestPrice, "Change Request Price" %>
+ <%= 	select_tag 'priceRange', "<option> > </option><option> < </option><option> = </option>".html_safe %>
+	<%= f.text_field :changeRequestPrice%><br>
 	
 	<%= f.label :person, "Person's Email" %>
 	<%= f.text_field :person%><br>

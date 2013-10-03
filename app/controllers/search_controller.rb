@@ -9,10 +9,20 @@ class SearchController < ApplicationController
         searchHash = Hash.new
         params['search'].each do |key, value|
             if(not (value.nil? or value.empty?) )
-               searchHash[key]=value 
+
+                if(key=='changeRequestPrice')
+                    if(params['priceRange'] == '>')
+                        value = {"$gt" => value}
+                    elsif(params['priceRange'] == '<')
+                        value = {"$lt" => value}
+                    end
+                end
+                
+                searchHash[key]=value 
             end
         end
         
+#        searchHash['changeRequestPrice'] = searchHash['changeRequestPrice'].to_i
         puts("searchHash = #{searchHash}")
         @log_entries = $log_entry_collection.find(searchHash).sort( :_id => :desc ).to_a
         
