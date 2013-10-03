@@ -14,6 +14,10 @@ class SearchController < ApplicationController
         
         puts("searchHash = #{searchHash}")
         @log_entries = $log_entry_collection.find(searchHash).sort( :_id => :desc ).to_a
+        
+        @persons = $person_collection.find(email: params['search']['person']).sort( :_id => :desc ).to_a
+        
+        @sites = $site_collection.find(siteId:  params['search']['siteId']).sort( :_id => :desc ).to_a
         render 'index'
     end
     
