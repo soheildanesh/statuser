@@ -48,7 +48,7 @@ class LogEntryController < ApplicationController
     end
     
     def show_cr_written_proof
-        log_entry = $log_entry_collection.find_one({'changeRequestNumber' => params[:id]})
+        log_entry = $log_entry_collection.find_one({'_id' => params['id'].to_i})
         @writtenProofEvidence = log_entry['writtenProofEvidence']
         render 'log_entry/change_request/show_cr_written_proof'
     end
@@ -161,8 +161,6 @@ class LogEntryController < ApplicationController
             raise "mongodb returend error after write, write might not have happened!"  
         end
       
-        @log_entries = last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
-        render 'index'
-
+        redirect_to 'index'
     end
 end

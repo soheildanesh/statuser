@@ -9,10 +9,11 @@ New User Form:
 	<%= f.text_field :password%><br>
 	
 	<p> 
- 		Person's Role:<br>
-		<%#= radio_button("person", "role", "cite manager") %> <!-- cite manager --> <br>
-		<%= radio_button("person", "role", "project manager") %> project manager: Only sees own log entries <br>
-		<%= radio_button("person", "role", "admin") %> Admin: full access<br>
+ 		Person's Role:<br><br>
+		<%#= radio_button("person", "role", "cite manager") %> <!-- cite manager --> 
+		<%= radio_button("person", "role", "project manager") %> project manager role: Can see/edit/create own log entries <br><br>
+		
+		<%= radio_button("person", "role", "admin") %> Admin (full access): Can create own log entries. See/edit everybody else's log entries. Can see list of all existing people and sites. Can delete/create new people and sites.
 	</p>
 	
 	<%= f.label :name, "Name" %>
