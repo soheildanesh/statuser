@@ -13,10 +13,20 @@
 		<td><%= crewChange['newCrew'] %> </td>
 		
 		<% if crewChange['person'].nil? %>
-			<td> unknown </td>
+		<td> 
+			unknown 
+		</td>
 		<%else %>
-			<td><%= link_to crewChange['person'], :controller => 'person', :action => 'show', :id => crewChange['person'] %>
+		<td>
+			<%= link_to crewChange['person'], :controller => 'person', :action => 'show', :id => crewChange['person'] %>
+		</td>
 		<%end%>
+		
+		</td>
+			
+		<td>
+			<%= link_to 'Delete', {action: 'destroy', id: crewChange['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</td>
 		
 	</tr>
 	<br>

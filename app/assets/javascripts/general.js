@@ -1,0 +1,4 @@
+$ ->
+	$('.someClass').click -> 
+		//do stuff
+    	

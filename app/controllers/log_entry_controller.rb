@@ -1,8 +1,19 @@
 class LogEntryController < ApplicationController
-    # TODO: when submit is pressed, create something in the session via js, before create check to see if it's set, after creating the object clear what was in the session, now a refresh or back button wont' resubmit and create duplicate object 
+        
+    def destroy
+        tobeDeleted = $log_entry_collection.find({_id: params['id'].to_i}).to_a[0]
+        if(current_user['role'] == 'admin' or tobeDeleted['person_id'] == current_user['_id'])
+            $log_entry_collection.remove({_id: params['id'].to_i})
+            redirect_to controller:'log_entry', action:'index'
+            return
+        else
+            flash[:notice] = "you dont have permission to delete this entry, contact and admin"
+            redirect_to controller:'log_entry', action:'index'
+            return
+        end
+    end
     
     def edit
-        #bookmark
         @log_entry = $log_entry_collection.find({"_id" => params["id"].to_i}).to_a[0]
     end
     

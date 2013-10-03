@@ -1,0 +1,1 @@
+> non admin role (currently only project manager) should not see any admin tools, have access to list of site/people/log entries. But he should be able to see his own log entries, edit or delete them.

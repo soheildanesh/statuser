@@ -9,7 +9,7 @@
 		<td><%= site['basePackage']%></td>
 		<td><%= site['crew']%></td>
 		</td>
-			<td><%= link_to 'Delete', {action: 'destroy', id: site['_id']}, {method: :delete} %>
+			<td><%= link_to 'Delete', {action: 'destroy', id: site['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</td>
 	</tr>
 </table>

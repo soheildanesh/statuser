@@ -27,7 +27,12 @@
 		<%end%>
 		
 		<td> <%= changeRequest['time'] %> </td>
-		<td> <%= link_to 'edit', controller: 'log_entry', action: 'edit', id: changeRequest['_id'] %> </td>
+		<td> 
+			<%= link_to 'edit', controller: 'log_entry', action: 'edit', id: changeRequest['_id'] %>
+		</td>
+		</td>
+			<td><%= link_to 'Delete', {action: 'destroy', id: changeRequest['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</td>
 	</tr>
 	<br>
 </table>
