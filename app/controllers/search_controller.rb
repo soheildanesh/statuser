@@ -5,6 +5,7 @@ class SearchController < ApplicationController
     end
     
     def create
+        params['search']['person'].downcase!
         searchHash = Hash.new
         params['search'].each do |key, value|
             if(not (value.nil? or value.empty?) )
