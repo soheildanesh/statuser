@@ -1,10 +1,19 @@
 class SearchController < ApplicationController
     
     def index
-#        redirect_to :controller => 'log_entry', :action => 'index'
+        if(current_user.nil? or current_user['role'] != 'admin')
+            flash[:notice] = "LOGin, as admin, to see the LOG!"
+            render '/login_session/new'
+            return
+        end
     end
     
     def create
+        if(current_user.nil? or current_user['role'] != 'admin')
+            flash[:notice] = "LOGin, as admin, to see the LOG!"
+            render '/login_session/new'
+            return
+        end
         params['search']['person'].downcase!
         searchHash = Hash.new
         params['search'].each do |key, value|
