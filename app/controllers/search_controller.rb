@@ -38,6 +38,13 @@ class SearchController < ApplicationController
         @persons = $person_collection.find(email: params['search']['person']).sort( :_id => :desc ).to_a
         
         @sites = $site_collection.find(siteId:  params['search']['siteId']).sort( :_id => :desc ).to_a
+        
+        if(@log_entries.empty? and @persons.empty? and @sites.empty?)
+            @noResultsToShow = true
+        else
+            @noResultsToShow = false
+        end
+        
         render 'index'
     end
     
