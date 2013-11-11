@@ -14,10 +14,53 @@ class SiteController < ApplicationController
         end
     end
     
-    def new
+    def edit
+        @site = $site_collection.find({"_id" => params['id'].to_i}).to_a[0]
     end
-  
-    def create
+    
+    def update
+         #find and remove record to be updated
+         record = $site_collection.find({"_id" => params["id"].to_i}).to_a[0]
+         oldId = record['_id']
+
+         #assign new ID by incrementing latest 
+         last_entry = $site_collection.find().sort( :_id => :desc ).to_a
+         if(last_entry[0].nil? or last_entry.empty?)
+             id = 1
+         else
+             id = last_entry[0]["_id"]+1
+         end
+
+         params["site"]["_id"] = id
+
+         #update respective fields in the old record
+         params["site"].each do |key, value|
+             if(record.has_key?(key))
+                 record[key] = value
+             end
+         end
+
+         #check to see if the site id is valid
+        # if(!siteExists?(record['siteId']))
+        #     return false
+        # end
+
+         #insert new updated record
+         $site_collection.insert(record)
+
+         mongodbLastError = $testDb.get_last_error({:w => 1})
+         if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
+
+             raise "mongodb returend error after write, write might not have happened!"  
+         else
+             $site_collection.remove({'_id' => oldId})
+         end
+
+         redirect_to controller: "site", action: "index"
+     end
+     
+       
+     def create
 
         if(current_user['role'] != 'admin')
             flash[:notice] = "only an admin can create a new site!"
@@ -25,15 +68,15 @@ class SiteController < ApplicationController
             return
         end
         
-        if(!validateCrew params[:site][:crew])
-            return
-        end
+       # if(!validateCrew params[:site][:crew])
+       #     return
+       # end
         
         existing_site = ($site_collection.find({:siteId => params[:site][:siteId]}).to_a)[0]
 
         #TODO check to see if the people listed in the crew exist in the db
         if(!existing_site.nil?)
-            flash[:notice] = "Site with this ID exists already"
+            flash.now[:notice] = "Site with this ID exists already"
         else
             
             #produce an incremented id

@@ -11,6 +11,7 @@
 	<%if !@log_entries.nil? and !@log_entries.empty? %>
 		<h2>Results in log entries </h2>
 		<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries}%>
+		<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries_notes}%>
 	<% end %>
 
 
@@ -20,11 +21,17 @@
 		<% for entry in @persons %>
 		    <%= render partial: 'person/show', locals: {person: entry} %> <br>
 		<% end %>
+		<% for entry in @persons_notes %>
+		    <%= render partial: 'person/show', locals: {person: entry} %> <br>
+		<% end %>
 	<% end %>
 
 	<%if !@sites.nil? and !@sites.empty?%>
 		<h2>Results in sites </h2>
 		<% for entry in @sites %>
+		    <%= render partial: 'site/show', locals: {site: entry} %> <br>
+		<% end %>
+		<% for entry in @sites_notes %>
 		    <%= render partial: 'site/show', locals: {site: entry} %> <br>
 		<% end %>
 	<% end %>

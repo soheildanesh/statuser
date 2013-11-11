@@ -1,0 +1,150 @@
+<%= @site_id %>
+
+<div id="inputForm">	
+	<h2> Site Activity Report Form: </h2>
+	<%= form_for :log_entry, url: '/log_entry' do |f| %>
+
+	  	
+		<p>
+	    	<%= f.label :siteVisitDate, "Site Visit Date" %><br>
+	    	<%= f.text_field :siteVisitDate%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :timeIn, "Time in on site" %><br>
+	    	<%= f.text_field :timeIn%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :timeOut, "Time out of site" %><br>
+	    	<%= f.text_field :timeOut%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :baseLocation, "Base Location" %><br>
+	    	<%= f.text_field :baseLocation%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :scopreOfWork, "Scope of Work" %><br>
+	    	<%= f.text_field :scopreOfWork%>
+	  	</p>
+	
+	
+		<p>
+	    	<%= f.label :projectManager, "Project Manager" %><br>
+	    	<%= f.text_field :projectManager%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :constructionManager, "Construction Manager" %><br>
+	    	<%= f.text_field :constructionManager%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :copInCharge, "COP in charge" %><br>
+	    	<%= f.text_field :copInCharge%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :crewMember1, "Crew Member 1" %><br>
+	    	<%= f.text_field :crewMember1%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :crewMember2, "Crew Member 2" %><br>
+	    	<%= f.text_field :crewMember2%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :crewMember3, "Crew Member 3" %><br>
+	    	<%= f.text_field :crewMember3%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :crewMember4, "Crew Member 4" %><br>
+	    	<%= f.text_field :crewMember4%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :vehicleNum, "Vehicle Number" %><br>
+	    	<%= f.text_field :vehicleNum%>
+	  	</p>
+
+		<p>
+	    	<%= f.label :vehicleStartMilage, "Vehicle Start Milage" %><br>
+	    	<%= f.text_field :vehicleStartMilage%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :vehicleEndMilage, "Vehicle End Milage" %><br>
+	    	<%= f.text_field :vehicleEndMilage%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :taskCompletedType, "Task Completed Type" %><br>
+	    	<%= f.text_field :taskCompletedType%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :taskCompletedDetail, "Task Completed Detail" %><br>
+	    	<%= f.text_field :taskCompletedDetail%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :siteDeail, "Task Completed Detail" %><br>
+	    	<%= f.text_field :taskCompletedDetail%>
+	  	</p>
+		
+		<p>
+	    	<%= f.label :siteAddress, "Site Address" %><br>
+	    	<%= f.text_field :siteAddress%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :siteLat, "Site Latitude" %><br>
+	    	<%= f.text_field :siteAddress%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :siteLong, "Site Longitude" %><br>
+	    	<%= f.text_field :siteLong%>
+	  	</p>
+
+	
+		<p>
+	    	<%= f.label :projectCode, "Project Code" %><br>
+	    	<%= f.text_field :projectCode%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :siteType, "Site Type" %><br>
+	    	<%= f.text_field :siteType%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :bridgeContactNumber, "Bridge contact number" %><br>
+	    	<%= f.text_field :bridgeContactNumber%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :bridgeRepName, "Bridge Representative Name" %><br>
+	    	<%= f.text_field :bridgeRepName%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :bridgeLoginTime, "Bridge Login Time" %><br>
+	    	<%= f.text_field :bridgeLoginTime%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :bridgeLogoutTime, "Bridge Logout Time" %><br>
+	    	<%= f.text_field :bridgeLogoutTime%>
+	  	</p>
+	
+		<p>
+	    	<%= f.label :troubleTicket, "Trouble Ticket" %><br>
+	    	<%= f.text_field :troubleTicket%>
+	  	</p>
+	<% end %>
+</div>

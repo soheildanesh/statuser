@@ -20,6 +20,12 @@ New User Form:
 	<%= f.text_field :name%><br>
 	
 	<p>
+		<%= f.label :notes, "Enter any additional notes" %><br>
+    	<%= f.text_area :notes %>
+	</p>
+	
+	
+	<p>
     	<%= f.submit "Submit" %>
   	</p>
 	

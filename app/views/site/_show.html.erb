@@ -1,15 +1,30 @@
 <table>
 	<tr>
 		<td>Site ID</td>
-		<td>Base Package</td>
-		<td>Crew</td>
+		<td>Project Code</td>
+		<td>Site Type</td>
+		<td>Site Address</td>
+		<td>Project Manager</td>
+		<td>Construction Manager</td>
+		<td>COP In Charge</td>
 	</tr>
 	<tr>
 		<td><%= site['siteId']%></td>
-		<td><%= site['basePackage']%></td>
-		<td><%= site['crew']%></td>
+		<td><%= site['projectCode']%></td>
+		<td><%= site['siteType']%></td>
+		<td><%= site['siteAddress']%></td>
+		<td><%= site['projMan']%></td>
+		<td><%= site['constMan']%></td>
+		<td><%= site['copInCharge']%></td>
+
+		<td> 
+			<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'activity_report', id: site['_id'] %>
 		</td>
-			<td><%= link_to 'Delete', {action: 'destroy', id: site['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		<td> 
+			<%= link_to 'edit', controller: 'site', action: 'edit', id: site['_id'] %>
+		</td>
+		<td>
+			<%= link_to 'Delete', {controller: 'site', action: 'destroy', id: site['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</td>
 	</tr>
 </table>

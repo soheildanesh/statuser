@@ -35,6 +35,11 @@
 			<%= f.label :writtenProofEvidence, "if written proof is provided, copy paste the email from client that serves as proof" %><br>
 	    	<%= f.text_area :writtenProofEvidence %>
 		</p>
+		
+		<p>
+			<%= f.label :notes, "Enter any additional notes" %><br>
+	    	<%= f.text_area :notes %>
+		</p>
 	
 		<!-- got the hint from here, look under hidden_field -->
 		<input type="hidden" id="log_entry_type" name="log_entry[type]" value="change request" />

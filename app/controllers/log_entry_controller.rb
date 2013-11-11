@@ -1,5 +1,10 @@
 class LogEntryController < ApplicationController
         
+    def activity_report
+        @site = $site_collection.find({"_id" => params["id"].to_i}).to_a[0]
+        render 'log_entry/activity_report/activity_report_form'
+    end
+    
     def destroy
         tobeDeleted = $log_entry_collection.find({_id: params['id'].to_i}).to_a[0]
         if(current_user['role'] == 'admin' or tobeDeleted['person_id'] == current_user['_id'])
@@ -85,8 +90,8 @@ class LogEntryController < ApplicationController
         render 'index'
     end
   
-    def new
-    end
+#    def edit
+#    end
   
     def show_crew_change_form
         respond_to do |format|
@@ -128,6 +133,7 @@ class LogEntryController < ApplicationController
       
         #check to see if the site id is valid
         if(!siteExists?(params[:log_entry][:siteId]))
+            puts('ret falseing')
             return false
         end
       # existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
@@ -136,7 +142,7 @@ class LogEntryController < ApplicationController
       #     redirect_to '/log_entry'
       #     return
       # end
-        
+      
         #if it's a crew change event, ensure all emails belong are valid
         if(params[:log_entry].has_key? "oldCrew")
             oldCrew = params[:log_entry]["oldCrew"]
@@ -144,9 +150,11 @@ class LogEntryController < ApplicationController
 
             emails = oldCrew + " " + newCrew
             if(!validateCrew emails)
-                return
+                return false
             end
         end
+        
+
         
         #if it's a change request, make sure crNumber is unique, update sep 24: talked to sina, he said the change request number is assiend to us by ericson, and not entered at the time of event entry, so removing this constraint for now to allow potential repeats between different sites, and also allow empty string crNumbers for when we don't have a crNum yet bue event is being entered 
     #    if(params[:log_entry].has_key? "changeRequestNumber")
@@ -157,6 +165,26 @@ class LogEntryController < ApplicationController
     #            return
     #        end
     #    end
+        
+        
+        #perform necessary validations for activity report
+        if(params[:log_entry]["type"] == "site activity report")
+            if(!isStringNumbersOnly?(params[:log_entry]["vehicleStartMilage"]) or
+                !isStringNumbersOnly?(params[:log_entry]["vehicleEndMilage"]))
+                flash.now[:notice] = "make sure vehicle start and end milages are numbers only"
+                puts("yooooooo")
+                render 'show_flash_notice.js.erb'
+                return
+            end
+            
+            if(!isStringNumbersOnly?(params[:log_entry]["siteDelay"]))
+                flash.now[:notice] = "make sure site delay in hours is numbers only"
+                render 'show_flash_notice.js.erb'
+                return
+            end
+        end
+        
+        
         
         
         

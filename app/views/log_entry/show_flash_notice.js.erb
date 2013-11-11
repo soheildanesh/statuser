@@ -1,0 +1,2 @@
+alert('yoyo')
+$("#flashNotice").html("<%= escape_javascript(render :partial => 'layouts/flash_notice' , :locals => { :flash => flash }).html_safe %>");

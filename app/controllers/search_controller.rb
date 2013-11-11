@@ -16,6 +16,15 @@ class SearchController < ApplicationController
         end
         params['search']['person'].downcase!
         searchHash = Hash.new
+        
+        notesSearchString = ".*#{params['search']['notes']}.*"
+        puts("***")
+        puts(notesSearchString)
+        @log_entries_notes = $log_entry_collection.find({notes: Regexp.new(notesSearchString) }).to_a
+        @persons_notes = $person_collection.find({notes: Regexp.new(notesSearchString)}).to_a
+        @sites_notes = $site_collection.find({notes: Regexp.new(notesSearchString)}).to_a
+        
+        params['search']['notes'] = ""
         params['search'].each do |key, value|
             if(not (value.nil? or value.empty?) )
 
@@ -31,13 +40,17 @@ class SearchController < ApplicationController
             end
         end
         
-#        searchHash['changeRequestPrice'] = searchHash['changeRequestPrice'].to_i
-        puts("searchHash = #{searchHash}")
         @log_entries = $log_entry_collection.find(searchHash).sort( :_id => :desc ).to_a
+        
         
         @persons = $person_collection.find(email: params['search']['person']).sort( :_id => :desc ).to_a
         
+        searchString = ".*#{params['search']['person']}.*"
+        @crews = $site_collection.find({'crew' => Regexp.new(searchString)})
+        
         @sites = $site_collection.find(siteId:  params['search']['siteId']).sort( :_id => :desc ).to_a
+        
+        
         
         if(@log_entries.empty? and @persons.empty? and @sites.empty?)
             @noResultsToShow = true

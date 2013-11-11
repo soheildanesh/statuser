@@ -29,7 +29,17 @@ class PersonController < ApplicationController
             redirect_to :controller => 'log_entry', :action => 'index'
             return
         else
-            @allPersons = $person_collection.find().to_a.reverse
+            if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
+                searchString = ".*#{params['q']}.*"
+                @persons = $person_collection.find({'email' => Regexp.new(searchString)})
+            else
+                @persons = $person_collection.find().to_a.reverse
+            end
+        end
+        
+        respond_to do |format|
+            format.html
+            format.json { render :json => @persons.map{ |person| { 'name' => person['email'], 'id'=> person['_id'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
         end
     end
   

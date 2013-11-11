@@ -1,4 +1,3 @@
-$ ->
-	$('.someClass').click -> 
-		//do stuff
-    	
+		$( document ).ready(function() {
+	$(".personInput").tokenInput("/person");
+});

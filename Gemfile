@@ -6,7 +6,6 @@ gem 'bson_ext'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
-
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
@@ -44,4 +43,4 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-#gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]

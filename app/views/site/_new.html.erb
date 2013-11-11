@@ -1,13 +1,37 @@
 <%= form_for :site, url: '/site' do |f| %>
 
 	<%= f.label :siteId, "Site ID" %>
-	<%= f.text_field :siteId%><br>
+	<%= f.text_field :siteId%><br><br>
 	
-	<%= f.label :basePackage, "Base Package" %>
-	<%= f.text_field :basePackage%><br><br>
+	<%= f.label :projectCode, "Project Code" %>
+	<%= f.text_field :projectCode%><br><br>
 	
-	<%= f.label :crew, "Enter the emails of the crew for this site, separated by space"%><br>
-	<%= f.text_area :crew %><br>
+	<%= f.label :siteType, "Site Type" %>
+	<%= f.text_field :siteType%><br><br>
+	
+	<%= f.label :siteAddress, "Site Address" %>
+	<%= f.text_field :siteAddress%><br><br>
+	
+	<%= f.label :siteLat, "Site Latitude" %>
+	<%= f.text_field :siteLat%><br><br>
+	
+	<%= f.label :siteLong, "Site Longitude" %>
+	<%= f.text_field :siteLong%><br><br>
+	
+	<%= f.label :projMan, "Site Project Manager" %>
+	<%= f.text_field :projMan%><br><br>
+	
+	<%= f.label :constMan, "Site Construction Manager" %>
+	<%= f.text_field :constMan%><br><br>
+	
+	<%= f.label :copInCharge, "COP In Charge" %>
+	<%= f.text_field :copInCharge%><br><br>
+	
+	<p>
+		<%= f.label :notes, "Enter any additional notes" %><br>
+    	<%= f.text_area :notes %>
+	</p>
+	
 	
 	<p>
 		<%= f.submit "Submit" %>

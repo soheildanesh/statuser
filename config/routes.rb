@@ -5,6 +5,7 @@ Statuser::Application.routes.draw do
             get :show_cr_written_proof
             get :show_crew_change_form
             get :show_change_request_form
+            get :activity_report
         end
     end
     

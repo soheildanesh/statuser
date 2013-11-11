@@ -1,0 +1,18 @@
+<h1>Editing Site</h1>
+ 
+<%= form_for :site, url: {controller: 'site', action: 'update', id: @site['_id']}, method: :patch do |f| %>
+	
+	<p>
+		<%= f.label :siteId, 'Site ID'%><br>
+		<%= text_field_tag 'site[siteId]', "#{@site['siteId']}" %>
+	</p>
+	<p>
+		<%= f.label :notes, 'Notes'%><br>
+		<%= text_field_tag 'site[notes]', "#{@site['notes']}" %>
+	</p>
+	
+	<p>
+		<%= f.submit %>
+	</p>
+	
+<% end %>
