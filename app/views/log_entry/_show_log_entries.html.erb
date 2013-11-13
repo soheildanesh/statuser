@@ -5,9 +5,9 @@
 		
 			<%= render :partial => "log_entry/change_request/change_request_show", :locals => {:changeRequest => entry}%>
 		
-		<% elsif entry.has_key? 'oldCrew' %>
+		<% elsif entry["type"] == 'site activity report' %>
 		
-			<%= render :partial => "log_entry/crew_change/crew_change_show", :locals => {:crewChange => entry}%>
+			<%= render :partial => "/log_entry/activity_report/activity_report_show", :locals => {:activityReport => entry}%>
 		
 		<% end %>
 

@@ -1,0 +1,18 @@
+<table>
+	<tr>
+		<td>Event Type</td>
+		<td>Site ID</td>
+		<td>Site Visit Day</td>
+		<td>Task Completed</td>
+		<td>Site Delay in Hours </td>
+	</tr>
+	<tr>
+		<td> Site Activity Report </td>
+		<td> <%=activityReport['siteId']%> </td>
+		<td> <%= activityReport['siteVisitDay']%> </td>
+		<td> <%="TODO"%> </td>
+		<td> <%=activityReport['siteDelay']%> </td>
+		<td> <%= link_to 'see full report', controller: 'log_entry', action: 'show_full_activity_report', id: activityReport['_id'] %> </td>
+	</tr>
+</table>
+

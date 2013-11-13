@@ -5,13 +5,20 @@ Statuser::Application.routes.draw do
             get :show_cr_written_proof
             get :show_crew_change_form
             get :show_change_request_form
-            get :activity_report
+            get :new_activity_report
+            get :show_full_activity_report
+            get :new_change_request
         end
     end
     
     resources :person
     resources :login_session
-    resources :site
+    resources :site do
+        member do
+            get :show_options
+        end
+    end
+    
 
     resources :search do
         member do

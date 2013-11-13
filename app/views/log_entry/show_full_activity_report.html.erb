@@ -1,0 +1,175 @@
+<h1>Site Activity Report </h1>
+<%= @activityReport%>
+
+
+<p>
+	Site ID: <br>
+	<%= @activityReport['siteId']%>
+</p>
+
+
+<p>
+	Site Project Manager:<br>
+	<%= @activityReport["projMan"]%>
+</p>
+
+<p>
+	Site Construction Manager:<br>
+	<%= @activityReport["constMan"]%>
+</p>
+
+<p>
+	COP In Charge:<br>
+	<%=  @activityReport["copInCharge"]%>
+</p>
+
+<p>
+	Project Code:<br>
+	<%= @activityReport["projectCode"]%>
+</p>
+
+<p>
+	Site Type:<br>
+	<%= @activityReport["siteType"]%>
+</p>
+
+<p>
+	Site Address:<br>
+	<%= @activityReport["siteAddress"]%>
+</p>
+
+<p>
+	Site Latitude:<br>
+	<%= @activityReport["siteLat"]%>
+</p>
+
+<p>
+	Site Longitude:<br>
+	<%= @activityReport["siteLong"]%>
+</p>
+
+<h3> Activity Report </h3>
+
+<!-- look at http://guides.rubyonrails.org/form_helpers.html#using-date-and-time-form-helpers under model object helpers for further elucidation-->
+
+<p>
+	Site Visit Day:<br>
+	<%= render partial: "layouts/show_date", locals: {year:  @activityReport['siteVisitDay(1i)'], month:  @activityReport['siteVisitDay(2i)'] , day: @activityReport['siteVisitDay(3i)'] } %>
+</p>
+
+<p>
+	Time on Site:<br>
+	<%= render partial: "layouts/show_time", locals: { hour: @activityReport['timeOnSite(4i)'], minute: @activityReport['timeOnSite(5i)'] } %>
+</p>
+
+<p>
+	Time out of Site:<br>
+	<%= render partial: "layouts/show_time", locals: { hour: @activityReport['timeOutofSite(4i)'], minute: @activityReport['timeOutofSite(5i)'] } %>
+</p>
+
+<p>
+	Crew Members: <br>
+<% for personId in @activityReport['crewMembers'].split(',') %>	
+	<%= link_to $person_collection.find({"_id" => personId.to_i}).to_a[0]["email"], controller: 'person', action: 'show', id: personId %> <br>
+<%end%>
+</p>
+
+<p>
+	Crew Member 1:<br>
+	<%=  %>
+</p>
+
+<p>
+	Crew Member 2:<br>
+	<%= @activityReport['crewMember2'] %>
+</p>
+
+<p>
+	Crew Member 3:<br>
+	<%= @activityReport['crewMember3'] %>
+</p>
+
+<p>
+	Crew Member 4:<br>
+	<%= @activityReport['crewMember4'] %>
+</p>
+
+<p>
+	Vehicle Number:<br>
+	<%= @activityReport['vehicleNum']%>
+</p>
+
+<p>
+	Vehicle Start Milage:<br>
+	<%= @activityReport['vehicleStartMilage']%>
+</p>
+
+<p>
+	Vehicle End Milage:<br>
+	<%= @activityReport['vehicleEndMilage']%>
+</p>
+
+
+-- need list of tasks from Roger or Shahrooz --
+<p>
+	Task Completed Type:<br>
+	<%= @activityReport['taskCompletedType']%>
+</p>
+
+<p>
+	Task Completed Detail:<br>
+	<%= @activityReport['taskCompletedDetail']%>
+</p>
+
+<p>
+	Site Delay (# Hours)<br>
+	<%= @activityReport['siteDelay']%>
+</p>
+
+<p>
+	Site Delay Comments in Detail<br>
+	<%= @activityReport['siteDelayComments']%>
+</p>
+
+
+<p>
+	Base Location:<br>
+	<%= @activityReport['baseLocation']%>
+</p>
+
+<p>
+	Base to site distance (miles round trip):<br>
+	<%= @activityReport['baseToSiteDist']%>
+</p>
+
+
+<p>
+	Scope of Work:<br>
+	<%= @activityReport['scopeOfWord'] %>
+</p>
+
+<p>
+	Bridge contact number:<br>
+	<%= @activityReport['bridgeContactNumber']%>
+</p>
+
+<p>
+	Bridge Representative Name:<br>
+	<%= @activityReport['bridgeRepName']%>
+</p>
+
+<p>
+	Bridge Login Time:<br>
+	<%= @activityReport['bridgeLoginTime']%>
+</p>
+
+<p>
+	Bridge Logout Time:<br>
+	<%= @activityReport['bridgeLogoutTime']%>
+</p>
+
+<p>
+	Trouble Ticket:<br>
+	<%= @activityReport['troubleTicket']%>
+</p>
+

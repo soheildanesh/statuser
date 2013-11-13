@@ -16,9 +16,17 @@
 		<td><%= site['projMan']%></td>
 		<td><%= site['constMan']%></td>
 		<td><%= site['copInCharge']%></td>
+		<td> <%= link_to 'show options', controller:'site', action:'show_options', id:site['_id'], remote: true%>
+</table>
 
+<% classString = "site_options_#{site['_id']}"%>
+<table class=<%= classString %> style="display:none;">	
+		
 		<td> 
-			<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'activity_report', id: site['_id'] %>
+			<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
+		</td>
+		<td> 
+			<%= link_to 'Submit Change Request', controller: 'log_entry', action: 'new_change_request', id: site['_id']%>
 		</td>
 		<td> 
 			<%= link_to 'edit', controller: 'site', action: 'edit', id: site['_id'] %>

@@ -12,4 +12,5 @@ class ApplicationController < ActionController::Base
     end
     return $current_user
   end
+
 end

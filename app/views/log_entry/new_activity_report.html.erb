@@ -58,6 +58,7 @@
 		<p>
 			Site Visit Day:
 			<%= date_select :log_entry, :siteVisitDay %>
+			
 		</p>
 		
 		<p>
@@ -69,6 +70,11 @@
 			Time out of Site:
 			<%= time_select :log_entry, :timeOutofSite %>
 		</p>
+		
+		<p>
+	    	<%= f.label :crewMembers, "Crew Members:" %><br>
+	    	<%= f.text_field( :crewMembers, "class" => "personInput") %>
+	  	</p>
 	
 		<p>
 	    	<%= f.label :crewMember1, "Crew Member 1" %><br>
@@ -140,8 +146,8 @@
 	
 	
 		<p>
-	    	<%= f.label :scopreOfWork, "Scope of Work" %><br>
-	    	<%= f.text_field :scopreOfWork%>
+	    	<%= f.label :scopreOfWork, "Scope of Work:" %><br>
+			<%= select(:log_entry, :scopeOfWork, [['Civil', 'Civil'], ['EF&I', 'EF&I']]) %>
 	  	</p>
 	
 		<p>

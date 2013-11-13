@@ -1,4 +1,10 @@
 class SiteController < ApplicationController
+    
+    def show_options
+       @_id =  params[:id]
+    end
+        
+        
 
     def destroy
         if(current_user.nil?)

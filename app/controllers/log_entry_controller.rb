@@ -1,8 +1,15 @@
 class LogEntryController < ApplicationController
         
-    def activity_report
+    def new_change_request
         @site = $site_collection.find({"_id" => params["id"].to_i}).to_a[0]
-        render 'log_entry/activity_report/activity_report_form'
+    end
+    
+    def show_full_activity_report
+        @activityReport = $log_entry_collection.find({"_id" => params["id"].to_i}).to_a[0]
+    end
+    
+    def new_activity_report
+        @site = $site_collection.find({"_id" => params["id"].to_i}).to_a[0]
     end
     
     def destroy
@@ -78,7 +85,7 @@ class LogEntryController < ApplicationController
         elsif(current_user['role'] == 'admin')
             if(!params[:id].nil? )
                 @log_entries = $log_entry_collection.find({'person_id' => params[:id].to_i }).sort( :_id => :desc ).to_a
-                @whoseEntries = @log_entries[0]['person']
+                @whoseEntries = $person_collection.find("_id" => params[:id].to_i).to_a[0]["email"]
             else
                 @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a
             end
@@ -87,18 +94,24 @@ class LogEntryController < ApplicationController
             @log_entries = $log_entry_collection.find({:person_id => current_user['_id']}).sort( :_id => :desc ).to_a
             @whoseEntries = current_user['email']
         end  
-        render 'index'
+
+        respond_to do |format|
+            format.html{ render 'index'}
+            format.js {  render 'index' }
+        end
     end
   
 #    def edit
 #    end
   
+    #delete later november 11 2013
     def show_crew_change_form
         respond_to do |format|
             format.js {render 'log_entry/crew_change/show_crew_change_form'}
         end
     end
-  
+
+    #delete later november 11 2013
     def show_change_request_form
         respond_to do |format|
             format.js {render 'log_entry/change_request/show_change_request_form'}
@@ -116,34 +129,35 @@ class LogEntryController < ApplicationController
         else
 
             #check for false resubmits due to page refresh or back button by seeing if the last event and current are the same (and ignore _id in comparison or they'd never be)
-            
             #equalize fields that are guaranteed to be different so we can compare this enry with last entry
             params[:log_entry]['_id'] = last_entry[0]['_id']
             params[:log_entry]['time'] = last_entry[0]['time']
             if(params[:log_entry] == last_entry[0])
-                
                 redirect_to '/log_entry'
                 return
             end
                         
             id = last_entry[0]['_id'] + 1
         end
+        
         params[:log_entry]['_id'] = id
         params[:log_entry][:time] = Time.now
       
+        #update: can prolly delete this later too, dont redirect them away from a half filled form so reverting to alert message nov 12 soheil
         #check to see if the site id is valid
-        if(!siteExists?(params[:log_entry][:siteId]))
-            puts('ret falseing')
-            return false
+        #if(!siteExists?(params[:log_entry][:siteId]))
+        #    puts('ret falseing')
+        #    return false
+        #end
+        existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
+        if(existingSite.nil?)
+            flash[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
+            render :js => "alert('The site id you entered does not match an existing site, let someone with admin rights know!');"
+            return
         end
-      # existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
-      # if(existingSite.nil?)
-      #     flash[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
-      #     redirect_to '/log_entry'
-      #     return
-      # end
       
         #if it's a crew change event, ensure all emails belong are valid
+        #i think crew change stuff can be deleted now, nov 11, soheil
         if(params[:log_entry].has_key? "oldCrew")
             oldCrew = params[:log_entry]["oldCrew"]
             newCrew = params[:log_entry]["newCrew"]    
@@ -167,20 +181,19 @@ class LogEntryController < ApplicationController
     #    end
         
         
-        #perform necessary validations for activity report
+        #perform necessary validations for site activity report event
         if(params[:log_entry]["type"] == "site activity report")
             if(!isStringNumbersOnly?(params[:log_entry]["vehicleStartMilage"]) or
                 !isStringNumbersOnly?(params[:log_entry]["vehicleEndMilage"]))
                 flash.now[:notice] = "make sure vehicle start and end milages are numbers only"
-                puts("yooooooo")
-                render 'show_flash_notice.js.erb'
+                render :js => "alert('make sure vehicle start and end milages are numbers only');"
                 return
             end
             
             if(!isStringNumbersOnly?(params[:log_entry]["siteDelay"]))
                 flash.now[:notice] = "make sure site delay in hours is numbers only"
-                render 'show_flash_notice.js.erb'
-                return
+                render :js => "alert('make sure site delay in hours is numbers only');"
+
             end
         end
         
@@ -199,7 +212,13 @@ class LogEntryController < ApplicationController
         if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
             raise "mongodb returend error after write, write might not have happened!"  
         end
+        
+        #request.format = :html
+        respond_to do |format|
+            format.html{ redirect_to 'index'}
+            format.js { render :js => "window.location.replace('/log_entry');" }
+        end
       
-        redirect_to 'index'
+       
     end
 end
