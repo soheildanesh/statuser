@@ -8,10 +8,11 @@
 	No results were found in the database for your current search!
 <% else %>
 
+<%#todo: the note search thing doesn't work, found out before demo on nov 14 2013%>
 	<%if !@log_entries.nil? and !@log_entries.empty? %>
 		<h2>Results in log entries </h2>
 		<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries}%>
-		<%= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries_notes}%>
+		<%#= render partial: "log_entry/show_log_entries", locals: {log_entries: @log_entries_notes}%>
 	<% end %>
 
 
@@ -22,7 +23,7 @@
 		    <%= render partial: 'person/show', locals: {person: entry} %> <br>
 		<% end %>
 		<% for entry in @persons_notes %>
-		    <%= render partial: 'person/show', locals: {person: entry} %> <br>
+		    <%#= render partial: 'person/show', locals: {person: entry} %> <br>
 		<% end %>
 	<% end %>
 
@@ -32,7 +33,7 @@
 		    <%= render partial: 'site/show', locals: {site: entry} %> <br>
 		<% end %>
 		<% for entry in @sites_notes %>
-		    <%= render partial: 'site/show', locals: {site: entry} %> <br>
+		    <%#= render partial: 'site/show', locals: {site: entry} %> <br>
 		<% end %>
 	<% end %>
 
