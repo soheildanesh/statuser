@@ -13,9 +13,16 @@
 		<td><%= site['projectCode']%></td>
 		<td><%= site['siteType']%></td>
 		<td><%= site['siteAddress']%></td>
-		<td><%= site['projMan']%></td>
-		<td><%= site['constMan']%></td>
-		<td><%= site['copInCharge']%></td>
+		<td>
+			<%= linkToPerson(site['projMan']) %>
+		</td>
+		<td>
+			<%= linkToPerson(site['constMan']) %>
+		</td>
+		<td>
+			<%= linkToPerson(site['copInCharge']) %>
+		</td>
+		
 		<td> <%= link_to 'show options', controller:'site', action:'show_options', id:site['_id'], remote: true%>
 </table>
 

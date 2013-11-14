@@ -20,10 +20,11 @@
 		<%= link_to "Search",  :controller => 'search', :action => 'index' %>
 		| <%= link_to "Manage People",  :controller => 'person', :action => 'index' %>
 		| <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %>
-		| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>
-		
-
 	<%end%>
+	
+	<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
+		| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	
+	<% end %>
 		
 	<br></br>
 	

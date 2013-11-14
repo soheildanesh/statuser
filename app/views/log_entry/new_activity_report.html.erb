@@ -13,17 +13,17 @@
 		
 		<p>
 			<%= f.label :projMan, "Site Project Manager" %><br>
-			<%= f.text_field :projMan, :value => @site["projMan"]%>
+			<%= f.text_field :projMan, :value => getPersonEmail(@site["projMan"].to_i) %> 
 		</p>
 	
 		<p>
 			<%= f.label :constMan, "Site Construction Manager" %><br>
-			<%= f.text_field :constMan, :value => @site["constMan"]%>
-	  	</p>
+			<%= f.text_field :constMan, :value => getPersonEmail(@site["constMan"].to_i) %> 
+		</p>
 	
 		<p>
 			<%= f.label :copInCharge, "COP In Charge" %><br>
-			<%= f.text_field :copInCharge, :value => @site["copInCharge"]%>
+			<%= f.text_field :copInCharge, :value => getPersonEmail(@site["copInCharge"].to_i) %> 
 	  	</p>
 	
 		<p>
@@ -115,7 +115,7 @@
 		-- need list of tasks from Roger or Shahrooz --
 		<p>
 	    	<%= f.label :taskCompletedType, "Task Completed Type" %><br>
-	    	<%= f.text_field :taskCompletedType%>
+	    	<%= f.text_field :taskCompletedType, "class" => "siteTask"%>
 	  	</p>
 	
 		<p>
@@ -130,13 +130,13 @@
 	
 		<p>
 	    	<%= f.label :siteDelayComments, "Site Delay Comments in Detail" %><br>
-	    	<%= f.text_field :siteDelayComments%>
+	    	<%= f.text_area :siteDelayComments%>
 	  	</p>
 		
 		
 		<p>
 	    	<%= f.label :baseLocation, "Base Location" %><br>
-	    	<%= f.text_field :baseLocation%>
+	    	<%= f.text_area :baseLocation%>
 	  	</p>
 	
 		<p>

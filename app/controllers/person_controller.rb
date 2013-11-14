@@ -25,9 +25,14 @@ class PersonController < ApplicationController
   
     def index
         if(!current_user.nil? and current_user['role'] != 'admin')
-            flash[:notice] = "only an admin can see list of people!"
-            redirect_to :controller => 'log_entry', :action => 'index'
-            return
+            if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
+                searchString = ".*#{params['q']}.*"
+                @persons = $person_collection.find({'email' => Regexp.new(searchString)})
+            else
+                flash[:notice] = "only an admin can see list of people!"
+                redirect_to :controller => 'log_entry', :action => 'index'
+                return
+            end
         else
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
@@ -36,7 +41,6 @@ class PersonController < ApplicationController
                 @persons = $person_collection.find().to_a.reverse
             end
         end
-        
         respond_to do |format|
             format.html
             format.json { render :json => @persons.map{ |person| { 'name' => person['email'], 'id'=> person['_id'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
@@ -91,6 +95,6 @@ class PersonController < ApplicationController
         end
       
         @allPersons = $person_collection.find().to_a.reverse
-        render 'index'
+        redirect_to controller:'person', action:'index'
     end
 end

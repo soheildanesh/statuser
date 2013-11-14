@@ -1,7 +1,6 @@
 <h1>Site Activity Report </h1>
-<%= @activityReport%>
 
-
+<h3>Site Information </h3>
 <p>
 	Site ID: <br>
 	<%= @activityReport['siteId']%>
@@ -69,29 +68,31 @@
 
 <p>
 	Crew Members: <br>
-<% for personId in @activityReport['crewMembers'].split(',') %>	
-	<%= link_to $person_collection.find({"_id" => personId.to_i}).to_a[0]["email"], controller: 'person', action: 'show', id: personId %> <br>
-<%end%>
+<% if !@activityReport['crewMembers'].nil? %>
+	<% for personId in @activityReport['crewMembers'].split(',') %>	
+		<%= linkToPerson personId %> <br>
+	<%end%>
+<% end %>
 </p>
 
 <p>
 	Crew Member 1:<br>
-	<%=  %>
+	<%= linkToPerson @activityReport['crewMember1'] %>
 </p>
 
 <p>
 	Crew Member 2:<br>
-	<%= @activityReport['crewMember2'] %>
+	<%= linkToPerson @activityReport['crewMember2'] %>
 </p>
 
 <p>
 	Crew Member 3:<br>
-	<%= @activityReport['crewMember3'] %>
+	<%= linkToPerson @activityReport['crewMember3'] %>
 </p>
 
 <p>
 	Crew Member 4:<br>
-	<%= @activityReport['crewMember4'] %>
+	<%= linkToPerson @activityReport['crewMember4'] %>
 </p>
 
 <p>
@@ -113,7 +114,9 @@
 -- need list of tasks from Roger or Shahrooz --
 <p>
 	Task Completed Type:<br>
-	<%= @activityReport['taskCompletedType']%>
+	<% for taskType in @activityReport['taskCompletedType'].split(',')%>
+		<%= taskType %><br>
+	<% end %>
 </p>
 
 <p>

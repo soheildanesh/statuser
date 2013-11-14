@@ -16,6 +16,7 @@ Statuser::Application.routes.draw do
     resources :site do
         member do
             get :show_options
+            get :siteTasks
         end
     end
     

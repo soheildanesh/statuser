@@ -1,10 +1,10 @@
-<%#= @allPersons %>
+<%= @persons %>
 
 <%= render :partial => "new"%>
 
-<%if !@allPersons.nil? %>
+<%if !@persons.nil? %>
 <h1>All People:</h1>
-	<% for entry in @allPersons %>
+	<% for entry in @persons %>
 	    <%= render partial: 'show', locals: {person: entry} %> <br>
 	<% end %>
 <%end%>

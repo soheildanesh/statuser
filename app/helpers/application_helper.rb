@@ -1,5 +1,26 @@
 module ApplicationHelper
     
+    
+    def getPersonEmail personId
+        a = $person_collection.find({"_id" => personId.to_i}).to_a
+        if(!a.nil? and !a.empty?)
+            return a[0]['email']
+        else
+            ""
+        end
+    end
+    
+    def linkToPerson personId
+        a = $person_collection.find({"_id" => personId.to_i}).to_a
+        if(!a.nil? and !a.empty?)
+            return (link_to a[0]["email"], :controller => 'person', :action => 'show', :id => personId.to_i)
+        else
+            ""
+        end
+    end
+    
+    
+    
     def validateCrew spaceSeparatedEmails
         emails = spaceSeparatedEmails.split()
         for email in emails

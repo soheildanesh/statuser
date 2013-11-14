@@ -1,5 +1,14 @@
 class SiteController < ApplicationController
     
+    def siteTasks
+        tasks = [
+            {"id" => "antenna adjustment","name" => "antenna adjustment"},
+            {"id" => "switchboard change","name" => "switchboard change"},
+            {"id" => "some other task","name" => "some other task"},
+        ]
+        render :json => tasks
+    end
+    
     def show_options
        @_id =  params[:id]
     end
@@ -112,13 +121,22 @@ class SiteController < ApplicationController
     end
   
     def index
-        if(current_user['role'] != 'admin')
-            flash[:notice] = "only an admin can see the list of sites!"
-            redirect_to :controller => 'log_entry', :action => 'index'
+        if(current_user.nil?)
+            flash[:notice] = "LOGin to see the LOG!"
+            render '/login_session/new'
             return
-        end
-        
-        @allSites = $site_collection.find().to_a.reverse
-        puts("all sites = #{@allSites}")
+        elsif(current_user['role'] == 'admin')
+            @allSites = $site_collection.find().to_a.reverse
+        else
+            s1 = $site_collection.find({"projMan" => current_user['_id'].to_s}).to_a.reverse
+            s2 = $site_collection.find({constMan: current_user['email']}).to_a.reverse
+            s3 = $site_collection.find({copInCharge: current_user['email']}).to_a.reverse
+            puts("****")
+            puts(s1)
+            puts(s2)
+            puts(s3)
+            puts("****")
+            @allSites = s1 + s2 + s3
+        end        
     end
 end

@@ -3,6 +3,7 @@ require 'mongo'
 include Mongo
 
 #on tasks and how to call them : http://railsguides.net/2012/03/14/how-to-generate-rake-task/
+#rake my_namespace:my_task1
 namespace :db_actions do
     
     @client = MongoClient.new('0.0.0.0', 27017) 
@@ -19,7 +20,11 @@ namespace :db_actions do
         admins << sina = {email: "Sina.Danesh@3Snetwork.com".downcase!, name: "Sina Danesh", role: "admin", password:"falaamak"}
         admins << soheil = {email: "Soheil.Danesh@3Snetwork.com".downcase!, name: "Soheil Danesh", role: "admin", password:"falaamak"}
         
-        admins << birju = {email: "Birju.Shah@3Snetwork.com".downcase!, name: "Birju Shah", role: "admin", password:"3spmt00l"}
+        admins << birju = {email: "Birju.Shah@3Snetwork.com".downcase!, name: "Birju Shah", role: "admin", password:"pass"}
+        admins << birju = {email: "tim.burton@3Snetwork.com".downcase!, name: "Tim Burton", role: "admin", password:"pass"}
+        admins << birju = {email: "roger.smith@3Snetwork.com".downcase!, name: "Roger Smith", role: "admin", password:"pass"}
+        admins << birju = {email: "shahrooz.taebi@3Snetwork.com".downcase!, name: "Shahrooz Taebi", role: "admin", password:"pass"}
+
         
         #produce an incremented id
         last_entry = $person_collection.find().sort( :_id => :desc ).to_a
@@ -30,10 +35,12 @@ namespace :db_actions do
         end
         
         for admin in admins
-            admin['_id'] = id
-            id = id+1
-
-            $person_collection.insert(admin)
+            existing_person = $person_collection.find({"email" => admin[:email] }).to_a[0]
+            if(existing_person.nil?)
+                admin['_id'] = id
+                id = id+1
+                $person_collection.insert(admin)
+            end
         end
     end
     

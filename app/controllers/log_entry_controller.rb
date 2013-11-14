@@ -90,7 +90,6 @@ class LogEntryController < ApplicationController
                 @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a
             end
         else
-            
             @log_entries = $log_entry_collection.find({:person_id => current_user['_id']}).sort( :_id => :desc ).to_a
             @whoseEntries = current_user['email']
         end  

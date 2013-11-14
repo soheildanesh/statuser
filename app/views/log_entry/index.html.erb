@@ -1,8 +1,7 @@
 
-<%= @log_entries%><br>
-<%#= current_user['_id']%>
+<%#= @log_entries%>
 
-<%= render :partial => "log_entry/change_request/change_request_form"%>
+<%#= :partial => "log_entry/change_request/change_request_form" can delete later, using separate input form now accessible from site options render nov 13 2013%> 
 
 <h1>All Log Entries:</h1>
 <% if  !@whoseEntries.nil?  and @whoseEntries != ""%>

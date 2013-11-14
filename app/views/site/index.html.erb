@@ -1,4 +1,6 @@
-<%= render :partial => "new"%>
+<% if current_user['role'] == 'admin'%>
+	<%= render :partial => "new"%>
+<% end %>
 
 <%= @allSites %>
 
