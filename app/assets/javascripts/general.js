@@ -10,6 +10,17 @@ $( document ).on( "focus", ".personInput", function() {
 });
 
 
+
+$( document ).ready(
+	function() {
+	$(".siteidInput").tokenInput("/site");
+});
+$( document ).on( "focus", ".siteidInput", function() {
+  	$(".siteidInput").tokenInput("/site");
+});
+
+
+
 $( document ).ready(
 	function() {
 	$(".siteTask").tokenInput("/site/dummy/siteTasks");

@@ -16,7 +16,7 @@ class LoginSessionController < ApplicationController
       redirect_to "/login_session/new"
     else
       session[:current_user_email] = $current_user['email']
-      redirect_to "/log_entry"
+      redirect_to "/site"
     end
   end
   

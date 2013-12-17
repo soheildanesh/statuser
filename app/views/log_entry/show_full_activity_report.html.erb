@@ -1,3 +1,5 @@
+<%= @activityReport%>
+
 <h1>Site Activity Report </h1>
 
 <h3>Site Information </h3>
@@ -109,6 +111,15 @@
 	Vehicle End Milage:<br>
 	<%= @activityReport['vehicleEndMilage']%>
 </p>
+
+Change Requests:
+<%for cr in @activityReport['changeRequest'].to_a%>
+	cr number: <%= cr[1]["number"]%>,  cr price: <%= cr[1]["number"] %> <br>
+<% end %>
+
+
+
+
 
 
 -- need list of tasks from Roger or Shahrooz --

@@ -121,22 +121,33 @@ class SiteController < ApplicationController
     end
   
     def index
+        
         if(current_user.nil?)
             flash[:notice] = "LOGin to see the LOG!"
             render '/login_session/new'
             return
-        elsif(current_user['role'] == 'admin')
-            @allSites = $site_collection.find().to_a.reverse
         else
-            s1 = $site_collection.find({"projMan" => current_user['_id'].to_s}).to_a.reverse
-            s2 = $site_collection.find({constMan: current_user['email']}).to_a.reverse
-            s3 = $site_collection.find({copInCharge: current_user['email']}).to_a.reverse
-            puts("****")
-            puts(s1)
-            puts(s2)
-            puts(s3)
-            puts("****")
-            @allSites = s1 + s2 + s3
-        end        
+            if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
+                searchString = ".*#{params['q']}.*"
+                @allSites = $site_collection.find({'siteId' => Regexp.new(searchString)})
+            elsif(current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
+                @allSites = $site_collection.find().to_a.reverse
+            else
+                s1 = $site_collection.find({"projMan" => current_user['_id'].to_s}).to_a.reverse
+                s2 = $site_collection.find({constMan: current_user['email']}).to_a.reverse
+                s3 = $site_collection.find({copInCharge: current_user['email']}).to_a.reverse
+                puts("****")
+                puts(s1)
+                puts(s2)
+                puts(s3)
+                puts("****")
+                @allSites = s1 + s2 + s3
+            end    
+        end
+        
+        respond_to do |format|
+            format.html
+            format.json { render :json => @allSites.map{ |site| { 'name' => site['siteId'], 'id'=> site['siteId'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
+        end
     end
 end

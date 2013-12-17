@@ -3,62 +3,27 @@
 <div id="inputForm">	
 	<h2> Site Activity Report Form: </h2>
 	<%= form_for(:log_entry, url: '/log_entry', remote: true) do |f| %>
-		
-		<h3> Site Info </h3>
-	  	<p>
+		    
+		<h3> Activity Report </h3>		
+		<p>
 	    	<%= f.label :siteId, "Site ID" %><br>
-	    	<%= f.text_field :siteId, :value => @site["siteId"]%> 
+			<% if @site.nil? %>
+				<% value = nil %>
+			<% else %>
+				<% value = @site["siteId"] %>
+			<% end %>
+	    	<%= f.text_field :siteId, :value => value, :class => 'siteidInput'%> 
 	  	</p>
-	
 		
 		<p>
-			<%= f.label :projMan, "Site Project Manager" %><br>
-			<%= f.text_field :projMan, :value => getPersonEmail(@site["projMan"].to_i) %> 
-		</p>
-	
-		<p>
-			<%= f.label :constMan, "Site Construction Manager" %><br>
-			<%= f.text_field :constMan, :value => getPersonEmail(@site["constMan"].to_i) %> 
-		</p>
-	
-		<p>
-			<%= f.label :copInCharge, "COP In Charge" %><br>
-			<%= f.text_field :copInCharge, :value => getPersonEmail(@site["copInCharge"].to_i) %> 
+	    	<%= f.label :scopeOfWork, "Scope of Work:" %><br>
+			<%= select(:log_entry, :scopeOfWork, [['Civil', 'Civil'], ['EF&I', 'EF&I']]) %>
 	  	</p>
-	
-		<p>
-			<%= f.label :projectCode, "Project Code" %><br>
-			<%= f.text_field :projectCode, :value => @site["projectCode"]%>
-		</p>
-        
-		<p>
-			<%= f.label :siteType, "Site Type" %><br>
-			<%= f.text_field :siteType, :value => @site["siteType"]%>
-		</p>
-		
-		<p>
-	    	<%= f.label :siteAddress, "Site Address" %><br>
-	    	<%= f.text_field :siteAddress, :value => @site["siteAddress"]%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :siteLat, "Site Latitude" %><br>
-	    	<%= f.text_field :siteLat, :value => @site["siteLat"]%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :siteLong, "Site Longitude" %><br>
-	    	<%= f.text_field :siteLong, :value => @site["siteLong"]%>
-	  	</p>
-	    
-		<h3> Activity Report </h3>
 		
 		<!-- look at http://guides.rubyonrails.org/form_helpers.html#using-date-and-time-form-helpers under model object helpers for further elucidation-->
-
 		<p>
 			Site Visit Day:
 			<%= date_select :log_entry, :siteVisitDay %>
-			
 		</p>
 		
 		<p>
@@ -72,28 +37,13 @@
 		</p>
 		
 		<p>
-	    	<%= f.label :crewMembers, "Crew Members:" %><br>
-	    	<%= f.text_field( :crewMembers, "class" => "personInput") %>
+	    	<%= f.label :crewLead, "Crew Lead:" %><br>
+	    	<%= f.text_field( :crewLead, "class" => "personInput") %>
 	  	</p>
 	
 		<p>
-	    	<%= f.label :crewMember1, "Crew Member 1" %><br>
-	    	<%= f.text_field( :crewMember1, "class" => "personInput") %>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :crewMember2, "Crew Member 2" %><br>
-	    	<%= f.text_field :crewMember2, "class" => "personInput"%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :crewMember3, "Crew Member 3" %><br>
-	    	<%= f.text_field :crewMember3, "class" => "personInput"%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :crewMember4, "Crew Member 4" %><br>
-	    	<%= f.text_field :crewMember4, "class" => "personInput"%>
+	    	<%= f.label :otherCrewMembers, "Other Crew Members" %><br>
+	    	<%= f.text_field(:otherCrewMembers, "class" => "personInput") %>
 	  	</p>
 	
 		<p>
@@ -111,11 +61,9 @@
 	    	<%= f.text_field :vehicleEndMilage%>
 	  	</p>
 	
-
-		-- need list of tasks from Roger or Shahrooz --
 		<p>
-	    	<%= f.label :taskCompletedType, "Task Completed Type" %><br>
-	    	<%= f.text_field :taskCompletedType, "class" => "siteTask"%>
+	    	<%= f.label :taskCompleted, "Task Completed" %><br>
+	    	<%= f.text_field :taskCompleted, "class" => "siteTask"%>
 	  	</p>
 	
 		<p>
@@ -132,54 +80,113 @@
 	    	<%= f.label :siteDelayComments, "Site Delay Comments in Detail" %><br>
 	    	<%= f.text_area :siteDelayComments%>
 	  	</p>
-		
-		
-		<p>
-	    	<%= f.label :baseLocation, "Base Location" %><br>
-	    	<%= f.text_area :baseLocation%>
-	  	</p>
 	
-		<p>
-	    	<%= f.label :baseToSiteDist, "Base to site distance (miles round trip)" %><br>
-	    	<%= f.text_field :baseToSiteDist%>
-	  	</p>
-	
-	
-		<p>
-	    	<%= f.label :scopreOfWork, "Scope of Work:" %><br>
-			<%= select(:log_entry, :scopeOfWork, [['Civil', 'Civil'], ['EF&I', 'EF&I']]) %>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :bridgeContactNumber, "Bridge contact number" %><br>
-	    	<%= f.text_field :bridgeContactNumber%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :bridgeRepName, "Bridge Representative Name" %><br>
-	    	<%= f.text_field :bridgeRepName%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :bridgeLoginTime, "Bridge Login Time" %><br>
-	    	<%= f.text_field :bridgeLoginTime%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :bridgeLogoutTime, "Bridge Logout Time" %><br>
-	    	<%= f.text_field :bridgeLogoutTime%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :troubleTicket, "Trouble Ticket" %><br>
-	    	<%= f.text_field :troubleTicket%>
-	  	</p>
+		<div id="changeRequests" style="">
+			<%= render :partial => "log_entry/change_request/change_request_form", locals: {index: 0}%> 
+		</div>
+		<div id="addCrLink" >
+			<%= link_to 'Add a Change Request', {controller: 'log_entry', action: 'add_cr_to_activity_report', id: 0}, remote: true%>
+		</div>
+
 	
 		<input type="hidden" id="log_entry_type" name="log_entry[type]" value="site activity report" />
 	
 	  	<p>
 	    	<%= f.submit "Submit"%>
 	  	</p>
+	
+	
+	
+		<% #NOTE: these fields wrapped in an invisble div contain the site's info per roger/shahrooz original request %>
+		
+		<div style="display:none;">
+		
+		
+			<p>
+		    	<%= f.label :baseLocation, "Base Location" %><br>
+		    	<%= f.text_area :baseLocation%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :baseToSiteDist, "Base to site distance (miles round trip)" %><br>
+		    	<%= f.text_field :baseToSiteDist%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :bridgeContactNumber, "Bridge contact number" %><br>
+		    	<%= f.text_field :bridgeContactNumber%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :bridgeRepName, "Bridge Representative Name" %><br>
+		    	<%= f.text_field :bridgeRepName%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :bridgeLoginTime, "Bridge Login Time" %><br>
+		    	<%= f.text_field :bridgeLoginTime%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :bridgeLogoutTime, "Bridge Logout Time" %><br>
+		    	<%= f.text_field :bridgeLogoutTime%>
+		  	</p>
+	
+			<p>
+		    	<%= f.label :troubleTicket, "Trouble Ticket" %><br>
+		    	<%= f.text_field :troubleTicket%>
+		  	</p>
+		</div>
+		
+		<div style="display:none;">
+
+			<h3> Site Info </h3>
+			<% if (not @site.nil?)%>
+
+				<p>
+					<%= f.label :projMan, "Site Project Manager" %><br>
+					<%= f.text_field :projMan, :value => getPersonEmail(@site["projMan"].to_i) %> 
+				</p>
+
+				<p>
+					<%= f.label :constMan, "Site Construction Manager" %><br>
+					<%= f.text_field :constMan, :value => getPersonEmail(@site["constMan"].to_i) %> 
+				</p>
+
+				<p>
+					<%= f.label :copInCharge, "COP In Charge" %><br>
+					<%= f.text_field :copInCharge, :value => getPersonEmail(@site["copInCharge"].to_i) %> 
+			  	</p>
+
+				<p>
+					<%= f.label :projectCode, "Project Code" %><br>
+					<%= f.text_field :projectCode, :value => @site["projectCode"]%>
+				</p>
+
+				<p>
+					<%= f.label :siteType, "Site Type" %><br>
+					<%= f.text_field :siteType, :value => @site["siteType"]%>
+				</p>
+
+				<p>
+			    	<%= f.label :siteAddress, "Site Address" %><br>
+			    	<%= f.text_field :siteAddress, :value => @site["siteAddress"]%>
+			  	</p>
+
+				<p>
+			    	<%= f.label :siteLat, "Site Latitude" %><br>
+			    	<%= f.text_field :siteLat, :value => @site["siteLat"]%>
+			  	</p>
+
+				<p>
+			    	<%= f.label :siteLong, "Site Longitude" %><br>
+			    	<%= f.text_field :siteLong, :value => @site["siteLong"]%>
+			  	</p>
+			<% end %>
+
+		</div>
+	
+	
 	<% end %>
 </div>
 

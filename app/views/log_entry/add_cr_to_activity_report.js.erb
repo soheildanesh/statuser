@@ -1,0 +1,4 @@
+
+//$('#addCrLink').html( "<div id='addCrLink'> <%= escape_javascript link_to 'add cr damnnn', {controller: 'log_entry', action: 'add_cr_to_activity_report', id: @id.to_s}, remote: true %> </div> ");
+$('#addCrLink').html( "<%= escape_javascript link_to 'Add a Change Request', {controller: 'log_entry', action: 'add_cr_to_activity_report', id: @id.to_s}, remote: true %>");
+$('#changeRequests').append("<%= escape_javascript render :partial => 'log_entry/change_request/change_request_form', locals: {index: @id.to_s} %>").fadeIn();

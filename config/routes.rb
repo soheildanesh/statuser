@@ -2,6 +2,7 @@ Statuser::Application.routes.draw do
   
     resources :log_entry do
         member do
+            get :add_cr_to_activity_report
             get :show_cr_written_proof
             get :show_crew_change_form
             get :show_change_request_form

@@ -1,4 +1,8 @@
 class LogEntryController < ApplicationController
+    
+   def add_cr_to_activity_report
+       @id = (params["id"].to_i+1).to_s
+   end
         
     def new_change_request
         @site = $site_collection.find({"_id" => params["id"].to_i}).to_a[0]

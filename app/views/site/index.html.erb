@@ -3,9 +3,10 @@
 <% end %>
 
 <%#= @allSites %>
+<%= link_to "Submit an Activity Report for a site not assigned to you", { controller:'log_entry', action: 'new_activity_report', id: 'dummy'}%>
 
 <%if !@allSites.nil? %>
-	<h1>All Sites:</h1>
+	<h1>Your Sites:</h1>
 	<% for entry in @allSites %>
 	    <%= render partial: "show", locals: {site: entry} %> <br>
 	<% end %>

@@ -1,53 +1,37 @@
 
+<div id="changeRequestInputForm">
+------------------------------------------------------------	
+	<h4> Change Request Input Form: </h4>
 
-<div id="inputForm">
-	<%= link_to "Submit a crew change", {controller: 'log_entry', action: 'show_crew_change_form', :id => "dummy"}, remote: true %>
-	
-	
-	<h2> Change Request Input Form: </h2>
-	<%= form_for :log_entry, url: '/log_entry' do |f| %>
 
-	  	<p>
-	    	<%= f.label :siteId, "Site ID" %><br>
-	    	<%= f.text_field :siteId%>
-	  	</p>
-  
-
-	  	<p>
-	    	<%= f.label :changeRequestNumber, "Change Request Number" %><br>
-	    	<%= f.text_field :changeRequestNumber%>
-	  	</p>
- 
-	  	<p>
-	    	<%= f.label :changeRequestpRrice, "Change Request Price" %><br>
-	    	<%= f.text_area :changeRequestPrice %>
-		</p>
-
-  
-		<p> 
-			Written proof of change request received? <br>
-			<%= radio_button("log_entry", "written_proof", "no", :checked => "checked") %> No <br>
-			<%= radio_button("log_entry", "written_proof", "yes") %> Yes
-			
-		</p>
-	
-		<p>
-			<%= f.label :writtenProofEvidence, "if written proof is provided, copy paste the email from client that serves as proof" %><br>
-	    	<%= f.text_area :writtenProofEvidence %>
-		</p>
+	<p>
+		<%= label :changeRequestNumber, "Change Request Number" %><br>
+		<%= text_field "log_entry" , "changeRequest[" + index.to_s + "][number]]"%>
+	</p>
+    
+	<p>
+		<%= label :changeRequestpRrice, "Change Request Price" %><br>
+		<%= text_area "log_entry", "changeRequest[" + index.to_s + "][price]" %>
+	</p>
+    
+    
+	<p> 
+		Written proof of change request received? <br>
+		<%= radio_button("log_entry", "changeRequest[" + index.to_s + "][written_proof]", "no", :checked => "checked") %> No <br>
+		<%= radio_button("log_entry", "changeRequest[" + index.to_s + "][written_proof]", "yes") %> Yes
 		
-		<p>
-			<%= f.label :notes, "Enter any additional notes" %><br>
-	    	<%= f.text_area :notes %>
-		</p>
+	</p>
 	
-		<!-- got the hint from here, look under hidden_field -->
-		<input type="hidden" id="log_entry_type" name="log_entry[type]" value="change request" />
- 
-	  	<p>
-	    	<%= f.submit "Submit"%>
-	  	</p>
-	<% end %>
+	<p>
+		<%= label :writtenProofEvidence, "if written proof is provided, copy paste the email from client that serves as proof" %><br>
+		<%= text_area "log_entry", "changeRequest[" + index.to_s + "][writtenProof]" %>
+	</p>
+	
+	<p>
+		<%= label :notes, "Enter any additional notes" %><br>
+		<%= text_area "log_entry", "changeRequest[" + index.to_s + "][notes]" %>
+	</p>
+------------------------------------------------------------
 </div>
 
 
