@@ -62,16 +62,6 @@
 	  	</p>
 	
 		<p>
-	    	<%= f.label :taskCompleted, "Task Completed" %><br>
-	    	<%= f.text_field :taskCompleted, "class" => "siteTask"%>
-	  	</p>
-	
-		<p>
-	    	<%= f.label :taskCompletedDetail, "Task Completed Detail" %><br>
-	    	<%= f.text_field :taskCompletedDetail%>
-	  	</p>
-	
-		<p>
 	    	<%= f.label :siteDelay, "Site Delay (# Hours)" %><br>
 	    	<%= f.text_field :siteDelay%>
 	  	</p>
@@ -102,6 +92,17 @@
 		<div style="display:none;">
 		
 		
+			<p>
+		    	<%= f.label :taskCompleted, "Task Completed" %><br>
+		    	<%= f.text_field :taskCompleted, "class" => "siteTask"%>
+		  	</p>
+
+			<p>
+		    	<%= f.label :taskCompletedDetail, "Task Completed Detail" %><br>
+		    	<%= f.text_field :taskCompletedDetail%>
+		  	</p>
+			
+			
 			<p>
 		    	<%= f.label :baseLocation, "Base Location" %><br>
 		    	<%= f.text_area :baseLocation%>
