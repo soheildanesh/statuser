@@ -26,10 +26,10 @@
 			<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
 		</td>
 		
-		 <%# <NOTE: uncomment this and take away slashes in the display:none below to click on this then show options for site, otherwise they're visible by default> = link_to 'show options', controller:'site', action:'show_options', id:site['_id'], remote: true%>
+
+
+<%# <NOTE: uncomment this and take away slashes in the display:none below to click on this then show options for site, otherwise they're visible by default> = link_to 'show options', controller:'site', action:'show_options', id:site['_id'], remote: true%>
 </table>
-
-
 <div style="display:none;">
 	
 	<% classString = "site_options_#{site['_id']}"%>

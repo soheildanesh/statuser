@@ -1,18 +1,19 @@
-<%#= @site%>
+<%= @site%>
 
 <div id="inputForm">	
 	<h2> Site Activity Report Form: </h2>
 	<%= form_for(:log_entry, url: '/log_entry', remote: true) do |f| %>
-		    
+		 
+		   
 		<h3> Activity Report </h3>		
 		<p>
 	    	<%= f.label :siteId, "Site ID" %><br>
 			<% if @site.nil? %>
-				<% value = nil %>
+				<%= f.text_field :siteId, :value => nil, :class => 'siteidInput'%>
 			<% else %>
-				<% value = @site["siteId"] %>
+				<%= f.text_field :siteId, :value => @site["siteId"], :class => 'siteidInput'%> 
 			<% end %>
-	    	<%= f.text_field :siteId, :value => value, :class => 'siteidInput'%> 
+	    
 	  	</p>
 		
 		<p>
@@ -80,6 +81,7 @@
 
 	
 		<input type="hidden" id="log_entry_type" name="log_entry[type]" value="site activity report" />
+		<input type="hidden" id="data" data-siteid="<%= @site['siteId']%>"  data-sitedbid="<%= @site['_id']%>" />
 	
 	  	<p>
 	    	<%= f.submit "Submit"%>

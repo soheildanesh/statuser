@@ -10,15 +10,26 @@ $( document ).on( "focus", ".personInput", function() {
 });
 
 
-
-$( document ).ready(
-	function() {
-	$(".siteidInput").tokenInput("/site");
+//http://loopj.com/jquery-tokeninput/
+$( document ).ready(function() {
+	
+	$(".siteidInput").tokenInput("/site", 
+		{tokenLimit: 1}
+	);
+	
+	
+	//prepopulate with the site from which they clicked the 'submit activity report' link
+	var siteId = $("#data").data('siteid');
+	var dbid = $("#data").data('sitedbid');
+	$(".siteidInput").tokenInput("add", {id: dbid, name: siteId } );	
+	
 });
 $( document ).on( "focus", ".siteidInput", function() {
-  	$(".siteidInput").tokenInput("/site");
+	$(".siteidInput").tokenInput("/site", 
+		{tokenLimit: 1}
+	);
 });
-
+//http://loopj.com/jquery-tokeninput/
 
 
 $( document ).ready(
