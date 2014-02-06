@@ -1,4 +1,4 @@
-<%= @activityReport%>
+<%#= @activityReport%>
 
 <h1>Site Activity Report </h1>
 
@@ -125,8 +125,10 @@ Change Requests:
 -- need list of tasks from Roger or Shahrooz --
 <p>
 	Task Completed Type:<br>
-	<% for taskType in @activityReport['taskCompletedType'].split(',')%>
-		<%= taskType %><br>
+	<% if( not @activityReport['taskCompletedType'].nil? )%>
+		<% for taskType in @activityReport['taskCompletedType'].split(',')%>
+			<%= taskType %><br>
+		<% end %>
 	<% end %>
 </p>
 

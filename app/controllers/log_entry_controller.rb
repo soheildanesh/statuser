@@ -155,7 +155,7 @@ class LogEntryController < ApplicationController
         existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
         if(existingSite.nil?)
             flash[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
-            render :js => "alert('The site id you entered does not match an existing site, let someone with admin rights know!');"
+            render :js => "alert('The site id you entered does not match an existing site, let someone with admin rights know! (id entered = #{ params[:log_entry][:siteId] })');"
             return
         end
       

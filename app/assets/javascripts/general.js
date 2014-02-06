@@ -13,6 +13,8 @@ $( document ).on( "focus", ".personInput", function() {
 //http://loopj.com/jquery-tokeninput/
 $( document ).ready(function() {
 	
+	// var dbid = $("#data").data('sitedbid'); this is the db id (ie _id fields in mongodb) not the siteId assigned by us, don't need it
+	
 	$(".siteidInput").tokenInput("/site", 
 		{tokenLimit: 1}
 	);
@@ -20,8 +22,8 @@ $( document ).ready(function() {
 	
 	//prepopulate with the site from which they clicked the 'submit activity report' link
 	var siteId = $("#data").data('siteid');
-	var dbid = $("#data").data('sitedbid');
-	$(".siteidInput").tokenInput("add", {id: dbid, name: siteId } );	
+
+	$(".siteidInput").tokenInput("add", {id: siteId, name: siteId } );	
 	
 });
 $( document ).on( "focus", ".siteidInput", function() {
