@@ -216,10 +216,8 @@ class LogEntryController < ApplicationController
             raise "mongodb returend error after write, write might not have happened!"  
         end
         
-        #request.format = :html
         respond_to do |format|
             format.html{ redirect_to 'index'}
-            format.js { render :js => "window.location.replace('/log_entry');" }
         end
       
        
