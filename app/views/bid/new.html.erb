@@ -1,0 +1,19 @@
+<h2> Enter new bid:</h2>
+
+<%= form_for :bid, url: '/bid' do |f| %>
+
+	<%= f.label :Client, "Client" %>
+	<%= f.text_field :client%><br>
+
+	<%= f.label :Description, "Description of Work" %>
+	<%= f.text_field :description%><br>
+	
+	<%= f.label :basePrice, "Base price" %>
+	<%= f.text_field :basePrice%><br>
+	
+	<%= f.label :contactInfo, "Contact Info" %>
+	<%= f.text_field :contactInfo%><br>	
+	
+	<%= f.submit "Submit" %>
+	
+<%end%>

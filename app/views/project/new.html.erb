@@ -1,0 +1,31 @@
+<h2> New Project:</h2>
+
+<%= form_for :project, url: '/project' do |f| %>
+
+	<%= f.label :projectId3s, "New 3S Internal project ID (Will generate randomly if left blank)" %>
+	<%= f.text_field :projectId3s%><br>
+	
+	<%= f.label :projMan, "Site Project Manager" %>
+	<%= f.text_field :projMan, :class => "personInput"%><br><br>
+	
+	<%= f.label :projectManger3s, "New 3S  project Manager" %>
+	<%= f.text_field :projectManger3s%><br>
+	
+	<%= f.label :client, "Client" %>
+	<%= f.text_field :client%><br>
+	
+	<%= f.label :projectMangerClient, "Client project Manager" %>
+	<%= f.text_field :projectMangerClient%><br>
+	
+	<p>
+    	<%= f.label :siteId, "Site ID" %><br>
+		<% if @site.nil? %>
+			<%= f.text_field :siteId, :class => 'siteidInput'%>
+		<% else %>
+			<%= f.text_field :siteId, :value => @site["siteId"], :class => 'siteidInput'%> 
+		<% end %>
+  	</p>	
+	<%= f.submit "Submit" %>
+	
+<%end%>
+<br>

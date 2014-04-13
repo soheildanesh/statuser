@@ -1,0 +1,66 @@
+
+<%#= quote %>
+
+
+
+<table>
+	<tr>
+		<td>
+			<b> Quote Price </b>
+		</td>
+		
+		<td>
+			<b> Acceptance Status </b>
+		</td>
+		
+	</tr>
+
+	<tr>
+		<td>
+			<%= quote['quotePrice'] %>
+		</td>
+		
+	
+		
+		
+		
+		<td>
+			<% if(quote.has_key? 'status') %> 
+				<%= quote['status']['status'] %>, <%= quote['status']['createdAt'] %>
+			<% else %>
+				pending
+			<% end %>
+		</td>
+		
+		
+		
+		
+		<%#= quote['status']%>
+	
+		
+		<% if quote.has_key?('status') %>
+			<% if quote['status'] == "accepted" %>
+			<td>
+				<span style = "color:red;"> <%= quote['rejection']%> </span>
+			</td>
+			<% end %>
+		
+		<% elsif quote.has_key?('acceptance') %>
+			<td>
+				<span style = "color:green;"> <%= quote['acceptance']%> </span>
+			</td>
+		<% else %>
+			<td>
+				<%= link_to 'Register Quote Accepted', {controller: 'quote', action: 'updateAcceptanceStatus', id: quote['_id'], status: 'accepted'} , {method: 'post', style: "color:green;"} %>
+			</td>
+			<td>
+				<%= link_to 'Register Quote Rejected', {controller: 'quote', action: 'updateAcceptanceStatus', id: quote['_id'], status: 'rejected'}, {method: 'post', style: "color:red;"} %>
+			</td>
+		<%end%>
+	</tr>
+
+
+
+	
+	
+</table>

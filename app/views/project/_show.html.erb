@@ -1,0 +1,77 @@
+
+
+<div style="width:1400px;">
+		<hr style="margin:0px;">
+	<div style="width:1200px; background-color:#CEF6CE;">
+		<div class='wSmall'>
+			<b> 3S Project Id </b>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;">
+			<b> Client </b>
+		</div>
+		
+		<div class='wSmall'>
+			<b> Site ID </b>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;">
+			<b> 3S Project Manager</b>
+		</div>
+		
+		<div class='wSmall'>
+			<b> Client Project Manager </b>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;">
+			<b> Created at </b>
+		</div>
+		
+	</div>
+	
+	<div style="width:1400px; float:left;">
+		
+		<% if project['projectId3s'].nil? or project['projectId3s'].empty? %>
+			<% linkText = project['_id'].to_s %>
+		<% else %>
+			<% linkText = project['projectId3s'] %>
+		<% end %>
+		<div class='wSmall'>
+			<%= link_to linkText, {controller: 'project', action: 'show', id: project['_id'].to_s}, {style: "color:green;"} %>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;" style="background-color:#CEF6CE;">
+			<%=  printReplaceEmpty project['client'] %> 
+		</div>
+		
+		<div class='wSmall'>
+			<%= printReplaceEmpty project['siteId'] %>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;">
+			<%= printReplaceEmpty project['projectManger3s'] %>
+		</div>
+		
+		<div class='wSmall'>
+			<%= printReplaceEmpty project['projectMangerClient'] %>
+		</div>
+		
+		<div class='wSmall' style="background-color:#CEF6CE;">
+			<%= printReplaceEmpty project['createdAt'].to_s %>
+		</div>
+		
+		
+		<div class='wSmall'>
+			<%= link_to 'Delete', {action: 'destroy', id: project['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</div>
+		<hr>
+	</div>
+
+	<br>
+	<br>
+	<br>
+	
+</div>
+
+
+

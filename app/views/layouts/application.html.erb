@@ -24,9 +24,17 @@
 	
 	<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
 		| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	
+		| <%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>	
 	<% end %>
 		
 	<br></br>
+	
+	<%if false and current_user and current_user['role'] == "admin" %>
+		<br><br>Purchase Order Management: 
+		<%= link_to "Bids",  :controller => 'bid', :action => 'index' %> |
+		<%= link_to "Quotes",  :controller => 'quote', :action => 'index' %> | 
+		<%= link_to "Projects",  :controller => 'project', :action => 'index' %> | 
+	<%end%>
 	
 	<div id="flashNotice">
 		<%= render :partial => 'layouts/flash_notice' , :locals => { :flash => flash } %>

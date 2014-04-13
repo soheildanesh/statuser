@@ -1,0 +1,35 @@
+<%#= depth%>
+
+<%# only keys from the topolgy should end up in the else statement%>
+
+<%if not hierarchy.nil? %>
+	<% hierarchy.each {|key, value| %>
+
+		<%if key == 'leaves'%>
+			<div  class="listOfCrs" style="display:none;">
+				<%for leaf in value %>
+					<% for i in 0..depth%>
+						&nbsp;
+					<% end %>
+					<%= render partial: 'show', locals: {wo: leaf}  %>
+				<% end %>
+			</div>
+		<%elsif key == 'count' or key == 'grantCount'%>
+			
+		<% else %>
+			<div>
+				<% for i in 0 .. depth.to_i %>
+					&nbsp;
+				<% end %>
+				<% if value.has_key? 'leaves'%>
+					<%= link_to key+' ('+hierarchy[key]['count'].to_s+')' ,{},{class: 'showCrs'}%>
+				<% else %>
+					<%= key %> (<%= hierarchy[key]['count'] %>)<br>
+				<% end %>
+					<%= render partial: "show_hierarchy", locals: {hierarchy: value, depth: depth+3} %>	
+			</div>
+		<% end %>
+
+	<% } %>
+	
+<% end %>

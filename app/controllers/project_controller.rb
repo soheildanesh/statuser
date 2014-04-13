@@ -1,0 +1,65 @@
+class ProjectController < ApplicationController
+    def new
+        
+        
+        
+        
+        
+        #make project off of quote, march 29
+        #
+        #if( not params["quote_id"].nil?)
+        #    @quote = $quote_collection.find({ :_id => BSON::ObjectId(params['quote_id']) } ).to_a[0]
+        #end
+             
+        #indicate quote has been accepted (acceptedQuote['accepted?'] = true) but no internal project has been created for it yet 
+        #acceptedQuote = Hash.new
+        #@quote.each do |key, value|
+        #    acceptedQuote[key] = value
+        #end
+        #acceptedQuote['accepted?'] = true
+        #$quote_collection.save(acceptedQuote)
+    end
+    
+    def show
+        id = params['id']
+        @project = $project_collection.find({:_id => BSON::ObjectId(id) } ).to_a[0]
+        
+         @wos = Array.new
+         @project.each do |key, value|
+             if(key.include? 'wo_id')
+                 @wos << $wo_collection.find(:_id => value).to_a[0]
+             end
+         end
+         
+         @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
+         
+    end
+    
+    def create
+        if( params['project'].nil? )
+            return nil
+        end
+        
+        #TODO check admin status so not just any one can create new proj
+        
+        #create new project and add quoteId to it
+        @project = Hash.new()
+        @project = params['project']
+        @project['createdAt'] = Time.now
+        @project['createdBy'] = $current_user
+        
+        projectId = $project_collection.insert(@project)
+ 
+        redirect_to action: 'index'
+    end
+    
+    def index
+        if(current_user.nil?)
+             flash[:notice] = "Have to be admin user for this"
+             render '/login_session/new'
+             return
+         elsif(current_user['role'] == 'admin')
+             @projects = $project_collection.find().sort( :_id => :desc ).to_a
+         end
+    end
+end

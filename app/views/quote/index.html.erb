@@ -1,0 +1,12 @@
+<%#= @quotes%>
+<%if !@quotes.nil? %>
+	<%if !@quotes.empty? %>
+		<h1>All Quotes:</h1>
+		<% for entry in @quotes %>
+		    <%= render partial: 'show', locals: {quote: entry} %> <br>
+		<% end %>
+	<% else %>
+		<br>
+		No quotes in database
+	<% end %>
+<%end%>

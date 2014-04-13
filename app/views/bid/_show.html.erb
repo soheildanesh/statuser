@@ -1,0 +1,39 @@
+<table>
+	<tr>
+		<td>
+			<b> Client </b>
+		</td>
+		<td>
+			<b> Base Price </b>
+		</td>
+		<td>
+			<b> Description </b>
+		</td>
+		<td>
+			<b> Contact info </b>
+		</td>
+		
+	</tr>
+	
+	<tr>
+		<td>
+			<%= bid['client'] %>
+		</td>
+		<td>
+			<%= bid['basePrice'] %>
+		</td>
+		<td>
+			<%= bid['description'] %>
+		</td>
+		<td>
+			<%= bid['contactInfo'] %>
+		</td>
+		<td>
+			<%= link_to 'Quote', {controller: 'quote', action: 'new', bid_id: bid['_id']} %>
+		</td>
+		<td>
+			<%= link_to 'Delete', {action: 'destroy', id: bid['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</td>
+		
+	</tr>
+</table>

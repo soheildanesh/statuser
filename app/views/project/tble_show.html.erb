@@ -1,0 +1,71 @@
+
+
+
+<table>
+	<tr>
+		<td width="100">
+			<b> 3S Project Id </b>
+		</td>
+		
+		<td>
+			<b> Client </b>
+		</td>
+		
+		<td>
+			<b> Site ID </b>
+		</td>
+		
+		<td>
+			<b> 3S Project Manager</b>
+		</td>
+		
+		<td>
+			<b> Client Project Manager </b>
+		</td>
+		
+		<td>
+			<b> Created at </b>
+		</td>
+		
+	</tr>
+	
+	<tr>
+		
+		<% if project['projectId3s'].nil? or project['projectId3s'].empty? %>
+			<% linkText = project['_id'].to_s %>
+		<% else %>
+			<% linkText = project['projectId3s'] %>
+		<% end %>
+		<td>
+			<%= link_to linkText, {controller: 'project', action: 'show', id: project['_id'].to_s}, {style: "color:green;"} %>
+		</td>
+		
+		<td>
+			<%= project['client'] %>
+		</td>
+		
+		<td>
+			<%= project['siteId'] %>
+		</td>
+		
+		<td>
+			<%= project['projectManger3s'] %>
+		</td>
+		
+		<td>
+			<%= project['projectMangerClient'] %>
+		</td>
+		
+		<td>
+			<%= project['createdAt'] %>
+		</td>
+		
+		
+		<td>
+			<%= link_to 'Delete', {action: 'destroy', id: project['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</td>
+	</tr>
+</table>
+
+
+

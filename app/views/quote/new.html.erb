@@ -1,0 +1,15 @@
+<h2> Enter new quote:</h2>
+
+<%= form_for :quote, url: '/quote' do |f| %>
+
+	<%= f.label :QotePrice, "Quote Price" %>
+	<%= f.text_field :quotePrice%><br>
+	
+	<input type="hidden" id="woId" name="quote[woId]" value= <%=@wo['_id']%> />
+	
+	<%= f.submit "Submit" %>
+	
+<%end%>
+<br>
+<b> For Work Order: </b>
+<%= render partial: '/work_order/show', locals: {wo: @wo} %> <br>

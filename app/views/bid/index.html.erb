@@ -1,0 +1,14 @@
+<br><br>
+<b> <%= link_to 'ENTER NEW BID', controller: 'bid', action: 'new'%></b>
+
+<%if !@bids.nil? %>
+	<%if !@bids.empty? %>
+		<h1>All Bids:</h1>
+		<% for entry in @bids %>
+		    <%= render partial: 'show', locals: {bid: entry} %> <br>
+		<% end %>
+	<% else %>
+		<br>
+		No bids in database
+	<% end %>
+<%end%>

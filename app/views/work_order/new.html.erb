@@ -1,0 +1,75 @@
+<h2> New Work Order:</h2>
+
+
+<%= form_for :work_order, url: '/work_order' do |f| %>
+
+	<input type="hidden" name="work_order[projectId]" value='<%= @projctId %>' />
+
+	<%#= f.label :workOderId, "Enter Work Order ID (Will create random unique id if left blank)" %>
+	<%# s= f.text_field :workOderId %><br>
+	
+	<p>
+		<%= f.label :name, "Name" %><br>
+		<%= f.text_field :name %><br>
+	</p>
+	
+	<p>
+		<%= f.label :description, "Description" %><br>
+		<%= f.text_area :description %><br>
+	</p>
+	
+	<p>
+		<%= f.label :customerPm, "Customer Project Manger Email"%><br>
+		<%= f.text_field :customerPm %><br>
+	</p>
+	
+	<p>
+		<%= f.label :projMan, "Site Project Manager" %>
+		<%= f.text_field :projMan, "class" => "personInput", style: 'width:200px; display:none;', size:10%><br>
+	</p>
+	
+	<p>
+    	<%= f.label :siteId, "Site ID" %><br>
+		<% if @site.nil? %>
+			<%= f.text_field :siteId, :class => 'siteidInput'%>
+		<% else %>
+			<%= f.text_field :siteId, :value => @site["siteId"], :class => 'siteidInput'%> 
+		<% end %>
+  	</p>
+	
+	<p>
+		<%= f.label :rfxNumber, "RFx Number" %><br>
+		<%= f.text_field :rfxNumber %><br>
+	</p>
+	
+	<p>
+		<%#= f.label :cpo, "CPO" %>
+		<%#= f.text_field :cpo %>
+	</p>
+	
+	<p>
+		<%= f.label :quantity, "Quantity"%><br>
+		<%= f.text_field :quantity %><br>
+	</p>
+	
+	<p>
+		<%= f.label :unitType, "Unit Type"%><br>
+		<%= f.text_field :unitType %><br>
+	</p>
+	
+	<p>
+		<%= f.label :unitPrice, "Unit Price"%><br>
+		<%= f.text_field :unitPrice %><br>
+	</p>
+	
+	<p>
+		<%= f.label :totalPrice, "Total Price"%><br>
+		<%= f.text_field :totalPrice %><br>
+	</p>
+	
+	
+
+	<%= f.submit "Submit" %>
+	
+<%end%>
+<br>

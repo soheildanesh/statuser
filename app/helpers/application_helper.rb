@@ -1,6 +1,16 @@
 module ApplicationHelper
     
     
+    def printReplaceEmpty str
+       if  str.nil? 
+           str = "_"
+       elsif str.empty?
+           str = "_"
+       end
+
+       return str
+    end
+    
     def getPersonEmail personId
         a = $person_collection.find({"_id" => personId.to_i}).to_a
         if(!a.nil? and !a.empty?)

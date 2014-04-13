@@ -1,0 +1,183 @@
+<%#= @wo%>
+<br>
+
+<%#= @childHierarchy %>
+
+<div>
+
+	<div style = "width:300px; float:left;">
+	
+		<% if @wo.has_key? 'parentWoId'  %>	
+			<%= link_to 'Parent WO', {action:'show', id:@wo['parentWoId']}%>
+		<% elsif @wo.has_key? 'projectId'%>
+			<%= link_to 'Parent Project', {controller: 'project', action:'show', id:@wo['projectId']}%>
+		<% end %>
+	
+		<p>
+			ID: <br>
+			<%= @wo['_id']%>
+		</p>
+	
+		<p>
+			Name: <br>
+			<%= @wo['name']%>
+		</p>
+	
+	
+		<p>
+			Site ID: <br>
+			<%= @wo['siteId']%>
+		</p>
+	
+		<p>
+			RFx Number: <br>
+			<%= @wo['rfxNumber']%>
+		</p>
+		<%if not @wo['type'].nil? and not @wo['type'].include? 'Pre-Approval'%>
+			<p>
+				CPO: <br>
+				<% if @wo.has_key? 'cpo' and ( not @wo['cpo'].empty? )  %>
+					<%= link_to @wo['cpo']['cpoNum'], controller: 'cpo', action: 'show', id: @wo['_id'] %>
+				<% end %>
+				<%#= @wo['cpo']['cpoNum']%>
+			</p>
+		<% end %>
+		<p>
+			Created At: <br>
+			<%= @wo['createdAt']%>
+		</p>
+		
+		<p>
+			Quantity: <br>
+			<%= @wo['quantity']%>
+		</p>
+		
+		<p>
+			Unit Type: <br>
+			<%= @wo['unitType']%>
+		</p>
+		
+		<p>
+			Unit Price: <br>
+			<%= @wo['unitPrice']%>
+		</p>
+		
+		<p>
+			Total Price: <br>
+			<%= @wo['totalPrice']%>
+		</p>
+	
+	</div>
+	
+	 
+	<div style="float:left; width:200px;">
+		
+		<% readyForQuote  = false %>
+		
+		<%if @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status' and  @wo['woAcceptance']['status'] == 'accepted'%>
+			<% readyForQuote  = true %>
+			<%= link_to 'woAcceptance', action: 'showWoAcceptance', id:@wo['_id']%><br>
+			<hr>
+		<% end %>
+		
+		<% if readyForQuote == false %>
+		
+			<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
+				<input type="hidden" name="work_order[woAcceptance][status]" value="accepted" />					
+				<%= f.submit "Accept Work Order" %>
+			<% end %>
+			
+			<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
+				<input type="hidden" name="work_order[woAcceptance][status]" value="rejected" />					
+				<%= f.submit "Reject Work Order" %>
+			<% end %>
+		<% end %>
+		
+		
+		
+		
+		<% if @wo.has_key? 'parentWoId'  %>	
+			<%if @wo['grant'].nil? %>
+				<% readyForQuote  = false%>
+				
+				<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
+					<input type="hidden" name="work_order[grant][status]" value="granted" />					
+					<%= f.submit "Granted?" %>
+				<% end %>
+				
+				<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
+					<input type="hidden" name="work_order[grant][status]" value="notGranted" />					
+					<%= f.submit "Not Granted?" %>
+				<% end %>
+				
+				
+				<%#= link_to 'Granted?'%>  <%#= link_to 'Not Granted?'%>
+			<% elsif @wo['grant']['status'] == 'notGranted' %>
+				<% readyForQuote  = false%>
+				<%= link_to 'Rejected Grant', {action: 'showGrant', id:@wo['_id']}%>
+			<% elsif @wo['grant']['status'] == 'granted'%>
+				<%= link_to 'Accepted Grant', {action: 'showGrant', id:@wo['_id']}%>
+			<% end %>
+			<hr>
+			
+		<% end %>
+		
+		<% if @wo.has_key? 'type' and  @wo['type'].include? 'Pre-Approval' %>
+			<% woIsPreapp = true %>
+		<% end %>
+		<%if not woIsPreapp %>
+			<% if readyForQuote and @hasQuote %>
+				<div>
+				<%= link_to 'Existing Quotes ', {controller: 'quote', action: 'showWoQuotes', id: @wo['_id'] }%> 
+				<hr>
+				</div>
+			<% end %>
+					
+			<%if @wo.has_key? 'acceptedQuoteId' and readyForQuote%>
+		
+				<div style="float:left;">
+					<%= link_to 'Accepted Quote', {controller: 'quote', action: 'show', id: @wo['acceptedQuoteId'] }%>
+					<% if @wo.has_key? 'cpo' and ( not @wo['cpo'].empty? )  %>
+						<br><br>
+						<%= link_to 'CPO', {controller: 'cpo', action: 'show', id: @wo['_id'] } %> <br>
+				
+						<%if @wo.has_key? 'grcr'%>
+							<br> <%= link_to 'GRCR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
+						<% else %>	
+							<%= render partial: 'new_grcr', locals: {wo: @wo} %> <br>
+						<% end %>
+				
+					<% else %>
+						<br><br>
+						<%= render partial: 'new_cpo', locals: {wo: @wo} %> <br>
+					<% end %>
+			
+				</div>
+		
+			<% elsif readyForQuote %>
+				<%= link_to 'New Quote', {controller: 'quote', action: 'new', woId: @wo['_id'] }%>
+			<% end %>
+		<% end %>
+		
+		
+		<% if not @wo.has_key? 'parentWoId'  and readyForQuote == true %>
+			<div style="float:left;  width:200px;">
+				<hr>
+				<%= link_to 'New Change Request', {action: 'newChangeRequest'}%>			
+				<hr>
+			
+				<%if not @childHierarchy.nil? and  not @childHierarchy.empty? %>
+				<%#= @childHierarchy %>
+				Existing Change Requests:<br><br>
+					<%= render partial: "show_hierarchy", locals: {hierarchy:  @childHierarchy, depth: 0} %>
+				<% end %>
+			</div>
+		<% end %>
+	
+	</div>
+	
+
+	
+	
+		
+</div>

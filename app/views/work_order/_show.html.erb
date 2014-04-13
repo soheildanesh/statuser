@@ -1,0 +1,90 @@
+<%#= wo %>
+<table style="position:relative; left:30px;">
+	<tr>
+		<td>
+			<b> Id </b>
+		</td>
+		
+		<% if wo.has_key? 'parentWoId'%>
+			<td>
+				Granted?
+			</td>
+		<% end %>
+		
+		<td>
+			<b> Site ID </b>
+		</td>
+		
+		<td>
+			<b> RFx Number </b>
+		</td>
+		
+		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
+			<td>
+				<b> CPO </b>
+			</td>
+		<% end %>
+		
+		<td>
+			<b> Name </b>
+		</td>
+		
+		<td>
+			<b> Created at </b>
+		</td>
+		
+	</tr>
+	
+	<tr>
+		
+		<% if wo['workOrderId'].nil? or wo['workOderId'].empty? %>
+			<% linkText = wo['_id'].to_s %>
+		<% else %>
+			<% linkText = wo['workOderId'] %>
+		<% end %>
+		<td>
+			<%= link_to linkText, {controller: 'work_order', action: 'show', id: wo['_id'].to_s}, {style: "color:green;"} %>
+		</td>
+		
+		<% if wo.has_key? 'parentWoId'%>
+			<td>
+				<%if wo['grant'].nil? %>
+					No
+				<% elsif wo['grant']['status'] == 'notGranted' %>
+					No
+				<% else %>
+					Yes
+				<% end %>
+			</td>
+		<% end %>
+		
+		<td>
+			<%= wo['siteId'] %>
+		</td>
+		
+		<td>
+			<%= wo['rfxNumber'] %>
+		</td>
+		
+		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
+			<td>
+				<% if wo.has_key? 'cpo' and ( not wo['cpo'].empty? )  %>
+					<%= link_to wo['cpo']['cpoNum'], controller: 'cpo', action: 'show', id: wo['_id'] %>
+				<% end %>
+			</td>
+		<% end %>
+		
+		<td>
+			<%= wo['name'] %>
+		</td>
+		
+		<td>
+			<%= wo['createdAt'] %>
+		</td>
+		
+		
+		<td>
+			<%= link_to 'Delete', {action: 'destroy', id: wo['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</td>
+	</tr>
+</table>

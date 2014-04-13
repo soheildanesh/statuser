@@ -1,3 +1,38 @@
-.alert-error{
-	color:red;
+table
+{
+border-collapse:collapse;
+}
+table, td, th
+{
+border:1px solid black;
+}
+
+table
+{
+	margin:20px;
+	width:2000px;
+}
+
+td
+{
+	padding:5px;
+	width:1000px;
+}
+
+.wLarge
+{
+	width:2000;
+}
+
+
+.wSmall
+{
+	width:200px;
+	float:left;
+	align:center;
+}
+
+div
+{
+	border:0px solid;
 }

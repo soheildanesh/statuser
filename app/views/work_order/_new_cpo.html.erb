@@ -1,0 +1,11 @@
+
+Enter CPO:
+<%= form_for :cpo, url: {action: "addCpo"}, html: {class: "nifty_form"} do |f| %>
+	<%= f.label :cpoNum, "CPO Number" %>
+	<%= f.text_field :cpoNum %>
+	
+	<input type="hidden" name="woId" value="<%= wo['_id'] %>" />
+	
+	<%#= f.text_area :body, size: "60x12" %>
+	<%= f.submit "Submit" %>
+<% end %>

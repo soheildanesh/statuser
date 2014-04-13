@@ -1,9 +1,16 @@
+$(document).on("click", '.showCrs', function(){
+	$(this).siblings('.listOfCrs').toggle();
+	return false;
+});
+
 
 //for token input autocomplete///// 		
 $( document ).ready(
 	function() {
 	$(".personInput").tokenInput("/person");
 });
+
+
 //note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
 $( document ).on( "focus", ".personInput", function() {
   	$(".personInput").tokenInput("/person");
@@ -21,9 +28,11 @@ $( document ).ready(function() {
 	
 	
 	//prepopulate with the site from which they clicked the 'submit activity report' link
-	var siteId = $("#data").data('siteid');
+	//var siteId = $("#data").data('siteid');
+	//if(siteId != 'null'){
+	//	$(".siteidInput").tokenInput("add", {id: siteId, name: siteId } );	
+	//}
 
-	$(".siteidInput").tokenInput("add", {id: siteId, name: siteId } );	
 	
 });
 $( document ).on( "focus", ".siteidInput", function() {

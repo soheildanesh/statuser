@@ -27,6 +27,35 @@ Statuser::Application.routes.draw do
             get :quick_search
         end
     end
+    
+    resources :bid
+    
+    resources :quote do
+        member do
+            post :updateAcceptanceStatus
+            get :showWoQuotes
+        end
+    end
+    
+    resources :project
+    
+    resources :cpo
+    
+    resources :work_order do
+        member do
+            post :addCpo
+            get :showCpo
+            get :newAuthorizationRequest
+            get :newChangeRequest
+            post :updateGrantStatus
+            get :showGrant
+            get :newPreApprovalRequest
+            post :addGrcr
+            get :showGrcr
+            post :updateWoAcceptance
+            get :showWoAcceptance
+        end
+    end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

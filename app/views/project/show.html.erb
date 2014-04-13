@@ -1,0 +1,14 @@
+
+
+<%= render partial: 'show', locals: {project: @project} %>
+
+<div>
+	<p>
+	<%= link_to "New Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
+	</p>
+</div>
+<b> Work Orders: </b>
+<% for wo in @wos%>
+	<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+	<%#= wo %>
+<% end %>
