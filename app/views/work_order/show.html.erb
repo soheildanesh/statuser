@@ -1,4 +1,4 @@
-<%#= @wo%>
+<%= @wo%>
 <br>
 
 <%#= @childHierarchy %>
@@ -80,7 +80,7 @@
 			<hr>
 		<% end %>
 		
-		<% if readyForQuote == false %>
+		<% if readyForQuote == false and not @wo.has_key? 'parentWoId'%>
 		
 			<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
 				<input type="hidden" name="work_order[woAcceptance][status]" value="accepted" />					
