@@ -74,10 +74,13 @@
 		
 		<% readyForQuote  = false %>
 		
+		<!-- sets the readyForQuote condition to true for both regular work orders (which have to be accepted) and authorization request change requests which have to granted (accept and grant are stored in separate fields but are candidates for merge) soheil april 14 2014-->
 		<%if @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status' and  @wo['woAcceptance']['status'] == 'accepted'%>
 			<% readyForQuote  = true %>
 			<%= link_to 'woAcceptance', action: 'showWoAcceptance', id:@wo['_id']%><br>
 			<hr>
+		<%elsif (@wo.has_key? 'parentWoId' and @wo.has_key? 'grant' and @wo['grant']['status'] == 'granted')%>
+			<% readyForQuote  = true %>
 		<% end %>
 		
 		<% if readyForQuote == false and not @wo.has_key? 'parentWoId'%>

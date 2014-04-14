@@ -1,15 +1,28 @@
+<div style='width:1400px;'>
+	<%= link_to 'New Project', {controller: 'project', action: 'new'}, {style: "color:blue;"} %>
 
- <%= link_to 'New', {controller: 'project', action: 'new'}, {style: "color:blue;"} %>
 
+	<%if !@projects.nil? %>
+		<%if !@projects.empty? %>
+			<h1>All Projects:</h1>
+			<%shadedBg = false;%>
+			<% for entry in @projects %>
+				
+				<%if shadedBg%>
+					<div style="background-color:beige; padding:0px;">
+				<%end%>
+			    <%= render partial: 'show', locals: {project: entry} %> <br>
+				<%if shadedBg%>
+					</div>
+					<%shadedBg=false%>
+				<%else%>
+					<%shadedBg=true%>
+				<%end%>
 
-<%if !@projects.nil? %>
-	<%if !@projects.empty? %>
-		<h1>All Projects:</h1>
-		<% for entry in @projects %>
-		    <%= render partial: 'show', locals: {project: entry} %> <br>
+			<% end %>
+		<% else %>
+			<br>
+			No projects in database
 		<% end %>
-	<% else %>
-		<br>
-		No projects in database
-	<% end %>
-<%end%>
+	<%end%>
+</div>

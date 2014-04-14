@@ -1,14 +1,82 @@
 
 
-<%= render partial: 'show', locals: {project: @project} %>
+<%#= render partial: 'show', locals: {project:  @project} %>
+
+
+<p>
+	<%= "3SN Project ID" %><br>
+	<%= printReplaceEmpty @project['_id'].to_s%>
+</p>
+
+<p>
+	<%=  "3SN Project Name" %><br>
+	<%= printReplaceEmpty @project['projName']%>
+</p>
+
+<p>
+	<%= "3SN Program" %><br>
+	<%= printReplaceEmpty @project['program']%>
+</p>
+
+<p>
+	<%= "Client" %><br>
+	<%= printReplaceEmpty @project['client']%>
+</p>
+
+<p>
+	<%= "3SN Customer ID" %><br>
+	<%= printReplaceEmpty @project['customerId']%>
+</p>
+
+
+<p>
+	<%=  "3SN Operator ID" %><br>
+	<%= printReplaceEmpty @project['operatorId']%>
+</p>
+
+<p>
+	<%=  "3SN Project Manager" %><br>
+	<%= printReplaceEmpty @project['projManager']%>
+</p>
+
+<p>
+	<%=  "3SN Project Controller" %><br>
+	<%= printReplaceEmpty @project['projController']%>
+</p>
+
+<p>
+	<%= "Start Date" %><br>
+	<%= printReplaceEmpty @project['startDate']%>
+</p>
+
+<p>
+	<%=  "End Date" %><br>
+	<%= printReplaceEmpty @project['endDate']%>
+</p>
+
+
+<p>
+	<%=  "Created AT" %><br>
+	<%= printReplaceEmpty @project['createdAt'].to_s %>
+</p>
+
+
+
+
+
+
 
 <div>
 	<p>
 	<%= link_to "New Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
 	</p>
 </div>
-<b> Work Orders: </b>
-<% for wo in @wos%>
-	<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
-	<%#= wo %>
+<%if @wos.nil? or @wos.empty? %>
+	- No work orders under this project currently.
+<% else %>
+	<b> Work Orders: </b>
+	<% for wo in @wos%>
+		<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+		<%#= wo %>
+	<% end %>
 <% end %>

@@ -1,21 +1,57 @@
 <h2> New Project:</h2>
 
 <%= form_for :project, url: '/project' do |f| %>
-
-	<%= f.label :projectId3s, "New 3S Internal project ID (Will generate randomly if left blank)" %>
-	<%= f.text_field :projectId3s%><br>
 	
-	<%= f.label :projMan, "Site Project Manager" %>
-	<%= f.text_field :projMan, :class => "personInput"%><br><br>
+	<p>
+		<%= f.label :projName, "3SN Project Name" %><br>
+		<%= f.text_field :projName%>
+	</p>
 	
-	<%= f.label :projectManger3s, "New 3S  project Manager" %>
-	<%= f.text_field :projectManger3s%><br>
+	<p>
+		<%= f.label :program, "3SN Program" %><br>
+		<%= f.text_field :program%>
+	</p>
 	
-	<%= f.label :client, "Client" %>
-	<%= f.text_field :client%><br>
+	<p>
+		<%= f.label :program, "Type" %><br>
+		<%= f.text_field :projType%>
+	</p>
 	
-	<%= f.label :projectMangerClient, "Client project Manager" %>
-	<%= f.text_field :projectMangerClient%><br>
+	
+	<p>
+		<%= f.label :client, "Client" %><br>
+		<%= f.text_field :client%><br>
+	</p>
+	
+	<p>
+		<%= f.label :customerId, "3SN Customer ID" %><br>
+		<%= f.text_field :customerId%>
+	</p>
+	
+	<p>
+		<%= f.label :operatorId, "3SN Operator ID" %><br>
+		<%= f.text_field :operatorId%>
+	</p>
+	
+	<p>
+		<%= f.label :projManager, "3SN Project Manager" %><br>
+		<%= f.text_field :projManager%>
+	</p>
+	
+	<p>
+		<%= f.label :projManager, "3SN Project Controller" %><br>
+		<%= f.text_field :projController%>
+	</p>
+	
+	<p>
+		<%= f.label :startDate, "Start Date" %><br>
+		<%= f.text_field :startDate%>
+	</p>
+	
+	<p>
+		<%= f.label :endDate, "End Date" %><br>
+		<%= f.text_field :endDate%>
+	</p>
 	
 	<p>
     	<%= f.label :siteId, "Site ID" %><br>
