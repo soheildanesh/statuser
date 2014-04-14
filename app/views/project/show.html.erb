@@ -61,22 +61,33 @@
 </p>
 
 
-
-
-
-
-
 <div>
 	<p>
-	<%= link_to "New Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
+		<div style="width:900px;">
+			<hr>
+			<%= link_to "New Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
+		</div>
 	</p>
 </div>
 <%if @wos.nil? or @wos.empty? %>
 	- No work orders under this project currently.
 <% else %>
-	<b> Work Orders: </b>
-	<% for wo in @wos%>
-		<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
-		<%#= wo %>
+	<p>
+		<b> Project's Work Orders: </b>
+	</p>
+
+	<%shadedBg=false%>
+		<% for wo in @wos%>
+			<%if shadedBg%>
+				<div style="background-color:beige; padding:0px; width:900px;">
+			<%end%>
+			<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+			<%if shadedBg%>
+				</div>
+				<%shadedBg=false%>
+			<%else%>
+				<%shadedBg=true%>
+			<%end%>
 	<% end %>
+	
 <% end %>

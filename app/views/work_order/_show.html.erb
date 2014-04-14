@@ -1,53 +1,51 @@
 <%#= wo %>
-<table style="position:relative; left:30px;">
-	<tr>
-		<td>
+<div style="width:1400px;">
+
+	<div style="width:900px; float:left;">
+		<hr style="margin:0px;">
+		<div class='wSmall'>
 			<b> Id </b>
-		</td>
+		</div>
 		
 		<% if wo.has_key? 'parentWoId'%>
-			<td>
+			<div class='wSmall'>
 				Granted?
-			</td>
+			</div>
 		<% end %>
 		
-		<td>
+		<div class='wSmall'>
 			<b> Site ID </b>
-		</td>
+		</div>
 		
-		<td>
+		<div class='wSmall'>
 			<b> RFx Number </b>
-		</td>
+		</div>
 		
 		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
-			<td>
+			<div class='wSmall'>
 				<b> CPO </b>
-			</td>
+			</div>
 		<% end %>
 		
-		<td>
+		<div class='wSmall'>
 			<b> Name </b>
-		</td>
+		</div>
 		
-		<td>
-			<b> Created at </b>
-		</td>
 		
-	</tr>
+	</div>
 	
-	<tr>
-		
+	<div style="width:1000px; float:left;">
 		<% if wo['workOrderId'].nil? or wo['workOderId'].empty? %>
 			<% linkText = wo['_id'].to_s %>
 		<% else %>
 			<% linkText = wo['workOderId'] %>
 		<% end %>
-		<td>
+		<div class='wSmall'>
 			<%= link_to linkText, {controller: 'work_order', action: 'show', id: wo['_id'].to_s}, {style: "color:green;"} %>
-		</td>
+		</div>
 		
 		<% if wo.has_key? 'parentWoId'%>
-			<td>
+			<div class='wSmall'>
 				<%if wo['grant'].nil? %>
 					No
 				<% elsif wo['grant']['status'] == 'notGranted' %>
@@ -55,36 +53,34 @@
 				<% else %>
 					Yes
 				<% end %>
-			</td>
+			</div>
 		<% end %>
 		
-		<td>
+		<div class='wSmall'>
 			<%= wo['siteId'] %>
-		</td>
+		</div>
 		
-		<td>
+		<div class='wSmall'>
 			<%= wo['rfxNumber'] %>
-		</td>
+		</div>
 		
 		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
-			<td>
+			<div class='wSmall'>
 				<% if wo.has_key? 'cpo' and ( not wo['cpo'].empty? )  %>
 					<%= link_to wo['cpo']['cpoNum'], controller: 'cpo', action: 'show', id: wo['_id'] %>
 				<% end %>
-			</td>
+			</div>
 		<% end %>
 		
-		<td>
+		<div class='wSmall'>
 			<%= wo['name'] %>
-		</td>
-		
-		<td>
-			<%= wo['createdAt'] %>
-		</td>
+		</div>
 		
 		
-		<td>
+		<div class='wSmall'>
 			<%= link_to 'Delete', {action: 'destroy', id: wo['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
-		</td>
-	</tr>
-</table>
+		</div>
+	</div>
+	<br>
+	<br>
+</div>
