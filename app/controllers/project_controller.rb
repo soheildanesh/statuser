@@ -26,12 +26,28 @@ class ProjectController < ApplicationController
          @wos = Array.new
          @project.each do |key, value|
              if(key.include? 'wo_id')
-                 @wos << $wo_collection.find(:_id => value).to_a[0]
+                 wo = $wo_collection.find(:_id => value).to_a[0]
+                 if(not wo.nil?)
+                     @wos << wo
+                 end   
              end
          end
          
          @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
          
+    end
+    
+    def destroy
+        tobeDeleted = $project_collection.find({_id: params['id'].to_i}).to_a[0]
+        if(current_user['role'] == 'admin' or tobeDeleted['createdBy'] == current_user['_id'])
+            $project_collection.remove({_id: BSON::ObjectId(params['id'])})
+            redirect_to controller:'project', action:'index'
+            return
+        else
+            flash[:error] = "you dont have permission to delete this entry, contact and admin"
+            redirect_to controller:'project', action:'index'
+            return
+        end
     end
     
     def create

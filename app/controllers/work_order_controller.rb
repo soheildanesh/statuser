@@ -9,6 +9,20 @@ class WorkOrderController < ApplicationController
         end
     end
     
+    def destroy
+        tobeDeleted = $wo_collection.find({_id: BSON::ObjectId(params['id'])}).to_a[0]
+        projectId = tobeDeleted['projectId']
+        if(current_user['role'] == 'admin' or tobeDeleted['createdBy'] == current_user['_id'])
+            $wo_collection.remove({_id: BSON::ObjectId(params['id'])})
+            redirect_to controller:'project', action:'show', id:projectId
+            return
+        else
+            flash[:error] = "you dont have permission to delete this entry, contact and admin"
+            redirect_to controller:'project', action:'show', id:projectId
+            return
+        end
+    end
+    
     
     #note: the fact that a work order has a list of ids of its child wos and a project has a list of ids of its child wos means that if they have many many children the size of a project or wo object will be big. This runs agains the hard limit of mongodb file size and the less defined but importnat ram size of the server. Of course the usual way would be to ony have pointers (i.e. references to the ids of the parnt) from the children to parnt not the other way around (here we have both ways) but that means everytime we want a list of children we have to issue a query to choose the ones for the specific parnet, Practically it is unlikely to run agains the abovementioned limist because a project will have on the order of 10s of wo children and similarly a work order will have on the same order of children wos (aka change requests at this point) so we maintain both way pointers for performance. If a parnet has too many children we can potentially create a linked list of files containing child ids (april 2014, soheil)
     def create

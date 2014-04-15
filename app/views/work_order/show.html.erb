@@ -15,7 +15,13 @@
 	
 		<p>
 			ID: <br>
-			<%= @wo['_id']%>
+			<% if  @wo.has_key? "workOrderId" %>
+				<% linkText = @wo["workOrderId"].to_s %>
+
+			<% else %>
+				<% linkText = @wo['_id'].to_s %>
+			<% end %>
+			<%= linkText %>
 		</p>
 	
 		<p>
@@ -197,10 +203,5 @@
 			</div>
 		<% end %>
 	
-	</div>
-	
-
-	
-	
-		
+	</div>		
 </div>

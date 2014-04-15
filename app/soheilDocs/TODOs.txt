@@ -1,1 +1,3 @@
+- when deleting a work order, delete the respective key in its parent project? or something... think about this
+
 - currently not searching in emails in crew changes for person email. can potentially use regular expressions?

@@ -1,5 +1,6 @@
-<%#= wo %>
-<div style="width:1400px;">
+
+	<div style="width:900px; margin:0px;">
+
 
 	<div style="width:900px; float:left;">
 		<hr style="margin:0px;">
@@ -35,10 +36,11 @@
 	</div>
 	
 	<div style="width:1000px; float:left;">
-		<% if wo['workOrderId'].nil? or wo['workOderId'].empty? %>
-			<% linkText = wo['_id'].to_s %>
+		<% if  wo.has_key? "workOrderId" %>
+			<% linkText = wo["workOrderId"].to_s %>
+
 		<% else %>
-			<% linkText = wo['workOderId'] %>
+			<% linkText = wo['_id'].to_s %>
 		<% end %>
 		<div class='wSmall'>
 			<%= link_to linkText, {controller: 'work_order', action: 'show', id: wo['_id'].to_s}, {style: "color:green;"} %>
@@ -78,9 +80,8 @@
 		
 		
 		<div class='wSmall'>
-			<%= link_to 'Delete', {action: 'destroy', id: wo['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+			<%= link_to 'Delete', {controller: 'work_order', action: 'destroy', id: wo['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</div>
 	</div>
-	<br>
-	<br>
+
 </div>

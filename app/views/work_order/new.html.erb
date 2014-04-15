@@ -9,6 +9,12 @@
 	<%# s= f.text_field :workOderId %><br>
 	
 	<p>
+		<%= f.label :workOrderId, "3SN Id" %><br>
+		<%= f.text_field :workOrderId, :value => rand(999999)%> 
+	</p>
+	
+	
+	<p>
 		<%= f.label :name, "Name" %><br>
 		<%= f.text_field :name %><br>
 	</p>

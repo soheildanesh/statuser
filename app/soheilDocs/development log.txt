@@ -4,3 +4,6 @@ April 14th
 - after cr is granted, work order needs to be accepted, was skipping this step, put it back in place
 
 - added a work completion submission  between CPO and GRCR
+
+- fixed project destroy
+
