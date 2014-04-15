@@ -69,30 +69,47 @@
 	
 	</div>
 	
-	 
-	<div style="float:left; width:200px;">
+	<% righColumnWidth = '300px'%> 
+	<div style="float:left; width: <%=righColumnWidth%> ;">
 		
 		<% readyForQuote  = false %>
 		
 		<!-- sets the readyForQuote condition to true for both regular work orders (which have to be accepted) and authorization request change requests which have to granted (accept and grant are stored in separate fields but are candidates for merge) soheil april 14 2014-->
-		<%if @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status' and  @wo['woAcceptance']['status'] == 'accepted'%>
-			<% readyForQuote  = true %>
-			<%= link_to 'woAcceptance', action: 'showWoAcceptance', id:@wo['_id']%><br>
+		<% showAcceptWo = true %>
+		<%if @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status'%>  		 
+			<%if @wo['woAcceptance']['status'] == 'accepted'%>
+				<% readyForQuote  = true %>
+				<%= link_to 'Work Order Acceptance', action: 'showWoAcceptance', id:@wo['_id']%><br>
+			<% else %>
+				<% showAcceptWo = false %>
+				<%= link_to 'Work Order Rejection', action: 'showWoAcceptance', id:@wo['_id']%><br>
+			<% end %>
+
 			<hr>
 		<%elsif (@wo.has_key? 'parentWoId' and @wo.has_key? 'grant' and @wo['grant']['status'] == 'granted')%>
 			<% readyForQuote  = true %>
 		<% end %>
 		
-		<% if readyForQuote == false and not @wo.has_key? 'parentWoId'%>
-		
-			<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
-				<input type="hidden" name="work_order[woAcceptance][status]" value="accepted" />					
-				<%= f.submit "Accept Work Order" %>
+		<% if readyForQuote == false  %>
+
+			<% if @wo.has_key? 'parentWoId' and @wo['grant']['status'] != 'granted'%>
+				<% showAcceptWo = false %>
 			<% end %>
 			
-			<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
-				<input type="hidden" name="work_order[woAcceptance][status]" value="rejected" />					
-				<%= f.submit "Reject Work Order" %>
+			<% if showAcceptWo%>
+				<div style="float:left;">
+					<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
+						<input type="hidden" name="work_order[woAcceptance][status]" value="accepted" />					
+						<%= f.submit "Accept Work Order" %>
+					<% end %>
+				</div>
+				<div style="float:left;">
+		
+					<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateWoAcceptance" do |f| %>
+						<input type="hidden" name="work_order[woAcceptance][status]" value="rejected" />					
+						<%= f.submit "Reject Work Order" %>
+					<% end %>
+				</div>
 			<% end %>
 		<% end %>
 		
@@ -140,14 +157,17 @@
 		
 				<div style="float:left;">
 					<%= link_to 'Accepted Quote', {controller: 'quote', action: 'show', id: @wo['acceptedQuoteId'] }%>
-					<% if @wo.has_key? 'cpo' and ( not @wo['cpo'].empty? )  %>
-						<br><br>
+					<% if @wo.has_key? 'cpo' and ( not @wo['cpo'].empty? )  %><br><br>
 						<%= link_to 'CPO', {controller: 'cpo', action: 'show', id: @wo['_id'] } %> <br>
-				
-						<%if @wo.has_key? 'grcr'%>
-							<br> <%= link_to 'GRCR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
-						<% else %>	
-							<%= render partial: 'new_grcr', locals: {wo: @wo} %> <br>
+						<%if @wo.has_key? 'workComplete' and not @wo['workComplete'].empty? %>
+							<br> <%= link_to 'Work Complettion', {controller: 'work_order', action: 'showWorkComplete', id: @wo['_id'] } %> <br>
+							<%if @wo.has_key? 'grcr'%>
+								<br> <%= link_to 'GRCR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
+							<% else %>	
+								<%= render partial: 'new_grcr', locals: {wo: @wo} %> <br>
+							<% end %>
+						<% else %>
+							<%= render partial: 'new_workComplete', locals: {wo: @wo} %> <br>
 						<% end %>
 				
 					<% else %>
@@ -164,7 +184,7 @@
 		
 		
 		<% if not @wo.has_key? 'parentWoId'  and readyForQuote == true %>
-			<div style="float:left;  width:200px;">
+			<div style="float:left;  width:<%=righColumnWidth%>;">
 				<hr>
 				<%= link_to 'New Change Request', {action: 'newChangeRequest'}%>			
 				<hr>

@@ -57,11 +57,11 @@
 		<% end %>
 		
 		<div class='wSmall'>
-			<%= wo['siteId'] %>
+			<%= printReplaceEmpty wo['siteId'] %>
 		</div>
 		
 		<div class='wSmall'>
-			<%= wo['rfxNumber'] %>
+			<%= printReplaceEmpty wo['rfxNumber'] %>
 		</div>
 		
 		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
@@ -73,7 +73,7 @@
 		<% end %>
 		
 		<div class='wSmall'>
-			<%= wo['name'] %>
+			<%= printReplaceEmpty wo['name'] %>
 		</div>
 		
 		

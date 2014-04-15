@@ -1,0 +1,6 @@
+April 14th
+- made it so that if not all the fields of a new project are entered or if the project name is not unique project creation will not take place and the user will receive an appropriate error message
+
+- after cr is granted, work order needs to be accepted, was skipping this step, put it back in place
+
+- added a work completion submission  between CPO and GRCR

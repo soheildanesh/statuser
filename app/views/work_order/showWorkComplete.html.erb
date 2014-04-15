@@ -1,0 +1,15 @@
+Work Completed on <br>
+
+<%= @wo['workComplete']['workCompletionDate(1i)'] %> / <%= @wo['workComplete']['workCompletionDate(2i)']%> / <%= @wo['workComplete']['workCompletionDate(3i)'] %> <br><br>
+
+
+<div style="width:400px;">
+	Comments:<br>
+	<%= printReplaceEmpty @wo['workComplete']['comments'] %><br><br>
+</div>
+
+Created At:<br>
+<%= @wo['workComplete']['createdAt'] %><br><br>
+
+Created By:<br>
+<%= @wo['workComplete']['createdBy'] %><br><br>

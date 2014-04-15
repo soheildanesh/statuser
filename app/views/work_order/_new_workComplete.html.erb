@@ -1,0 +1,12 @@
+<br>
+<%= form_for :workComplete, url: {action: "addWorkComplete"}, html: {class: "dummy"} do |f| %>
+	<%= f.label :workCompletionDate, "Work Completion Date:" %>
+	<%= f.date_select :workCompletionDate %>
+	<br>
+	
+	<input type="hidden" name="woId" value="<%= wo['_id'] %>" />
+
+	Comments:
+	<%= f.text_area :comments, size: "60x12" %>
+	<%= f.submit "Submit" %>
+<% end %>

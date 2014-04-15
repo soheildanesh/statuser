@@ -4,7 +4,6 @@ class ProjectController < ApplicationController
         
         
         
-        
         #make project off of quote, march 29
         #
         #if( not params["quote_id"].nil?)
@@ -48,9 +47,64 @@ class ProjectController < ApplicationController
         @project['createdAt'] = Time.now
         @project['createdBy'] = $current_user
         
-        projectId = $project_collection.insert(@project)
- 
-        redirect_to action: 'index'
+        
+        
+        okToCreate = true
+
+        #make sure all fields have been entered before creating object
+        @project.each do |key, value|
+          if value.nil?
+              okToCreate = false
+          elsif value.to_s.empty?
+              okToCreate = false
+          end
+        end
+
+        if(not okToCreate)
+            flash[:error] = "Project could not be created because not all fields required for a new project were entered."
+        end
+
+        if(okToCreate)
+          #make sure the project name is unique
+          project = $project_collection.find({'projName' => @project['projName'] } ).to_a[0]
+          if(project.nil?)
+
+          elsif(project.empty?)
+
+          else
+              okToCreate = false
+              flash[:error] = "Poject could not be created becuse project's name already exists in the databse, please enter a unique project name"
+          end
+        end
+
+        if(okToCreate)
+          flash[:error] = ""
+        end
+
+        #generate a unique random 3s id
+        id3s = rand(1000000)
+        idIsUniq = false
+        while(not idIsUniq)
+          project = $project_collection.find({'id3s' => id3s }).to_a[0]
+          if(project.nil?)
+              idIsUniq = true
+          elsif(project.empty?)
+              idIsUniq = true
+          else
+              id3s = rand(1000000)
+              puts("Trying to generate uniqe random 3sId for project")
+          end
+        end
+
+        if(okToCreate)
+          @project['3sId'] = id3s
+
+          projectId = $project_collection.insert(@project)
+
+          redirect_to action: 'index'
+        else
+          redirect_to action: 'new'
+        end
     end
     
     def index

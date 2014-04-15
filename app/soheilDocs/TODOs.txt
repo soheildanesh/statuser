@@ -1,0 +1,1 @@
+- currently not searching in emails in crew changes for person email. can potentially use regular expressions?

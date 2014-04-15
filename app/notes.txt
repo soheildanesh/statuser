@@ -1,4 +1,0 @@
-Deploying:
-from your local do: git push origin master
-in aws's app folder do: git pull
-

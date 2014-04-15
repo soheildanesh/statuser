@@ -51,9 +51,11 @@ Statuser::Application.routes.draw do
             get :showGrant
             get :newPreApprovalRequest
             post :addGrcr
+            post :addWorkComplete
             get :showGrcr
             post :updateWoAcceptance
             get :showWoAcceptance
+            get :showWorkComplete
         end
     end
   

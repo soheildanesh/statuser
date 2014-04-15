@@ -142,7 +142,7 @@ class WorkOrderController < ApplicationController
         
         $wo_collection.save(wo)
 
-         redirect_to action: 'show', id: wo['_id'].to_s
+        redirect_to action: 'show', id: wo['_id'].to_s
 
     end
     
@@ -168,6 +168,10 @@ class WorkOrderController < ApplicationController
         @wo = $wo_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
     end
     
+    def showWorkComplete
+        @wo = $wo_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
+    end
+    
     def showGrcr
         @wo = $wo_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
     end
@@ -184,6 +188,21 @@ class WorkOrderController < ApplicationController
         $wo_collection.save(wo)
         
         redirect_to action: 'show', id: wo['_id'].to_s
+    end
+    
+    def addWorkComplete
+        wo = $wo_collection.find({ :_id => BSON::ObjectId(params['woId']) }).to_a[0]
+        workComplete = params['workComplete']
+        workComplete['createdAt'] = Time.now
+        workComplete['createdBy'] = current_user['_id']
+        
+        wo['workComplete'] = workComplete
+        
+        $wo_collection.save(wo)
+        
+        redirect_to action: 'show', id: wo['_id'].to_s
+        
+        
     end
     
     def addCpo
