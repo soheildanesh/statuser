@@ -1,4 +1,4 @@
-<%#= @wo%>
+<%= @wo%>
 <br>
 
 <%#= @childHierarchy %>
@@ -26,19 +26,38 @@
 	
 		<p>
 			Name: <br>
-			<%= @wo['name']%>
+			<%= printReplaceEmpty @wo['name']%>
 		</p>
+		
+		<p>
+			Customer PM: <br>
+			<%= printReplaceEmpty @wo['customerPm']%>
+		</p>
+		
+		<p>
+			Site Project Manager: <br>
+			<%= getPersonEmail printReplaceEmpty @wo['projMan']%>
+		</p>
+		
+		
+		
 	
 	
 		<p>
 			Site ID: <br>
-			<%= @wo['siteId']%>
+			<%= printReplaceEmpty @wo['siteId']%>
 		</p>
 	
 		<p>
 			RFx Number: <br>
-			<%= @wo['rfxNumber']%>
+			<%= printReplaceEmpty @wo['rfxNumber']%>
 		</p>
+		
+		<p>
+			Bid Type: <br>
+			<%= printReplaceEmpty @wo['bidType']%>
+		</p>
+		
 		<%if not @wo['type'].nil? and not @wo['type'].include? 'Pre-Approval'%>
 			<p>
 				CPO: <br>
@@ -48,29 +67,31 @@
 				<%#= @wo['cpo']['cpoNum']%>
 			</p>
 		<% end %>
+		
+		
 		<p>
 			Created At: <br>
-			<%= @wo['createdAt']%>
+			<%= printReplaceEmpty @wo['createdAt'].to_s%>
 		</p>
 		
 		<p>
 			Quantity: <br>
-			<%= @wo['quantity']%>
+			<%= printReplaceEmpty @wo['quantity']%>
 		</p>
 		
 		<p>
 			Unit Type: <br>
-			<%= @wo['unitType']%>
+			<%= printReplaceEmpty @wo['unitType']%>
 		</p>
 		
 		<p>
 			Unit Price: <br>
-			<%= @wo['unitPrice']%>
+			<%= printReplaceEmpty @wo['unitPrice']%>
 		</p>
 		
 		<p>
 			Total Price: <br>
-			<%= @wo['totalPrice']%>
+			<%= printReplaceEmpty @wo['totalPrice']%>
 		</p>
 	
 	</div>

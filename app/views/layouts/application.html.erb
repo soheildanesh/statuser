@@ -6,7 +6,7 @@
   	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   	<%= csrf_meta_tags %>
 </head>
-<body>
+<body style="font-family: 'Areal';">
 
 	<% if !current_user.nil? %>
 		<%= link_to current_user['email'], :controller => 'person', :action => 'show', :id => current_user['_id'] %> | 

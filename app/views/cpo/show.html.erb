@@ -9,8 +9,15 @@
 		</p>
 	
 		<p>
-			createdAt: <br>
+			Created At: <br>
 			<%= @cpo['createdAt']%>
 		</p>
+		
+		<p>
+			Created By: <br>
+			<%= getPersonEmail @cpo['createdBy']%>
+		</p>
+		
+		
 	</div>
 </div>
