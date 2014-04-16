@@ -6,7 +6,7 @@
 
 
 	<p>
-		<%= "3SN Project ID" %><br>
+		<span style="font-style:bold;"> <%= "3SN Project ID" %> </span> <br>
 		<% if @project['projId3s'].nil? or @project['projId3s'].empty? %>
 			<% linkText = @project['_id'].to_s %>
 		<% else %>
