@@ -7,7 +7,12 @@
 
 	<p>
 		<%= "3SN Project ID" %><br>
-		<%= printReplaceEmpty @project['_id'].to_s%>
+		<% if @project['projId3s'].nil? or @project['projId3s'].empty? %>
+			<% linkText = @project['_id'].to_s %>
+		<% else %>
+			<% linkText = @project['projId3s'] %>
+		<% end %>
+		<%= printReplaceEmpty linkText %>
 	</p>
 
 	<p>

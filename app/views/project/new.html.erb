@@ -5,8 +5,13 @@
 <%= form_for :project, url: '/project' do |f| %>
 	
 	<p>
-		<%= f.label :projName, "3SN Project Name" %><br>
-		<%= f.text_field :projName%>
+		<%= f.label :projId3s, "3SN Project ID" %><br>
+		<%= f.text_field :projId3s, :value => rand(999999)%>
+	</p>
+	
+	<p>
+		<%= f.label :customerId, "3SN Customer ID" %><br>
+		<%= f.text_field :customerId%>
 	</p>
 	
 	<p>
@@ -14,20 +19,16 @@
 		<%= f.text_field :program%>
 	</p>
 	
+	
 	<p>
-		<%= f.label :program, "Type" %><br>
+		<%= f.label :projName, "3SN Project Name" %><br>
+		<%= f.text_field :projName%>
+	</p>
+	
+	
+	<p>
+		<%= f.label :program, "Project Type" %><br>
 		<%= f.text_field :projType%>
-	</p>
-	
-	
-	<p>
-		<%= f.label :client, "Client" %><br>
-		<%= f.text_field :client%><br>
-	</p>
-	
-	<p>
-		<%= f.label :customerId, "3SN Customer ID" %><br>
-		<%= f.text_field :customerId%>
 	</p>
 	
 	<p>
@@ -55,14 +56,6 @@
 		<%= f.text_field :endDate%>
 	</p>
 	
-	<p>
-    	<%= f.label :siteId, "Site ID" %><br>
-		<% if @site.nil? %>
-			<%= f.text_field :siteId, :class => 'siteidInput'%>
-		<% else %>
-			<%= f.text_field :siteId, :value => @site["siteId"], :class => 'siteidInput'%> 
-		<% end %>
-  	</p>	
 	<%= f.submit "Submit" %>
 	
 <%end%>

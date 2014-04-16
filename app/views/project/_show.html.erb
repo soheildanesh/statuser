@@ -31,14 +31,13 @@
 	
 	<div style="width:1800px; float:left;">
 		<!-- this if is for showing id only if name is not presenting, right now opting for just showing both so this is not really used april 14 2014, soheil-->
-		<% if project['projName'].nil? or project['projName'].empty? %>
+		<% if project['projId3s'].nil? or project['projId3s'].empty? %>
 			<% linkText = project['_id'].to_s %>
 		<% else %>
-			<% linkText = project['projName'] %>
+			<% linkText = project['projId3s'] %>
 		<% end %>
-		
 		<div class='wSmall'>
-			<%= link_to project['_id'].to_s, {controller: 'project', action: 'show', id: project['_id'].to_s}, {style: "color:green;"} %>
+			<%= link_to linkText, {controller: 'project', action: 'show', id: project['_id'].to_s}, {style: "color:green;"} %>
 		</div>
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
