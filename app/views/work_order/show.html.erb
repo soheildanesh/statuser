@@ -119,7 +119,7 @@
 		
 		<% if readyForQuote == false  %>
 
-			<% if @wo.has_key? 'parentWoId' and @wo['grant']['status'] != 'granted'%>
+			<% if @wo.has_key? 'parentWoId' and  @wo.has_key? 'grant' and @wo['grant'].has_key? 'status' and @wo['grant']['status'] != 'granted'%>
 				<% showAcceptWo = false %>
 			<% end %>
 			
@@ -144,7 +144,7 @@
 		
 		
 		<% if @wo.has_key? 'parentWoId'  %>	
-			<%if @wo['grant'].nil? %>
+			<%if  @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status' and   @wo['woAcceptance']['status'] == "accepted" and not @wo.has_key? 'grant' %>
 				<% readyForQuote  = false%>
 				
 				<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
@@ -159,11 +159,12 @@
 				
 				
 				<%#= link_to 'Granted?'%>  <%#= link_to 'Not Granted?'%>
-			<% elsif @wo['grant']['status'] == 'notGranted' %>
+			<% elsif  @wo.has_key? 'grant' and @wo['grant'].has_key? 'status' and  @wo['grant']['status'] == 'notGranted' %>
 				<% readyForQuote  = false%>
 				<%= link_to 'Rejected Grant', {action: 'showGrant', id:@wo['_id']}%>
-			<% elsif @wo['grant']['status'] == 'granted'%>
+			<% elsif @wo.has_key? 'grant' and @wo['grant'].has_key? 'status' and @wo['grant']['status'] == 'granted'%>
 				<%= link_to 'Accepted Grant', {action: 'showGrant', id:@wo['_id']}%>
+				<% readyForQuote  = true%>
 			<% end %>
 			<hr>
 			
