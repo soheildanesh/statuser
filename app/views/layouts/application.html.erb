@@ -7,39 +7,46 @@
   	<%= csrf_meta_tags %>
 </head>
 <body style="font-family: 'Arial';">
-
-	<% if !current_user.nil? %>
-		<%= link_to current_user['email'], :controller => 'person', :action => 'show', :id => current_user['_id'] %> | 
-		<%= link_to "logout", {:controller => "login_session", :action => "destroy", :id => "1"}, :method => :delete %>
-	<% else %>
-		<%= link_to "login",  {:controller => "login_session", :action => "new" } %>
-	<% end %>
 	
-	<%if current_user and current_user['role'] == "admin" %>
-		<br><br>Admin Tools: 
-		<%= link_to "Search",  :controller => 'search', :action => 'index' %>
-		| <%= link_to "Manage People",  :controller => 'person', :action => 'index' %>
-		| <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %>
-	<%end%>
+	<div style="width:1600px; height:80px;">
+		<div style="float:left;">
+			<%= image_tag "/assets/3SN_Logo.jpg" ,{style: "width:200px;"}%>
+		</div>
 	
-	<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
-		| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	
-		| <%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>	
-	<% end %>
+		<% if !current_user.nil? %>
+			<%= link_to current_user['email'], :controller => 'person', :action => 'show', :id => current_user['_id'] %> | 
+			<%= link_to "logout", {:controller => "login_session", :action => "destroy", :id => "1"}, :method => :delete %>
+		<% else %>
+			<%= link_to "login",  {:controller => "login_session", :action => "new" } %>
+		<% end %>
+		<br>
+		<br>
+	
+		<%if current_user and current_user['role'] == "admin" %>
+ 
+			<%= link_to "Search",  :controller => 'search', :action => 'index' %>
+			| <%= link_to "Manage People",  :controller => 'person', :action => 'index' %>
+			| <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %>
+		<%end%>
+	
+		<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
+			| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	
+			| <%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>	
+		<% end %>
 		
-	<br></br>
+		<br></br>
 	
-	<%if false and current_user and current_user['role'] == "admin" %>
-		<br><br>Purchase Order Management: 
-		<%= link_to "Bids",  :controller => 'bid', :action => 'index' %> |
-		<%= link_to "Quotes",  :controller => 'quote', :action => 'index' %> | 
-		<%= link_to "Projects",  :controller => 'project', :action => 'index' %> | 
-	<%end%>
+		<%if false and current_user and current_user['role'] == "admin" %>
+			<br><br>Purchase Order Management: 
+			<%= link_to "Bids",  :controller => 'bid', :action => 'index' %> |
+			<%= link_to "Quotes",  :controller => 'quote', :action => 'index' %> | 
+			<%= link_to "Projects",  :controller => 'project', :action => 'index' %> | 
+		<%end%>
 	
-	<div id="flashNotice">
-		<%= render :partial => 'layouts/flash_notice' , :locals => { :flash => flash } %>
+		<div id="flashNotice">
+			<%= render :partial => 'layouts/flash_notice' , :locals => { :flash => flash } %>
+		</div>
 	</div>
-
 	<%= yield %>
 
 </body>
