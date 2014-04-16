@@ -1,8 +1,8 @@
 <br>
 Submit GRCR:
 <%= form_for :grcr, url: {action: "addGrcr"}, html: {class: "dummy"} do |f| %>
-	<%= f.label :clientPm, "Client Project Manager Email" %>
-	<%= f.text_field :clientPm %>
+	<%#= f.label :clientPm, "Client Project Manager Email" %>
+	<%#= f.text_field :clientPm %>
 	<br>
 	
 	<input type="hidden" name="woId" value="<%= wo['_id'] %>" />
