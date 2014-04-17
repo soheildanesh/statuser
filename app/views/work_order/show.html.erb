@@ -30,19 +30,21 @@
 		</p>
 		
 		<p>
+			3SN PM: <br>
+			<%= getPersonEmail printReplaceEmpty @wo['projMan']%>
+		</p>
+		
+		<p>
+			3SN PC: <br>
+			<%= getPersonEmail printReplaceEmpty @wo['projCont']%>
+		</p>
+		
+		
+		<p>
 			Customer PM: <br>
 			<%= printReplaceEmpty @wo['customerPm']%>
 		</p>
 		
-		<p>
-			Site Project Manager: <br>
-			<%= getPersonEmail printReplaceEmpty @wo['projMan']%>
-		</p>
-		
-		
-		
-	
-	
 		<p>
 			Site ID: <br>
 			<%= printReplaceEmpty @wo['siteId']%>
