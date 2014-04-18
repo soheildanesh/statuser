@@ -1,0 +1,9 @@
+<b> Grant Status: </b> <br>
+<%= @cr['pm3sGrant']['status'] %> <br><br>
+
+
+<b> When: </b> <br>
+<%= @cr['pm3sGrant']['created_at'] %> <br><br>
+
+<b> By </b> <br>
+<%= getPersonEmail @cr['pm3sGrant']['created_by']%> <br><br>

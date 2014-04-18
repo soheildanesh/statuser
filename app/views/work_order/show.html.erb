@@ -5,16 +5,26 @@
 
 <div>
 
-	<div style = "width:300px; float:left;">
+	<div style="width:300px; float:left;">
 	
 		<% if @wo.has_key? 'parentWoId'  %>	
-			<%= link_to 'Parent WO', {action:'show', id:@wo['parentWoId']}%>
+			<%= link_to 'Parent Work Order', {action:'show', id:@wo['parentWoId']}%><br>
+			<%= link_to 'Parent Change Request', {controller: 'change_request', action:'show', id:@wo['parentCrId']}%>
 		<% elsif @wo.has_key? 'projectId'%>
 			<%= link_to 'Parent Project', {controller: 'project', action:'show', id:@wo['projectId']}%>
 		<% end %>
 	
 		<p>
-			ID: <br>
+			<%if @wo.has_key? 'parentWoId' %>
+				<% if @wo['type'].include? 'Pre-Approval'%>
+					<%idLabel = "Pre-Approval Request ID"%>
+				<% elsif @wo['type'].include? 'Inquiry' %>
+					<%idLabel = "Authorization Request ID"%>
+				<% end %>
+			<% else %>
+				<%idLabel = "Work Order ID"%>
+			<% end %>
+			<%= idLabel %>: <br>
 			<% if  @wo.has_key? "workOrderId" %>
 				<% linkText = @wo["workOrderId"].to_s %>
 
@@ -147,17 +157,22 @@
 		
 		<% if @wo.has_key? 'parentWoId'  %>	
 			<%if  @wo.has_key? 'woAcceptance' and @wo['woAcceptance'].has_key? 'status' and   @wo['woAcceptance']['status'] == "accepted" and not @wo.has_key? 'grant' %>
+				
+				
 				<% readyForQuote  = false%>
 				
-				<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
-					<input type="hidden" name="work_order[grant][status]" value="granted" />					
-					<%= f.submit "Granted?" %>
-				<% end %>
-				
-				<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
-					<input type="hidden" name="work_order[grant][status]" value="notGranted" />					
-					<%= f.submit "Not Granted?" %>
-				<% end %>
+				<div style="float:left; ">
+					<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
+						<input type="hidden" name="work_order[grant][status]" value="granted" />					
+						<%= f.submit "Granted?" %>
+					<% end %>
+				</div>
+					<%= form_for :work_order, url: "/work_order/#{@wo['_id']}/updateGrantStatus" do |f| %>
+				<div "float:left;" >
+						<input type="hidden" name="work_order[grant][status]" value="notGranted" />					
+						<%= f.submit "Not Granted?" %>
+					<% end %>
+				</div>
 				
 				
 				<%#= link_to 'Granted?'%>  <%#= link_to 'Not Granted?'%>
@@ -168,7 +183,7 @@
 				<%= link_to 'Accepted Grant', {action: 'showGrant', id:@wo['_id']}%>
 				<% readyForQuote  = true%>
 			<% end %>
-			<hr>
+
 			
 		<% end %>
 		
@@ -216,16 +231,40 @@
 		<% if not @wo.has_key? 'parentWoId'  and readyForQuote == true %>
 			<div style="float:left;  width:<%=righColumnWidth%>;">
 				<hr>
-				<%= link_to 'New Change Request', {action: 'newChangeRequest'}%>			
-				<hr>
-			
+				
+				<p>
+					<%= link_to 'New Change Request', {action: 'newChangeRequest', id:@wo['_id']}%>			
+				</p>
+				
+				<!-- probably delete, not in usage after the change to change request where pre-approval and authorization are now children of change requst too, april 19 soheil-->
 				<%if not @childHierarchy.nil? and  not @childHierarchy.empty? %>
 				<%#= @childHierarchy %>
-				Existing Change Requests:<br><br>
+				Existing Change Requests*:<br><br>
 					<%= render partial: "show_hierarchy", locals: {hierarchy:  @childHierarchy, depth: 0} %>
 				<% end %>
 			</div>
 		<% end %>
+			
+		<% if not @childCrs.nil?  %>
+			<% if not @childCrs.empty? %>
+				<div style="float:left; margin-top:20px;">
+					Existing Change Requests*:
+				</div>
+				<% for cr in @childCrs %>
+					<div style="float:left; margin-top:10px;">
+						<%= render partial: "change_request/show", locals: {cr:cr} %>
+						<%#= cr %>
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+		<div style="float:left;">
+			<br>
+			<br>
+			<hr>
+			* Two styles for viewing a work order's change request, pick one, both or we can switch between with a button
+		</div>
 	
 	</div>		
+
 </div>

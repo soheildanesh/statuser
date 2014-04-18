@@ -1,8 +1,7 @@
 
-	<div style="width:1200px; margin:0px;">
-
-
-	<div style="width:1200px; float:left;">
+<div style="width:1400px; margin-top:0px; ">
+	
+	<div style="width:1400px; float:left;">
 		<hr style="margin:0px;">
 		<div class='wSmall'>
 			<b> Id </b>
@@ -10,7 +9,7 @@
 		
 		<% if wo.has_key? 'parentWoId'%>
 			<div class='wSmall'>
-				Granted?
+				<b> Granted Status </b>
 			</div>
 		<% end %>
 		
@@ -21,6 +20,10 @@
 		<div class='wSmall'>
 			<b> RFx Number </b>
 		</div>
+				
+		<div class='wSmall'>
+			<b> Name </b>
+		</div>
 		
 		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
 			<div class='wSmall'>
@@ -28,14 +31,10 @@
 			</div>
 		<% end %>
 		
-		<div class='wSmall'>
-			<b> Name </b>
-		</div>
-		
 		
 	</div>
 	
-	<div style="width:1400px; float:left;">
+	<div style="width:1700px; float:left;">
 		<% if  wo.has_key? "workOrderId" %>
 			<% linkText = wo["workOrderId"].to_s %>
 
@@ -49,11 +48,11 @@
 		<% if wo.has_key? 'parentWoId'%>
 			<div class='wSmall'>
 				<%if wo['grant'].nil? %>
-					No
+					Pending
 				<% elsif wo['grant']['status'] == 'notGranted' %>
-					No
+					Rejected
 				<% else %>
-					Yes
+					Granted
 				<% end %>
 			</div>
 		<% end %>
@@ -66,22 +65,22 @@
 			<%= printReplaceEmpty wo['rfxNumber'] %>
 		</div>
 		
+		<div class='wSmall'>
+			<%= printReplaceEmpty wo['name'] %>
+		</div>
+		
 		<%if not wo['type'].nil? and not wo['type'].include? 'Pre-Approval'%>
 			<div class='wSmall'>
 				<% if wo.has_key? 'cpo' and ( not wo['cpo'].empty? )  %>
 					<%= link_to wo['cpo']['cpoNum'], controller: 'cpo', action: 'show', id: wo['_id'] %>
+				<% else %>
+					_
 				<% end %>
 			</div>
 		<% end %>
 		
 		<div class='wSmall'>
-			<%= printReplaceEmpty wo['name'] %>
-		</div>
-		
-		
-		<div class='wSmall'>
 			<%= link_to 'Delete', {controller: 'work_order', action: 'destroy', id: wo['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</div>
 	</div>
-	<br>
 </div>

@@ -1,0 +1,95 @@
+	<%#= @cr%>
+
+<div style="width:1500px;">
+
+<div style="float:left; width:300px;">
+	<%= link_to 'Parent Work Order', {controller: 'work_order', action:'show', id:@cr['parent__wo__id']}%>
+
+
+	<p>
+		Change Request Type: <br>
+		<% if @cr['type'] == "crInquiry"%>
+			Change Request Iquiry
+		<% elsif @cr['type'] == "crReport" %>
+			Change Request Report
+		<% end %>
+	</p>
+
+	<p>
+		Description: <br>
+		<%= printReplaceEmpty @cr['description']%>
+	</p>
+
+</div>
+
+
+<div style="float:left; width:500px;">
+	<%if @cr.has_key? 'pm3sGrant'%>
+
+		<%= link_to '3SN PM Grant', action: 'showPm3sGrant', id:@cr['_id']%><br>
+		<div style="width:300px;">
+			<hr>
+		</div>
+	
+		<% if @cr['pm3sGrant']['status'] == "granted"%>
+	
+	
+			<%= link_to 'New Pre-Approval Request', {action: 'newPreApprovalRequest', woid: @cr['parent__wo__id'], crid: @cr['_id'], type: @cr['type'] }%>
+
+			<br>
+			<%= link_to 'New Authorization Request', {action: 'newAuthorizationRequest', woid:     @cr['parent__wo__id'], crid: @cr['_id'], type: @cr['type'] }%>
+	
+			
+		<% end %>
+	
+	
+	<% else %>
+	
+	
+		<div style="float:left; width:100px;">
+			3SN PM:
+		</div>
+		<div style="float:left; ">
+			<%= form_for :change_request, url: "/change_request/#{@cr['_id']}/update3sPmGrant" do |f| %>
+				<input type="hidden" name="change_request[pm3sGrant][status]" value="granted" />					
+				<%= f.submit "Grant" %>
+			<% end %>
+
+		</div>
+		<div style="float:left; ">
+	
+			<%= form_for :change_request, url: "/change_request/#{@cr['_id']}/update3sPmGrant" do |f| %>
+				<input type="hidden" name="change_request[pm3sGrant][status]" value="rejected" />					
+				<%= f.submit "Reject" %>
+			<% end %>	
+		</div>
+
+	
+	<% end %>
+	
+	<% if not @childWos.empty? %>
+		<div style="margin-top:20px;">
+			Existing Authorization / Pre-Approval Requests:
+		</div>
+		<% for wo in @childWos%>
+			
+			<div style="margin-top:30px; float:left;">
+				<% if wo['type'].include? 'Pre-Approval'%>
+
+					Pre-Approval Request:
+
+				<% elsif wo['type'].include? 'Authorization'%>
+
+					Authorization Request:
+				<% end %>
+				<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+			</div>
+		
+		<% end %>
+		
+	<% end %>
+	
+</div>
+
+
+</div>

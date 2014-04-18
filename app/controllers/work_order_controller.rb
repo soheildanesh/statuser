@@ -1,8 +1,11 @@
 class WorkOrderController < ApplicationController
     def new
-        #>>>this is when a new change request is being created which belongs to a work order
-        if(params.has_key? 'woid')
-            render 'change_request_inquiry'
+        # has_key?'crId' : this is when a new preapproval or authroziation request is being created which are childrenof a change request and
+        if(params.has_key? 'crId')
+            @parentChangeRequestId = params['crId']
+            @crType = params['type']
+            @parentCr = $cr_collection.find({_id: BSON::ObjectId(params['crId'])}).to_a[0]
+            @parentWoId = @parentCr['parent__wo__id']
         else    
             #this is when a regular work order is being created which belongs to a project
             @projctId = params['id']
@@ -36,7 +39,13 @@ class WorkOrderController < ApplicationController
             parentWo = $wo_collection.find({ :_id => BSON::ObjectId(@wo['parentWoId']) }).to_a[0]
             parentWo["childWo_id_#{woId}"] = woId
             $wo_collection.save(parentWo)
-            redirect_to controller: 'work_order', action: 'show', id:@wo['parentWoId']
+            
+            parentCr = $cr_collection.find({ :_id => BSON::ObjectId(@wo['parentCrId']) }).to_a[0]
+            parentCr["childWo_id_#{woId}"] = woId
+            $cr_collection.save(parentCr)
+            
+            
+            redirect_to controller: 'work_order', action: 'show', id:@wo['_id']
         else
             project = $project_collection.find({ :_id => BSON::ObjectId(@wo['projectId']) }).to_a[0]
             project["wo_id_#{woId}"] = woId
@@ -50,16 +59,19 @@ class WorkOrderController < ApplicationController
         
         @childCrInquiries = Array.new
         @childWos = Array.new
+        @childCrs = Array.new
         @hasQuote = false
         @wo.each do |key, value|
             if(key.include? 'childWo_id')
                 @childWos << $wo_collection.find(:_id => value).to_a[0]
+            elsif(key.include? 'child__cr__')
+                @childCrs << $cr_collection.find(:_id => value).to_a[0]
             elsif(key.include? 'quoteId')
                 @hasQuote = true
             end
-        end
+        end 
         
-        puts("@childWos = #{@childWos}")
+        #puts("@childWos = #{@childWos}")
 
         if not @childWos.nil? 
             @childWos.sort!{|x,y| y['createdAt'] <=> x['createdAt']} 

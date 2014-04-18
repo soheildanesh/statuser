@@ -58,6 +58,15 @@ Statuser::Application.routes.draw do
             get :showWorkComplete
         end
     end
+    
+    resources :change_request do
+        member do
+            get :newPreApprovalRequest
+            get :newAuthorizationRequest
+            post :update3sPmGrant
+            get :showPm3sGrant
+        end
+    end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

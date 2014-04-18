@@ -1,6 +1,27 @@
 module ApplicationHelper
     
     
+    #generate a small 6 digit id that is unique in the passed in collection
+    def genSamllUniqId collection, columnName = 'id3s'
+        #generate a unique random 3s id
+        id3s = rand(1000000)
+        idIsUniq = false
+        while(not idIsUniq)
+          dup = collection.find({columnName => id3s }).to_a[0]
+          if(dup.nil?)
+              idIsUniq = true
+          elsif(dup.empty?)
+              idIsUniq = true
+          else
+              id3s = rand(1000000)
+              puts("Trying to generate uniqe random 3sId for #{collection.name}")
+          end
+        end
+        
+        return id3s
+    end
+    
+    #prints string or _ if nil or empty
     def printReplaceEmpty str
        if  str.nil? 
            str = "_"

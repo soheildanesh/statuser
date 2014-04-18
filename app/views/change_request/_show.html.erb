@@ -1,0 +1,36 @@
+<div style="width:1200px; float:left;">
+
+
+	<div style="width:1200px; float:left;">
+
+		<div class='wSmall'>
+			<b> CR Id </b>
+		</div>
+		
+
+		<div class='wSmall'>
+			<b> Granted? </b>
+		</div>
+
+	</div>
+
+
+	<div style="width:1200px; float:left;">
+		<div style="width:600px;">
+			<hr style="margin:0px;">
+		</div>
+		<div class='wSmall'>
+			<% if cr['cr3sid'].nil?%>
+				<%= link_to cr['_id'], {controller: 'change_request', action: 'show', id: cr['_id']}%>
+			<% else %>
+				<%= printReplaceEmpty cr['cr3sid'] %> 
+			<% end %>
+		</div>
+		
+		<div class='wSmall'>
+			<%= printReplaceEmpty cr['pm3sGrant']['status'] %> 
+		</div>
+	
+	</div>
+	
+</div>

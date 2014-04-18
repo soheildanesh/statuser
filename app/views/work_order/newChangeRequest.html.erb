@@ -1,13 +1,15 @@
 
-Change Request <b> Inquiry </b>
-<br>
-<%= link_to 'New Pre-Approval Request', {action: 'newPreApprovalRequest', id: @parentWoId, type:'crInquiry'}%>
-<br>
-<%= link_to 'New Authorization Request' , {action: 'newAuthorizationRequest', id: @parentWoId , type:'crInquiry'}%>
-
-<br><br>
-Change Request<b> Report </b>
-<br>
-<%= link_to 'New Pre-Approval Request', {action: 'newPreApprovalRequest', id: @parentWoId, type:'crReport'}%>
-<br>
-<%= link_to 'New Authorization Request' , {action: 'newAuthorizationRequest', id: @parentWoId , type:'crReport'}%>
+<%= form_for :change_request, url: '/change_request' do |f| %>
+	<input type="hidden" name="woId" value="<%= @parentWoId %>" />
+	<p>
+		<%= f.label :description, "Description:" %><br>
+		<%= f.text_area :description%>
+	</p>
+	<br>
+	Change Request Type:
+	<p>
+		<%= radio_button_tag 'change_request[type]', 'crReport' %> CR Report<br> 
+		<%= radio_button_tag('change_request[type]', 'crInquiry') %> CR Inqury <br>
+	</p>
+	<%= f.submit%>
+<% end %>

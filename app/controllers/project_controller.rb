@@ -1,22 +1,6 @@
 class ProjectController < ApplicationController
     def new
-        
-        
-        
-        
-        #make project off of quote, march 29
-        #
-        #if( not params["quote_id"].nil?)
-        #    @quote = $quote_collection.find({ :_id => BSON::ObjectId(params['quote_id']) } ).to_a[0]
-        #end
-             
-        #indicate quote has been accepted (acceptedQuote['accepted?'] = true) but no internal project has been created for it yet 
-        #acceptedQuote = Hash.new
-        #@quote.each do |key, value|
-        #    acceptedQuote[key] = value
-        #end
-        #acceptedQuote['accepted?'] = true
-        #$quote_collection.save(acceptedQuote)
+        @projId3s = genSamllUniqId $project_collection, 'projId3s'        
     end
     
     def show
@@ -95,21 +79,6 @@ class ProjectController < ApplicationController
 
         if(okToCreate)
           flash[:error] = ""
-        end
-
-        #generate a unique random 3s id
-        id3s = rand(1000000)
-        idIsUniq = false
-        while(not idIsUniq)
-          project = $project_collection.find({'id3s' => id3s }).to_a[0]
-          if(project.nil?)
-              idIsUniq = true
-          elsif(project.empty?)
-              idIsUniq = true
-          else
-              id3s = rand(1000000)
-              puts("Trying to generate uniqe random 3sId for project")
-          end
         end
 
         if(okToCreate)
