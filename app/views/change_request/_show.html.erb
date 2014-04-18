@@ -28,7 +28,9 @@
 		</div>
 		
 		<div class='wSmall'>
-			<%= printReplaceEmpty cr['pm3sGrant']['status'] %> 
+			<% if cr.has_key? 'pm3sGrant'%>
+				<%= printReplaceEmpty cr['pm3sGrant']['status'] %> 
+			<% end %>
 		</div>
 	
 	</div>
