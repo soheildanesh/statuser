@@ -18,7 +18,7 @@
 			<%if @wo.has_key? 'parentWoId' %>
 				<% if @wo['type'].include? 'Pre-Approval'%>
 					<%idLabel = "Pre-Approval Request ID"%>
-				<% elsif @wo['type'].include? 'Inquiry' %>
+				<% elsif @wo['type'].include? 'Authorization' %>
 					<%idLabel = "Authorization Request ID"%>
 				<% end %>
 			<% else %>
@@ -193,8 +193,9 @@
 		<%if not woIsPreapp %>
 			<% if readyForQuote and @hasQuote %>
 				<div>
-				<%= link_to 'Existing Quotes ', {controller: 'quote', action: 'showWoQuotes', id: @wo['_id'] }%> 
-				<hr>
+
+					<%= link_to 'Existing Quotes ', {controller: 'quote', action: 'showWoQuotes', id: @wo['_id'] }%> 
+					<hr>
 				</div>
 			<% end %>
 					
@@ -207,7 +208,7 @@
 						<%if @wo.has_key? 'workComplete' and not @wo['workComplete'].empty? %>
 							<br> <%= link_to 'Work Complettion', {controller: 'work_order', action: 'showWorkComplete', id: @wo['_id'] } %> <br>
 							<%if @wo.has_key? 'grcr'%>
-								<br> <%= link_to 'GRCR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
+								<br> <%= link_to 'GR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
 							<% else %>	
 								<%= render partial: 'new_grcr', locals: {wo: @wo} %> <br>
 							<% end %>
@@ -223,7 +224,10 @@
 				</div>
 		
 			<% elsif readyForQuote %>
-				<%= link_to 'New Quote', {controller: 'quote', action: 'new', woId: @wo['_id'] }%>
+				<div>
+
+					<%= link_to 'New Quote', {controller: 'quote', action: 'new', woId: @wo['_id'] }%>
+				</div>
 			<% end %>
 		<% end %>
 		
@@ -237,9 +241,9 @@
 				</p>
 				
 				<!-- probably delete, not in usage after the change to change request where pre-approval and authorization are now children of change requst too, april 19 soheil-->
-				<%if not @childHierarchy.nil? and  not @childHierarchy.empty? %>
+				<%if false and not @childHierarchy.nil? and  not @childHierarchy.empty? %>
 				<%#= @childHierarchy %>
-				Existing Change Requests*:<br><br>
+				Existing Change Requests:<br><br>
 					<%= render partial: "show_hierarchy", locals: {hierarchy:  @childHierarchy, depth: 0} %>
 				<% end %>
 			</div>
@@ -248,7 +252,7 @@
 		<% if not @childCrs.nil?  %>
 			<% if not @childCrs.empty? %>
 				<div style="float:left; margin-top:20px;">
-					Existing Change Requests*:
+					Existing Change Requests:
 				</div>
 				<% for cr in @childCrs %>
 					<div style="float:left; margin-top:10px;">
@@ -256,14 +260,18 @@
 						<%#= cr %>
 					</div>
 				<% end %>
+				
+					<div style="float:left;">
+						<br>
+						<br>
+						<hr>
+						<%#=* Two styles for viewing a work order's change request, pick one, both or we can switch between with a button %>
+					</div>
 			<% end %>
+			
+		
 		<% end %>
-		<div style="float:left;">
-			<br>
-			<br>
-			<hr>
-			* Two styles for viewing a work order's change request, pick one, both or we can switch between with a button
-		</div>
+		
 	
 	</div>		
 

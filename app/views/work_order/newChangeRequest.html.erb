@@ -1,6 +1,13 @@
 
 <%= form_for :change_request, url: '/change_request' do |f| %>
 	<input type="hidden" name="woId" value="<%= @parentWoId %>" />
+	
+	@cr3sId
+	<p>
+		<%= f.label :cr3sid, "3SN ID:" %><br>
+		<%= f.text_field :cr3sid, value: @cr3sid %>
+	</p>
+	
 	<p>
 		<%= f.label :description, "Description:" %><br>
 		<%= f.text_area :description%>

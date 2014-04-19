@@ -10,6 +10,8 @@ class WorkOrderController < ApplicationController
             #this is when a regular work order is being created which belongs to a project
             @projctId = params['id']
         end
+        
+        @workOrderId = genSamllUniqId $wo_collection, 'workOrderId'        
     end
     
     def destroy
@@ -76,6 +78,11 @@ class WorkOrderController < ApplicationController
         if not @childWos.nil? 
             @childWos.sort!{|x,y| y['createdAt'] <=> x['createdAt']} 
         end
+        
+        if not @childCrs.nil? 
+            @childCrs.sort!{|x,y| y['createdAt'] <=> x['createdAt']} 
+        end
+        
         
         @childHierarchy= Hash.new
         
@@ -253,6 +260,7 @@ class WorkOrderController < ApplicationController
     
     def newChangeRequest
         @parentWoId = params['id']
+        @cr3sid = genSamllUniqId $cr_collection, 'cr3sid'
     end
     
     def newPreApprovalRequest

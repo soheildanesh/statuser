@@ -1,3 +1,5 @@
+<%#= cr %>
+
 <div style="width:1200px; float:left;">
 
 
@@ -23,13 +25,15 @@
 			<% if cr['cr3sid'].nil?%>
 				<%= link_to cr['_id'], {controller: 'change_request', action: 'show', id: cr['_id']}%>
 			<% else %>
-				<%= printReplaceEmpty cr['cr3sid'] %> 
+				<%= link_to cr['cr3sid'], {controller: 'change_request', action: 'show', id: cr['_id']}%>
 			<% end %>
 		</div>
 		
 		<div class='wSmall'>
 			<% if cr.has_key? 'pm3sGrant'%>
-				<%= printReplaceEmpty cr['pm3sGrant']['status'] %> 
+				<%= printReplaceEmpty cr['pm3sGrant']['status'] %>
+			<% else %>
+				pending
 			<% end %>
 		</div>
 	
