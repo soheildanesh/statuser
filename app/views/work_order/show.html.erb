@@ -206,7 +206,7 @@
 					<% if @wo.has_key? 'cpo' and ( not @wo['cpo'].empty? )  %><br><br>
 						<%= link_to 'CPO', {controller: 'cpo', action: 'show', id: @wo['_id'] } %> <br>
 						<%if @wo.has_key? 'workComplete' and not @wo['workComplete'].empty? %>
-							<br> <%= link_to 'Work Complettion', {controller: 'work_order', action: 'showWorkComplete', id: @wo['_id'] } %> <br>
+							<br> <%= link_to 'Work Completion', {controller: 'work_order', action: 'showWorkComplete', id: @wo['_id'] } %> <br>
 							<%if @wo.has_key? 'grcr'%>
 								<br> <%= link_to 'GR', {controller: 'work_order', action: 'showGrcr', id: @wo['_id'] } %> <br>
 							<% else %>	

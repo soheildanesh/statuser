@@ -6,7 +6,8 @@
 	
 	<p>
 		<%= f.label :projId3s, "3SN Project ID" %><br>
-		<%= f.text_field :projId3s, :value => @projId3s%>
+		<%#= f.text_field :projId3s, :value => @projId3s%>
+		<%= f.text_field :projId3s, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
 	</p>
 	
 	<p>
@@ -27,7 +28,7 @@
 	
 	
 	<p>
-		<%= f.label :program, "Project Type" %><br>
+		<%= f.label :projType, "Project Type" %><br>
 		<%= f.text_field :projType%>
 	</p>
 	
@@ -38,11 +39,12 @@
 	
 	<p>
 		<%= f.label :projManager, "3SN Project Manager" %><br>
-		<%= f.text_field :projManager%>
+		<%#= f.text_field :projManager%>
+		<%= f.text_field :projManager, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
 	</p>
 	
 	<p>
-		<%= f.label :projManager, "3SN Project Controller" %><br>
+		<%= f.label :projController, "3SN Project Controller" %><br>
 		<%= f.text_field :projController%>
 	</p>
 	
