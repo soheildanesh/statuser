@@ -1,3 +1,21 @@
+
+$( document ).on( "keyup", "input", function() {
+	
+    var empty = false;
+    $('input').each(function() {
+        if ($(this).val() == '') {
+            empty = true;
+        }
+    });
+
+    if (empty) {
+        $('.disabledTillFilled').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+    } else {
+        $('.disabledTillFilled').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+    }
+});
+
+
 $(document).on("click", '.showCrs', function(){
 	$(this).siblings('.listOfCrs').toggle();
 	return false;
