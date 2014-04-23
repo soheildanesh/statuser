@@ -82,7 +82,7 @@ class ProjectController < ApplicationController
         end
 
         if(okToCreate)
-          @project['3sId'] = id3s
+          #@project['3sId'] = id3s
 
           projectId = $project_collection.insert(@project)
 
