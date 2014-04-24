@@ -52,10 +52,18 @@ class ChangeRequestController < ApplicationController
    
    
    def newPreApprovalRequest
-       redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Report > Pre-Approval Request'
+        if(params['type'] == 'crReport')
+            redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Report > Pre-Approval Request'
+        elsif(params['type'] == 'crInquiry')
+            redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Inquiry > Pre-Approval Request'
+        end
    end
    
    def newAuthorizationRequest
-       redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Report>Authorization Request'
+       if(params['type'] == 'crReport')
+           redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Report > Authorization Request'
+       elsif(params['type'] == 'crInquiry')
+           redirect_to controller: 'work_order', action: 'new', crId:params['crid'], type: 'CR Inquiry > Authorization Request'
+       end
    end
 end

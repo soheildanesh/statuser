@@ -9,14 +9,14 @@
 	<p>
 		Change Request Type: <br>
 		<% if @cr['type'] == "crInquiry"%>
-			Change Request Iquiry
+			Change Request Inquiry
 		<% elsif @cr['type'] == "crReport" %>
 			Change Request Report
 		<% end %>
 	</p>
 	
 	<p>
-		3SN ID: <br>
+		Change Request ID: <br>
 		<%= printReplaceEmpty @cr['cr3sid']%>
 	</p>
 	

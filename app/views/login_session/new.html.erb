@@ -1,11 +1,20 @@
-enter your Email and password to log in
+Enter Your 3S Email and Your Provided Password to Login
 
 <%= form_for :login_session, url: '/login_session' do |f| %>
 <p>
-	<%= f.label :email, "Email" %>
-	<%= f.text_field :email%><br>
+	<div style="width:80px; float:left;">
+		<%= f.label :email, "Email" %>
+	</div>
 	
-	<%= f.label :password, "Password" %>
+	<div>
+		<%= f.text_field :email%><br>
+	</div>
+</p>
+<p>	
+	<div style="width:80px; float:left;">
+		<%= f.label :password, "Password" %>
+	</div>
+
 	<%= f.password_field :password%><br>
 </p>
 <p>

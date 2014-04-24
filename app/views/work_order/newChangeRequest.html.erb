@@ -2,9 +2,9 @@
 <%= form_for :change_request, url: '/change_request' do |f| %>
 	<input type="hidden" name="woId" value="<%= @parentWoId %>" />
 	
-	@cr3sId
+	
 	<p>
-		<%= f.label :cr3sid, "3SN ID:" %><br>
+		<%= f.label :cr3sid, "3SN Change Request ID:" %><br>
 		<%= f.text_field :cr3sid, value: @cr3sid %>
 	</p>
 	
