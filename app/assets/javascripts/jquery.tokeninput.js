@@ -436,6 +436,8 @@ $.TokenList = function (input, url_or_data, settings) {
         var escaped = input_val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         input_resizer.html(escaped);
         input_box.width(input_resizer.width() + 30);
+		
+		$( document ).trigger( "keyup" );
     }
 
     function is_printable_character(keycode) {

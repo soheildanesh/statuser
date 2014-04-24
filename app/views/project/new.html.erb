@@ -6,61 +6,66 @@
 	
 	<p>
 		<%= f.label :projId3s, "3SN Project ID" %><br>
-		<%= f.text_field :projId3s, :value => @projId3s%>
+		<%= f.text_field :projId3s, :value => @projId3s, "class" => "required"%>
 		<br>
 	</p>
 	
 	<p>
 		<%= f.label :customerId, "3SN Customer ID" %><br>
-		<%= f.text_field :customerId%>
+		<%= f.text_field :customerId, "class" => "required"%>
 	</p>
 	
 	<p>
 		<%= f.label :program, "3SN Program" %><br>
-		<%= f.text_field :program%>
+		<%= f.text_field :program, "class" => "required"%>
 	</p>
 	
 	
 	<p>
 		<%= f.label :projName, "3SN Project Name" %><br>
-		<%= f.text_field :projName%>
+		<%= f.text_field :projName, "class" => "required"%>
 	</p>
 	
 	
 	<p>
 		<%= f.label :projType, "Project Type" %><br>
-		<%= f.text_field :projType%>
+		<%= f.text_field :projType, "class" => "required"%>
 	</p>
 	
 	<p>
 		<%= f.label :operatorId, "3SN Operator ID" %><br>
-		<%= f.text_field :operatorId%>
+		<%= f.text_field :operatorId, "class" => "required"%>
 	</p>
 	
 	<p>
-		<%= f.label :projManager, "3SN Project Manager" %><br>
-		<%#= f.text_field :projManager%>
-		<%= f.text_field :projManager, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
+		<div id="projManager">
+			<%= f.label :projManager, "3SN Project Manager" %><br>
+			<%#= f.text_field :projManager%>
+			<%= f.text_field :projManager, "class" => "personInput required", style: 'width:100px; display:none;', size:10%>
+		</div>
 	</p>
 	
 	<p>
-		<%= f.label :projController, "3SN Project Controller" %><br>
-		<%#= f.text_field :projController%>
-		<%= f.text_field :projController, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
+		<div id="projController">
+			<%= f.label :projController, "3SN Project Controller" %><br>
+			<%#= f.text_field :projController%>
+			<%= f.text_field :projController, "class" => "personInput required"%>
+		</div>
 	</p>
 	
 	<p>
 		<%= f.label :startDate, "Start Date" %><br>
-		<%= f.date_select :startDate %>
+		<%= f.date_select :startDate, class: "required" %>
 		<%#= f.text_field :startDate%>
 	</p>
 	
 	<p>
 		<%= f.label :endDate, "End Date" %><br>
-		<%= f.date_select :endDate %>
+		<%= f.date_select :endDate, class: "required" %>
 		<%#= f.text_field :endDate%>
 	</p>
 	
+	<%#= f.submit "Submit", class: 'disabledTillFilled' %>
 	<%= f.submit "Submit", class: 'disabledTillFilled' , disabled:"disabled"%>
 	
 <%end%>

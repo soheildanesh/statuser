@@ -1,4 +1,4 @@
-<%= @project%>
+<%#= @project%>
 
 <div style="width:1250px;">
 
@@ -32,11 +32,6 @@
 		<%= printReplaceEmpty @project['customerId']%>
 	</p>
 
-	<p>
-		<%= "3SN Customer ID" %><br>
-		<%= printReplaceEmpty @project['customerId']%>
-	</p>
-
 
 	<p>
 		<%=  "3SN Operator ID" %><br>
@@ -55,7 +50,11 @@
 
 	<p>
 		<%= "Start Date" %><br>
-		<%= printReplaceEmpty @project['startDate']%>
+		<%if @project.has_key? 'startDate(1i)'%>
+			<%= render partial: "layouts/show_date", locals: {year:  @project['startDate(1i)'], month:  @project['startDate(2i)'] , day: @project['startDate(3i)'] } %>
+		<% else %>
+		 _
+		<% end %>
 	</p>
 
 	<p>

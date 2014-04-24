@@ -1,21 +1,36 @@
 
-$( document ).on( "keyup", "input", function() {
-	alert($("#project_endDate_1i").selected);  #TODO look up a way to get the selected value and ensure the being date is before the end date and also not too far in the past maybe
+$( document ).on("keyup change", function() {
 	
-    var empty = false;
-    $('input').each(function() {
-        if ($(this).val() == '') {
+	var empty = false;
+   	$.each( $('.required'), function(index, field) {
+		console.log("index = "+index+" value = "+ field.value + " value.length = "+field.value.length );
+        if (field.value.length == 0 ) {
             empty = true;
         }
     });
 
-    if (empty) {
+    if (empty || !validateProjectDates()) {
         $('.disabledTillFilled').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
-    } else {
+    } else if(validateProjectDates()) {
         $('.disabledTillFilled').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
     }
 });
 
+function validateProjectDates(){
+	if($("#project_endDate_1i").val() > $("#project_startDate_1i").val()){
+		return true;
+	}
+	else if($("#project_endDate_1i").val() >= $("#project_startDate_1i").val() && 	$("#project_endDate_2i").val() > $("#project_startDate_2i").val() ){
+		return true;
+	}
+	else if($("#project_endDate_1i").val() >= $("#project_startDate_1i").val() && $("#project_endDate_2i").val() >= $("#project_startDate_2i").val() && 
+$("#project_endDate_3i").val() > $("#project_startDate_3i").val() ){
+		return true
+	}
+	else{
+		return false;
+	}
+}
 
 $(document).on("click", '.showCrs', function(){
 	$(this).siblings('.listOfCrs').toggle();
