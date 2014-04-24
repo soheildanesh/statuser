@@ -92,6 +92,42 @@ class ProjectController < ApplicationController
         end
     end
     
+    def edit
+         @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+    end
+    
+    def update
+        
+         if(not current_user.nil?)
+             if(not current_user['role'] == 'admin')
+                 flash[:notice] = "Have to be admin user for this"
+                 render '/login_session/new'
+                 return
+             end
+        else
+            flash[:notice] = "Have to be logged in for this"
+            render '/login_session/new'
+            return
+        end
+        
+        
+        
+        #find and remove record to be updated
+        record = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+        
+        params['project'].each do |key, value| 
+            if key == '_id'
+                next
+            end
+            record[key] = value
+        end
+        
+        $project_collection.save(record)
+   
+        redirect_to controller: "project", action: "show", id: record['_id']
+        
+     end
+    
     def index
         if(current_user.nil?)
              flash[:notice] = "Have to be admin user for this"

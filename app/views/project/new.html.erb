@@ -6,8 +6,8 @@
 	
 	<p>
 		<%= f.label :projId3s, "3SN Project ID" %><br>
-		<%#= f.text_field :projId3s, :value => @projId3s%>
-		<%= f.text_field :projId3s, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
+		<%= f.text_field :projId3s, :value => @projId3s%>
+		<br>
 	</p>
 	
 	<p>
@@ -45,17 +45,20 @@
 	
 	<p>
 		<%= f.label :projController, "3SN Project Controller" %><br>
-		<%= f.text_field :projController%>
+		<%#= f.text_field :projController%>
+		<%= f.text_field :projController, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
 	</p>
 	
 	<p>
 		<%= f.label :startDate, "Start Date" %><br>
-		<%= f.text_field :startDate%>
+		<%= f.date_select :startDate %>
+		<%#= f.text_field :startDate%>
 	</p>
 	
 	<p>
 		<%= f.label :endDate, "End Date" %><br>
-		<%= f.text_field :endDate%>
+		<%= f.date_select :endDate %>
+		<%#= f.text_field :endDate%>
 	</p>
 	
 	<%= f.submit "Submit", class: 'disabledTillFilled' , disabled:"disabled"%>

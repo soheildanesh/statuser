@@ -1,5 +1,6 @@
 
 $( document ).on( "keyup", "input", function() {
+	alert($("#project_endDate_1i").selected);  #TODO look up a way to get the selected value and ensure the being date is before the end date and also not too far in the past maybe
 	
     var empty = false;
     $('input').each(function() {

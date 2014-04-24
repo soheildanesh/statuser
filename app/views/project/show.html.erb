@@ -1,4 +1,4 @@
-<%#= @project%>
+<%= @project%>
 
 <div style="width:1250px;">
 
@@ -60,7 +60,12 @@
 
 	<p>
 		<%=  "End Date" %><br>
-		<%= printReplaceEmpty @project['endDate']%>
+		<%if @project.has_key? 'endDate(1i)'%>
+			<%= render partial: "layouts/show_date", locals: {year:  @project['endDate(1i)'], month:  @project['endDate(2i)'] , day: @project['endDate(3i)'] } %>
+		<% else %>
+		 _
+		<% end %>
+		<%#= printReplaceEmpty @project['endDate']%>
 	</p>
 
 

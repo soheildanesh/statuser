@@ -64,6 +64,8 @@
 
 		<div class='wSmall'>
 			<%= link_to 'Delete', {action: 'destroy', id: project['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+			|	
+			<%= link_to 'Edit', {action: 'edit', id: project['_id']}%>
 		</div>
 	</div>
 	<br>

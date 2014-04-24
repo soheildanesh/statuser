@@ -15,9 +15,9 @@
 	
 		<% if !current_user.nil? %>
 			<%= link_to current_user['email'], :controller => 'person', :action => 'show', :id => current_user['_id'] %> | 
-			<%= link_to "logout", {:controller => "login_session", :action => "destroy", :id => "1"}, :method => :delete %>
+			<%= link_to "Logout", {:controller => "login_session", :action => "destroy", :id => "1"}, :method => :delete %>
 		<% else %>
-			<%= link_to "login",  {:controller => "login_session", :action => "new" } %>
+			<%= link_to "Login",  {:controller => "login_session", :action => "new" } %>
 		<% end %>
 		<br>
 		<br>

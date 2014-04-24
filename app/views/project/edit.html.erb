@@ -1,0 +1,18 @@
+<h1>Editing Project</h1>
+ 
+<%= form_for :project, url: {controller: 'project', action: 'update', id: @project['_id']}, method: :patch do |f| %>
+	
+	<p>
+		<%= f.label :proj, 'Project ID'%><br>
+		<%= text_field_tag "project[projId3s]", "#{@project['projId3s']}" %>
+	</p>
+	<p>
+		<%#= f.label :notes, 'Notes'%><br>
+		<%#= text_field_tag 'site[notes]', "#{@site['notes']}" %>
+	</p>
+	
+	<p>
+		<%= f.submit %>
+	</p>
+	
+<% end %>
