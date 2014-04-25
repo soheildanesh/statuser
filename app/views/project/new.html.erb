@@ -6,13 +6,13 @@
 	
 	<p>
 		<%= f.label :projId3s, "3SN Project ID" %><br>
-		<%= f.text_field :projId3s, :value => @projId3s, "class" => "required"%>
+		<%= f.text_field :projId3s, :value => @projId3s, "class" => "required", disabled: true%>
 		<br>
 	</p>
 	
 	<p>
 		<%= f.label :customerId, "3SN Customer ID" %><br>
-		<%= f.text_field :customerId, "class" => "required"%>
+		<%= f.text_field :customerId, "class" => "required", value: "Ericsson" , disabled: true%>
 	</p>
 	
 	<p>
