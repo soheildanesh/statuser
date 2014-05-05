@@ -1,0 +1,15 @@
+<h2> New Program Form:</h2>
+
+<%= form_for :program, url: '/program' do |f| %>
+<p>
+	<%= f.label :programName, "Program Name" %>
+	<%= f.text_field 'programName' %><br>
+	
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

@@ -32,6 +32,16 @@ module ApplicationHelper
        return str
     end
     
+    def getProgramName programId
+        begin 
+            a = $program_collection.find({:_id => BSON::ObjectId( programId ) } ).to_a
+            return a[0]['programName']
+        rescue 
+            puts("ERROR: invalid program mongodb id format in  getProgramName")
+            return programId
+        end
+    end
+    
     def getPersonEmail personId
         a = $person_collection.find({"_id" => personId.to_i}).to_a
         if(!a.nil? and !a.empty?)

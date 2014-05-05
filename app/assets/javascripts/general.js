@@ -38,7 +38,23 @@ $(document).on("click", '.showCrs', function(){
 });
 
 
-//for token input autocomplete///// 		
+//for token input autocomplete///// 	
+$( document ).ready(
+	function() {
+	$(".programInput").tokenInput("/program",
+	{tokenLimit: 1});
+});
+
+
+//note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
+$( document ).on( "focus", ".programInput", function() {
+  	$(".programInput").tokenInput("/program",
+	{tokenLimit: 1});
+});
+
+
+
+	
 $( document ).ready(
 	function() {
 	$(".personInput").tokenInput("/person",

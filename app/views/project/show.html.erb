@@ -1,4 +1,4 @@
-<%#= @project%>
+<%= @project%>
 
 <div style="width:1250px;">
 
@@ -24,7 +24,7 @@
 
 	<p>
 		<%= "3SN Program" %><br>
-		<%= printReplaceEmpty @project['program']%>
+		<%= printReplaceEmpty getProgramName  @project['program']%>
 	</p>
 
 	<p>
@@ -40,12 +40,12 @@
 
 	<p>
 		<%=  "3SN Project Manager" %><br>
-		<%= printReplaceEmpty @project['projManager']%>
+		<%= printReplaceEmpty getPersonEmail @project['projManager']%>
 	</p>
 
 	<p>
 		<%=  "3SN Project Controller" %><br>
-		<%= printReplaceEmpty @project['projController']%>
+		<%= printReplaceEmpty getPersonEmail @project['projController']%>
 	</p>
 
 	<p>

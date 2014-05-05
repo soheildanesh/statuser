@@ -67,6 +67,10 @@ Statuser::Application.routes.draw do
             get :showPm3sGrant
         end
     end
+    
+    resources :list
+    
+    resources :program
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
