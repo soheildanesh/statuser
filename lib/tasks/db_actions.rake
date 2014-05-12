@@ -16,21 +16,21 @@ namespace :db_actions do
     desc "TODO"
     task :add_admins => :environment do
         admins = Array.new
-        admins << boss = {email: "S_Danesh@3Snetwork.com".downcase!, name: "Saeid Danesh", role: "admin", password: rand(999999)}
+        admins << boss = {email: "S_Danesh@3Snetwork.com".downcase!, name: "Saeid Danesh", role: "admin", password: rand(999999).to_s}
         
-        admins << sina = {email: "Sina.Danesh@3Snetwork.com".downcase!, name: "Sina Danesh", role: "admin", password:rand(999999)}
+        admins << sina = {email: "Sina.Danesh@3Snetwork.com".downcase!, name: "Sina Danesh", role: "admin", password:rand(999999).to_s}
         
-        admins << soheil = {email: "Soheil.Danesh@3Snetwork.com".downcase!, name: "Soheil Danesh", role: "admin", password:rand(999999)}
+        admins << soheil = {email: "Soheil.Danesh@3Snetwork.com".downcase!, name: "Soheil Danesh", role: "admin", password:rand(999999).to_s}
         
-        admins <<  {email: "Birju.Shah@3Snetwork.com".downcase!, name: "Birju Shah", role: "admin", password:rand(999999)}
+        admins <<  {email: "Birju.Shah@3Snetwork.com".downcase!, name: "Birju Shah", role: "admin", password:rand(999999).to_s}
         
-        admins << {email: "tim.burton@3Snetwork.com".downcase!, name: "Tim Burton", role: "admin", password:rand(999999)}
+        admins << {email: "tim.burton@3Snetwork.com".downcase!, name: "Tim Burton", role: "admin", password:rand(999999).to_s}
         
-        admins << {email: "roger.smith@3Snetwork.com".downcase!, name: "Roger Smith", role: "admin", password:rand(999999)}
+        admins << {email: "roger.smith@3Snetwork.com".downcase!, name: "Roger Smith", role: "admin", password:rand(999999).to_s}
         
-        admins <<  {email: "shahrooz.taebi@3Snetwork.com".downcase!, name: "Shahrooz Taebi", role: "admin", password:rand(999999)}
+        admins <<  {email: "shahrooz.taebi@3Snetwork.com".downcase!, name: "Shahrooz Taebi", role: "admin", password:rand(999999).to_s}
         
-        admins <<  {email: "bjorn.burlin@3Snetwork.com".downcase!, name: "Bjorn Burlin", role: "admin", password:rand(999999)}
+        admins <<  {email: "bjorn.burlin@3Snetwork.com".downcase!, name: "Bjorn Burlin", role: "admin", password:rand(999999).to_s}
         
 
         
