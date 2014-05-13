@@ -5,6 +5,6 @@
 <%if !@programs.nil? %>
 <h1>All Programs:</h1>
 	<% for entry in @programs %>
-	    <%= render partial: 'show', locals: {entry: entry} %> <br>
+	    <%= render partial: 'show', locals: {entry: entry} %> <br><br><br>
 	<% end %>
 <%end%>

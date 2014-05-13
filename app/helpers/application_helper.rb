@@ -32,6 +32,16 @@ module ApplicationHelper
        return str
     end
     
+    def getNameFromBsonId collection,  nameColumnName, id
+        begin 
+            a = collection.find({:_id => BSON::ObjectId( id ) } ).to_a
+            return a[0][nameColumnName]
+        rescue 
+            puts("ERROR: invalid  mongodb id format in  getNameFromBsonId")
+            return id
+        end
+    end
+    
     def getProgramName programId
         begin 
             a = $program_collection.find({:_id => BSON::ObjectId( programId ) } ).to_a

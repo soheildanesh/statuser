@@ -1,0 +1,15 @@
+<h2> New Customer Form:</h2>
+
+<%= form_for :customer, url: '/customer' do |f| %>
+<p>
+	<%= f.label :customerName, "Customer Name" %>
+	<%= f.text_field 'customerName' %><br>
+	
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

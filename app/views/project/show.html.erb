@@ -1,4 +1,4 @@
-<%= @project%>
+<%#= @project%>
 
 <div style="width:1250px;">
 
@@ -26,10 +26,16 @@
 		<%= "3SN Program" %><br>
 		<%= printReplaceEmpty getProgramName  @project['program']%>
 	</p>
+	
+	<p>
+		<%= "3SN Project Type" %><br>
+		<%= printReplaceEmpty getNameFromBsonId $projectType_collection,  'projectTypeName', @project['projType'] %> 
+		
+	</p>
 
 	<p>
 		<%= "3SN Customer ID" %><br>
-		<%= printReplaceEmpty @project['customerId']%>
+		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerId'] %>
 	</p>
 
 

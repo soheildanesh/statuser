@@ -19,21 +19,11 @@
 		<% else %>
 			<%= link_to "Login",  {:controller => "login_session", :action => "new" } %>
 		<% end %>
+		| <%= link_to "Dashboard",  :controller => 'list', :action => 'index' %>	
 		<br>
 		<br>
 	
-		<%if current_user and current_user['role'] == "admin" %>
- 
-			<%= link_to "Search",  :controller => 'search', :action => 'index' %>
-			| <%= link_to "Manage People",  :controller => 'person', :action => 'index' %>
-			| <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %>
-		<%end%>
-	
-		<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
-			| <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	
-			| <%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>
-			| <%= link_to "Manage Lists",  :controller => 'list', :action => 'index' %>	
-		<% end %>
+
 		
 		<br></br>
 	

@@ -52,11 +52,12 @@
 		</div>
 		
 		<div class='wSmall' >
-			<%=  printReplaceEmpty project['customerId'] %> 
+			<%=  printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', project['customerId'] %> 
 		</div>
 		
 		<div class='wSmall' style="__background-color:#CEF6CE;">
-			<%=  printReplaceEmpty project['projType'] %> 
+			<%= printReplaceEmpty getNameFromBsonId $projectType_collection,  'projectTypeName', project['projType'] %> 
+			
 		</div>
 		
 		

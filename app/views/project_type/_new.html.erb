@@ -1,0 +1,15 @@
+<h2> New Customer Form:</h2>
+
+<%= form_for :project_type, url: '/project_type' do |f| %>
+<p>
+	<%= f.label :projectType, "Project Type" %>
+	<%= f.text_field 'projectTypeName' %><br>
+	
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

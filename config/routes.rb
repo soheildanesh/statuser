@@ -37,7 +37,12 @@ Statuser::Application.routes.draw do
         end
     end
     
-    resources :project
+    resources :project do
+        member do
+            get :newSearch
+            post :search
+        end
+    end
     
     resources :cpo
     
@@ -71,6 +76,10 @@ Statuser::Application.routes.draw do
     resources :list
     
     resources :program
+    
+    resources :customer
+    
+    resources :project_type
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

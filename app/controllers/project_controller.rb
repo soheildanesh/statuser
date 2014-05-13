@@ -137,4 +137,22 @@ class ProjectController < ApplicationController
              @projects = $project_collection.find().sort( :_id => :desc ).to_a
          end
     end
+    
+    def newSearch
+        
+    end
+    
+    def search
+        searchHash = Hash.new
+        
+        params['project'].each do |key,value|
+            if(value.nil? or value.empty?)
+                next
+            end
+            searchHash[key] = value
+        end
+        
+        @projects = $project_collection.find(searchHash).sort( :_id => :desc ).to_a
+        render 'index'
+    end
 end

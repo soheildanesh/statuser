@@ -1,1 +1,17 @@
+<%= link_to "Search",  :controller => 'search', :action => 'index' %> 
+<br><br>
 <%= link_to 'Manage Programs', controller: 'program', action: 'index'%>
+<br><br>
+<%= link_to 'Manage Customers', controller: 'customer', action: 'index'%>
+<br> <br>
+<%= link_to 'Manage Project Types', controller: 'project_type', action: 'index'%>
+<br><br>
+<%if current_user and current_user['role'] == "admin" %>
+	<%= link_to "Manage People",  :controller => 'person', :action => 'index' %> <br><br>
+ 	<%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %> <br><br>
+<%end%>
+
+<%if current_user and (current_user['role'] == "admin" or current_user['role'] == "project manager") %>
+	<%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	<br><br>
+	<%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>  <br><br>
+<% end %>

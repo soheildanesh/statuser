@@ -41,6 +41,36 @@ $(document).on("click", '.showCrs', function(){
 //for token input autocomplete///// 	
 $( document ).ready(
 	function() {
+	$(".projectTypeInput").tokenInput("/project_type",
+	{tokenLimit: 1});
+});
+
+
+//note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
+$( document ).on( "focus", ".customerInput", function() {
+  	$(".projectTypeInput").tokenInput("/project_type",
+	{tokenLimit: 1});
+});
+
+
+
+$( document ).ready(
+	function() {
+	$(".customerInput").tokenInput("/customer",
+	{tokenLimit: 1});
+});
+
+
+//note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
+$( document ).on( "focus", ".customerInput", function() {
+  	$(".customerInput").tokenInput("/customer",
+	{tokenLimit: 1});
+});
+
+
+
+$( document ).ready(
+	function() {
 	$(".programInput").tokenInput("/program",
 	{tokenLimit: 1});
 });

@@ -1,5 +1,5 @@
 <div style='width:1440px;'>
-	<%= link_to 'Add Project', {controller: 'project', action: 'new'}, {style: "color:blue;"} %>
+	<%= link_to 'Add Project', {controller: 'project', action: 'new'}, {style: "color:blue;"} %> | 	<%= link_to 'Search Projects', {controller: 'project', action: 'newSearch', id:'dummy'}, {style: "color:blue;"} %>
 
 
 	<%if !@projects.nil? %>
