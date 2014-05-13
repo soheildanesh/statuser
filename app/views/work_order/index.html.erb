@@ -1,0 +1,23 @@
+<%if !@wos.nil? %>
+	<%if !@wos.empty? %>
+		<h1>All Work Orders:</h1>
+		<%shadedBg = false;%>
+		<% for wo in @wos %>
+			
+			<%if shadedBg%>
+				<div style="background-color:beige; padding:0px;">
+			<%end%>
+		    <%= render partial: 'show', locals: {wo: wo} %> <br>
+			<%if shadedBg%>
+				</div>
+				<%shadedBg=false%>
+			<%else%>
+				<%shadedBg=true%>
+			<%end%>
+
+		<% end %>
+	<% else %>
+		<br>
+		No Work Orders found in database
+	<% end %>
+<%end%>

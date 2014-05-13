@@ -74,12 +74,13 @@ class WorkOrderController < ApplicationController
         end 
         
         #puts("@childWos = #{@childWos}")
-
-        if not @childWos.nil? 
+        @childWos.compact!
+        if not @childWos.nil? and not @childWos.empty?
             @childWos.sort!{|x,y| y['createdAt'] <=> x['createdAt']} 
         end
         
-        if not @childCrs.nil? 
+        @childCrs.compact!
+        if not @childCrs.nil? and not @childCrs.empty?
             @childCrs.sort!{|x,y| y['createdAt'] <=> x['createdAt']} 
         end
         
@@ -277,5 +278,22 @@ class WorkOrderController < ApplicationController
         
     end
     
+    def newSearch
+        
+    end
     
+    def search
+        searchHash = Hash.new
+        
+        params['work_order'].each do |key,value|
+            if(value.nil? or value.empty?)
+                next
+            end
+            searchHash[key] = value
+        end
+        
+        @wos = $wo_collection.find(searchHash).sort( :_id => :desc ).to_a
+        render 'index'
+    end
+
 end

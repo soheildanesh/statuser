@@ -1,0 +1,85 @@
+
+
+
+<%= form_for :work_order, url: {controller:'work_order', action: 'search', id:'dummy'} do |f| %>
+
+
+	
+	<p>
+		<%= f.label :workOrderId, "Work Order ID" %><br>
+		<%= f.text_field :workOrderId %> 
+	</p>
+			
+	<p>
+		<%= f.label :projMan, "3SN PM" %>
+		<%= f.text_field :projMan, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
+	</p>
+	
+	<p>
+		<%= f.label :projCont, "3SN PC" %>
+		<%= f.text_field :projCont, "class" => "personInput", style: 'width:100px; display:none;', size:10%><br>
+	</p>
+	
+	<p>
+		<%= f.label :customerPm, "Customer PM"%><br>
+		<%= f.text_field :customerPm %><br>
+	</p>
+	
+	<p>
+    	<%= f.label :siteId, "Site ID" %><br>
+		<%= f.text_field :siteId, :class => 'siteidInput'%>
+  	</p>
+	
+	<p>
+		<%= f.label :rfxNumber, "RFx Number" %><br>
+		<%= f.text_field :rfxNumber %><br>
+	</p>
+	
+	<p>
+		<%= f.label :bidType, "Bid Type" %><br>
+		<%= f.text_field :bidType %><br>
+	</p>
+	
+	<p>
+		<%= f.label :name, "Name" %><br>
+		<%= f.text_field :name %><br>
+	</p>
+	
+	
+	<p>
+		<%= f.label :cpo, "CPO" %>
+		<%= f.text_field :cpo %>
+	</p>
+	
+	<p>
+		<%= f.label :quantity, "Quantity"%><br>
+		<%= f.text_field :quantity %><br>
+	</p>
+	
+	<p>
+		<%= f.label :unitType, "Unit Type"%><br>
+		<%= f.text_field :unitType %><br>
+	</p>
+	
+	<p>
+		<%= f.label :unitPrice, "Unit Price"%><br>
+		<%= f.text_field :unitPrice %><br>
+	</p>
+	
+	<p>
+		<%= f.label :totalPrice, "Total Price"%><br>
+		<%= f.text_field :totalPrice %><br>
+	</p>
+	
+	<p>
+		<%= f.label :description, "Description" %><br>
+		<%= f.text_area :description %><br>
+	</p>
+	
+	
+	
+
+	<%= f.submit "Submit" %>
+	
+<%end%>
+<br>

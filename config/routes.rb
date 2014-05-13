@@ -61,6 +61,8 @@ Statuser::Application.routes.draw do
             post :updateWoAcceptance
             get :showWoAcceptance
             get :showWorkComplete
+            get :newSearch
+            post :search
         end
     end
     
