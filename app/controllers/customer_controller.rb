@@ -10,6 +10,7 @@ class CustomerController < ApplicationController
             redirect_to controller:'login_session', action:'new'
             return
         else
+            $project_collection.find()
             $customer_collection.remove({:_id => BSON::ObjectId(params['id']) })
             redirect_to controller:'customer', action:'index'
             return
