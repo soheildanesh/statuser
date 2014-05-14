@@ -1,7 +1,14 @@
 
 <% if !log_entries.nil? and !log_entries.empty? %>
+	<% i = 1%>
 	<% for entry in log_entries %>
-		<%= render :partial => "show", :locals => {:event => entry}%>
+		<% if i < 0 %>
+			<% backgroundColor = 'beige'%>
+		<% else %>
+			<% backgroundColor = 'white'%>
+		<% end %>
+		<%= render :partial => "show", :locals => {:event => entry, :backgroundColor => backgroundColor}%>
+		<% i = i * -1%>
 	<% end %>
 <%else%>
 	No Log Entries to Show.
@@ -14,7 +21,7 @@
 	<% for entry in log_entries %>
 		<% if entry.has_key? 'changeRequestNumber' %>
 		
-			<%= render :partial => "log_entry/change_request/change_request_show", :locals => {:changeRequest => entry}%>
+			<%= render :partial => "log_entry/change_request/change_request_show", :locals => {:changeRequest => entry }%>
 		
 		<% elsif entry["type"] == 'site activity report' %>
 		

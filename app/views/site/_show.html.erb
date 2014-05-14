@@ -1,54 +1,65 @@
-<table style='border:1px solid black;'>
-	<tr>
-		<td width="60%"> Site ID</td>
-		<td>Project Code</td>
-		<td>Site Type</td>
-		<td>Site Address</td>
-		<td>Project Manager</td>
-		<td>Construction Manager</td>
-		<td>COP In Charge</td>
-	</tr>
-	<tr>
-		<td><%= site['siteId']%></td> 
-		<td><%= site['projectCode']%></td> 
-		<td><%= site['siteType']%></td>
-		<td><%= site['siteAddress']%></td>
-		<td>
+<div style=''>
+	<div style="width:2000px; float:left;">
+		<hr>
+		<div class='wSmall'> Site ID</div>
+		<div class='wSmall'>Project Code</div>
+		<div class='wSmall'>Site Type</div>
+		<div class='wSmall'>Site Address</div>
+		<div class='wSmall'>Project Manager</div>
+		<div class='wSmall'>Construction Manager</div>
+		<div class='wSmall'>COP In Charge</div>
+	</div>
+	<div style="width:2000px; float:left;">
+		<div class='wSmall'><%= site['siteId']%></div> 
+		<div class='wSmall'><%= site['projectCode']%></div> 
+		<div class='wSmall'><%= site['siteType']%></div>
+		<div class='wSmall'><%= site['siteAddress']%></div>
+		<div class='wSmall'>
 			<%= linkToPerson(site['projMan']) %>
-		</td>
-		<td>
+		</div>
+		<div class='wSmall'>
 			<%= linkToPerson(site['constMan']) %>
-		</td>
-		<td>
+		</div>
+		<div class='wSmall'>
 			<%= linkToPerson(site['copInCharge']) %>
-		</td>
-		<td> 
-			<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
-		</td>
+		</div>
+		
+		
+	</div>
+	
+	<div class='wSmall'> 
+		<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
+	</div>
+	
+	
+
 		
 
 
 <%# <NOTE: uncomment this and take away slashes in the display:none below to click on this then show options for site, otherwise they're visible by default> = link_to 'show options', controller:'site', action:'show_options', id:site['_id'], remote: true%>
-</table>
+</div>
+
+
+
 <div style="display:none;">
 	
 	<% classString = "site_options_#{site['_id']}"%>
 	<table class=<%= classString %> >	
 
-			<td> 
+			<div class='wSmall'> 
 				<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
-			</td>
+			</div>
 		</tr>
 	</table>
 	
 	
-	<td> 
+	<div class='wSmall'> 
 		<%= link_to 'Submit Change Request', controller: 'log_entry', action: 'new_change_request', id: site['_id']%>
-	</td>
-	<td> 
+	</div>
+	<div class='wSmall'> 
 		<%= link_to 'edit', controller: 'site', action: 'edit', id: site['_id'] %>
-	</td>
-	<td>
+	</div>
+	<div class='wSmall'>
 		<%= link_to 'Delete', {controller: 'site', action: 'destroy', id: site['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
-	</td>
+	</div>
 </div>

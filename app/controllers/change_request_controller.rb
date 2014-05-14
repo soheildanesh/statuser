@@ -12,6 +12,8 @@ class ChangeRequestController < ApplicationController
        @wo["child__cr__#{crid}"] = crid
        $wo_collection.save(@wo)
        
+       eventUrl = {controller: 'change_request', action: 'show', id: crid}
+       registerEvent eventUrl , current_user['_id'], "Change Request Created"
        redirect_to action: 'show', id: crid
    end 
    

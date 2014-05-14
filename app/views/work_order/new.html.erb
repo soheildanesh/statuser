@@ -70,50 +70,52 @@
 		<% end %>
   	</p>
 	
-	<p>
-		<%= f.label :rfxNumber, "RFx Number" %><br>
-		<%= f.text_field :rfxNumber %><br>
-	</p>
+	<% if not @crType.include? 'Pre-Approval Request' #not needed for pre-approval %>
+		<p>
+			<%= f.label :rfxNumber, "RFx Number" %><br>
+			<%= f.text_field :rfxNumber %><br>
+		</p>
 	
-	<p>
-		<%= f.label :bidType, "Bid Type" %><br>
-		<%= f.text_field :bidType %><br>
-	</p>
+		<p>
+			<%= f.label :bidType, "Bid Type" %><br>
+			<%= f.text_field :bidType %><br>
+		</p>
 	
-	<p>
-		<%= f.label :name, "Name" %><br>
-		<%= f.text_field :name %><br>
-	</p>
+		<p>
+			<%= f.label :name, "Name" %><br>
+			<%= f.text_field :name %><br>
+		</p>
 	
 	
-	<p>
-		<%#= f.label :cpo, "CPO" %>
-		<%#= f.text_field :cpo %>
-	</p>
+		<p>
+			<%#= f.label :cpo, "CPO" %>
+			<%#= f.text_field :cpo %>
+		</p>
 	
-	<p>
-		<%= f.label :quantity, "Quantity"%><br>
-		<%= f.text_field :quantity %><br>
-	</p>
+		<p>
+			<%= f.label :quantity, "Quantity"%><br>
+			<%= f.text_field :quantity %><br>
+		</p>
 	
-	<p>
-		<%= f.label :unitType, "Unit Type"%><br>
-		<%= f.text_field :unitType %><br>
-	</p>
+		<p>
+			<%= f.label :unitType, "Unit Type"%><br>
+			<%= f.text_field :unitType %><br>
+		</p>
 	
-	<p>
-		<%= f.label :unitPrice, "Unit Price"%><br>
-		<%= f.text_field :unitPrice %><br>
-	</p>
+		<p>
+			<%= f.label :unitPrice, "Unit Price"%><br>
+			<%= f.text_field :unitPrice %><br>
+		</p>
 	
-	<p>
-		<%= f.label :totalPrice, "Total Price"%><br>
-		<%= f.text_field :totalPrice %><br>
-	</p>
+		<p>
+			<%= f.label :totalPrice, "Total Price"%><br>
+			<%= f.text_field :totalPrice %><br>
+		</p>
+	<% end %>
 	
 	<p>
 		<%= f.label :description, "Description" %><br>
-		<%= f.text_area :description %><br>
+		<%= f.text_area :description, style:"height:200px; width:400px;" %><br>
 	</p>
 	
 	

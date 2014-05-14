@@ -27,6 +27,10 @@ class QuoteController < ApplicationController
         @wo = $wo_collection.find({ :_id => BSON::ObjectId(@quote['woId']) } ).to_a[0]
         @wo["quoteId_#{quoteId}"] = quoteId
         $wo_collection.save(@wo)
+        
+        eventUrl = {controller: 'work_order', action: 'show', id: @wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "Quote submitted for work order ID: #{@wo['workOrderId']}"
+        
         redirect_to controller: 'work_order', action: 'show', id: @wo['_id']
     end
     
@@ -64,6 +68,9 @@ class QuoteController < ApplicationController
               # >>>write to the work order record 
             end
             $quote_collection.save(updatedQuote)
+            
+            eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+            registerEvent eventUrl , current_user['_id'], "Quote #{params['status']} for work order ID: #{wo['workOrderId']} "
         end
         
         redirect_to controller: 'work_order', action: 'show', id: quote['woId'] 

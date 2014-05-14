@@ -37,7 +37,7 @@ class WorkOrderController < ApplicationController
         woId = $wo_collection.insert(@wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: woId}
-        registerEvent eventUrl , current_user['_id'], "work order created"
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{@wo['workOrderId']} created"
         
         #A regular work order belongs to a project, but a change request (which starts with an authorization request) is a special kind of work order that belongs to another work order hence skipping this part if has key parnetWoId
         if  @wo.has_key? 'parentWoId'
@@ -178,6 +178,9 @@ class WorkOrderController < ApplicationController
         wo['woAcceptance'] = woAcceptance
         
         $wo_collection.save(wo)
+        
+        eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} #{woAcceptance['status']}"
 
         redirect_to action: 'show', id: wo['_id'].to_s
 
@@ -193,6 +196,9 @@ class WorkOrderController < ApplicationController
         wo['grant'] = grant
         
         $wo_collection.save(wo)
+        
+        eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} grant #{grant['status']}"
         
         redirect_to action: 'show', id: wo['_id'].to_s
     end
@@ -223,6 +229,9 @@ class WorkOrderController < ApplicationController
         wo['grcr'] = grcr
         
         $wo_collection.save(wo)
+
+        eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} work completion #{grcr['acceptance_status']}"
         
         redirect_to action: 'show', id: wo['_id'].to_s
     end
@@ -236,6 +245,9 @@ class WorkOrderController < ApplicationController
         wo['workComplete'] = workComplete
         
         $wo_collection.save(wo)
+        
+        eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} work completed"
         
         redirect_to action: 'show', id: wo['_id'].to_s
         
@@ -255,6 +267,8 @@ class WorkOrderController < ApplicationController
         
         wo['cpo'] = cpo
         
+        eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
+        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} cpo added"
 
         $wo_collection.save(wo)
         

@@ -32,10 +32,18 @@ td
 
 .wSmall
 {
-	width:230px;
+	width:250px;
 	float:left;
 	align:center;
 }
+
+.wMedium
+{
+	width:500px;
+	float:left;
+	align:center;
+}
+
 
 div
 {
