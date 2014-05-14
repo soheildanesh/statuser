@@ -10,14 +10,19 @@ class CustomerController < ApplicationController
             redirect_to controller:'login_session', action:'new'
             return
         else
-            $project_collection.find()
-            $customer_collection.remove({:_id => BSON::ObjectId(params['id']) })
+            projects = $project_collection.find("customerId" => BSON::ObjectId(params['id'])).to_a
+            if(projects.empty?)
+                $customer_collection.remove({:_id => BSON::ObjectId(params['id']) })
+            else
+                
+            end
             redirect_to controller:'customer', action:'index'
             return
         end
     end
     
     def show
+        
 
     end
   
