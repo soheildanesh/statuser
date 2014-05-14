@@ -1,5 +1,5 @@
 class LogEntryController < ApplicationController
-    
+   
    def add_cr_to_activity_report
        @id = (params["id"].to_i+1).to_s
    end
@@ -88,7 +88,7 @@ class LogEntryController < ApplicationController
             return
         elsif(current_user['role'] == 'admin')
             if(!params[:id].nil? )
-                @log_entries = $log_entry_collection.find({'person_id' => params[:id].to_i }).sort( :_id => :desc ).to_a
+                @log_entries = $log_entry_collection.find({'doer' => params[:id].to_i }).sort( :_id => :desc ).to_a
                 @whoseEntries = $person_collection.find("_id" => params[:id].to_i).to_a[0]["email"]
             else
                 @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a

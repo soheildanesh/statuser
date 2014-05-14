@@ -1,0 +1,35 @@
+
+<div style="width:1400px; margin-top:0px; ">
+	
+	<div style="width:1400px; float:left;">
+		<hr style="margin:0px;">
+		<div class='wSmall'>
+ 			Event 
+		</div>
+		
+		<div class='wSmall'>
+			 By
+		</div>
+		
+		<div class='wSmall'>
+			<b> Time </b>
+		</div>				
+	</div>
+	
+	<div style="width:1700px; float:left;">
+		<div class='wSmall'>
+			<%= link_to event['eventDesc'], event['eventUrl'] %>
+		</div>
+		
+		<div class='wSmall'>
+			<%= linkToPerson event['doer'] %> 
+		</div>				
+		
+		<div class='wSmall'>
+			<%=  event['createdAt'] %> 
+		</div>				
+		
+		
+		
+	</div>
+</div>

@@ -12,5 +12,12 @@ class ApplicationController < ActionController::Base
     end
     return $current_user
   end
+  
+  helper_method :registerEvent
+  def registerEvent contActIdHash, user_id, eventDesc
+
+      $log_entry_collection.insert({ 'eventUrl' => contActIdHash, 'doer' => user_id, 'eventDesc' => eventDesc, 'createdAt' => Time.now })
+
+  end
 
 end

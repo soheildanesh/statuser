@@ -36,6 +36,9 @@ class WorkOrderController < ApplicationController
         @wo['createdAt'] = Time.now
         woId = $wo_collection.insert(@wo)
         
+        eventUrl = {controller: 'work_order', action: 'show', id: woId}
+        registerEvent eventUrl , current_user['_id'], "work order created"
+        
         #A regular work order belongs to a project, but a change request (which starts with an authorization request) is a special kind of work order that belongs to another work order hence skipping this part if has key parnetWoId
         if  @wo.has_key? 'parentWoId'
             parentWo = $wo_collection.find({ :_id => BSON::ObjectId(@wo['parentWoId']) }).to_a[0]

@@ -1,4 +1,15 @@
+
 <% if !log_entries.nil? and !log_entries.empty? %>
+	<% for entry in log_entries %>
+		<%= render :partial => "show", :locals => {:event => entry}%>
+	<% end %>
+<%else%>
+	No Log Entries to Show.
+<% end %>
+
+
+
+<% if false and  !log_entries.nil? and !log_entries.empty? %>
 
 	<% for entry in log_entries %>
 		<% if entry.has_key? 'changeRequestNumber' %>
@@ -13,6 +24,6 @@
 
 	<% end %>
 <%else%>
-	No Log Entries to Show.
+
 
 <% end %>
