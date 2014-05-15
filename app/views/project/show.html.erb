@@ -100,7 +100,10 @@
 		<p>
 			<b> Project's Work Orders: </b>
 		</p>
-
+		
+		<%= render partial: 'work_order/show_work_orders', locals: {wos: @wos} %> <br>
+		
+		<% if false%>
 		<%shadedBg=false%>
 			<% for wo in @wos%>
 				<%if shadedBg%>
@@ -116,6 +119,7 @@
 			<% end %>
 			<br>
 			<br>
+		<% end %>
 	
 	<% end %>
 </div>

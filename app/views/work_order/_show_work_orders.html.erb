@@ -1,0 +1,21 @@
+<%if !wos.nil? %>
+	<%if !wos.empty? %>
+		<h1>All Work Orders:</h1>
+		<%shadedBg = -1 %>
+		<% for wo in wos %>
+			
+			<%if shadedBg > 0%>
+		    	<%= render partial: 'work_order/show', locals: {wo: wo, backGround: 'beige'} %> <br>
+			<% else %>
+				<%= render partial: 'work_order/show', locals: {wo: wo, backGround: 'white'} %> <br>
+			<% end %>
+
+			<% shadedBg = shadedBg * -1%>
+			
+
+		<% end %>
+	<% else %>
+		<br>
+		No Work Orders found in database
+	<% end %>
+<%end%>

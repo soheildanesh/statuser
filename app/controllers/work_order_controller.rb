@@ -317,11 +317,13 @@ class WorkOrderController < ApplicationController
     def newPreApprovalRequest
         @parentWoId = params['id']
         @type = params['type']
+        render 'new'
     end
     
     def newAuthorizationRequest
         @parentWoId = params['id']
         @type = params['type']
+        render 'new'
     end
     
     def newPreapprovalRequest

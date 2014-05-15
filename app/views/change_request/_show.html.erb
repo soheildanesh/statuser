@@ -11,7 +11,7 @@
 		
 
 		<div class='wSmall'>
-			<b> Granted? </b>
+			<b> 3S PM Acceptance </b>
 		</div>
 
 	</div>
@@ -31,9 +31,13 @@
 		
 		<div class='wSmall'>
 			<% if cr.has_key? 'pm3sGrant'%>
-				<%= printReplaceEmpty cr['pm3sGrant']['status'] %>
+				<% if (printReplaceEmpty(cr['pm3sGrant']['status']) == "granted") %>
+					<%= "Accepted" %>
+				<% else %>
+					<%= "Pending" %>
+				<% end %>
 			<% else %>
-				pending
+				Pending
 			<% end %>
 		</div>
 	

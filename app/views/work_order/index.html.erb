@@ -1,19 +1,20 @@
+<%= render partial: 'show_work_orders', locals: {wos: @wos} %> <br>
+
+<% if false %>
 <%if !@wos.nil? %>
 	<%if !@wos.empty? %>
 		<h1>All Work Orders:</h1>
-		<%shadedBg = false;%>
+		<%shadedBg = -1 %>
 		<% for wo in @wos %>
 			
-			<%if shadedBg%>
-				<div style="background-color:beige; padding:0px;">
-			<%end%>
-		    <%= render partial: 'show', locals: {wo: wo} %> <br>
-			<%if shadedBg%>
-				</div>
-				<%shadedBg=false%>
-			<%else%>
-				<%shadedBg=true%>
-			<%end%>
+			<%if shadedBg > 0%>
+		    	<%= render partial: 'show', locals: {wo: wo, backGround: 'beige'} %> <br>
+			<% else %>
+				<%= render partial: 'show', locals: {wo: wo, backGround: 'white'} %> <br>
+			<% end %>
+
+			<% shadedBg = shadedBg * -1%>
+			
 
 		<% end %>
 	<% else %>
@@ -21,3 +22,4 @@
 		No Work Orders found in database
 	<% end %>
 <%end%>
+<% end %>
