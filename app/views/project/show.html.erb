@@ -101,7 +101,7 @@
 			<b> Project's Work Orders: </b>
 		</p>
 		
-		<%= render partial: 'work_order/show_work_orders', locals: {wos: @wos} %> <br>
+		<%= render partial: 'work_order/show_work_orders', locals: {wos: @wos, backGround: 'white'} %> <br>
 		
 		<% if false%>
 		<%shadedBg=false%>
@@ -109,7 +109,7 @@
 				<%if shadedBg%>
 					<div style="_background-color:beige; padding:0px; width:900px; float:center;">
 				<%end%>
-				<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+				<%= render :partial => 'work_order/show' , :locals => { :wo => wo ,backGround: 'white'} %>
 				<%if shadedBg%>
 					</div>
 					<%shadedBg=false%>

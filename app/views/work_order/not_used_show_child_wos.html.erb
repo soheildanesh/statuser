@@ -1,6 +1,6 @@
 <h2> 
 
 <% for wo in @childWos%>
-	<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+	<%= render :partial => 'work_order/show' , :locals => { :wo => wo , backGround: 'white'} %>
 	<%#= wo %>
 <% end %>
