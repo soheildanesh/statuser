@@ -60,9 +60,10 @@ class QuoteController < ApplicationController
                  updatedQuote[key] = value
             end
             updatedQuote['status'] = {:status => params['status'], createdAt: Time.now}
+            wo = $wo_collection.find({:_id => BSON::ObjectId(quote['woId'])}).to_a[0]
             
             if(params['status'] == 'accepted')
-                wo = $wo_collection.find({:_id => BSON::ObjectId(quote['woId'])}).to_a[0]
+                
                 wo['acceptedQuoteId'] = quote['_id']
                 $wo_collection.save(wo)
               # >>>write to the work order record 

@@ -14,6 +14,39 @@ class WorkOrderController < ApplicationController
         @workOrderId = genSamllUniqId $wo_collection, 'workOrderId'        
     end
     
+    def update
+
+        if(not current_user.nil?)
+            if(not current_user['role'] == 'admin')
+                flash[:notice] = "Have to be admin user for this"
+                render '/login_session/new'
+                return
+            end
+       else
+           flash[:notice] = "Have to be logged in for this"
+           render '/login_session/new'
+           return
+       end
+
+
+
+       #find and remove record to be updated
+       record = $wo_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+
+       params['work_order'].each do |key, value| 
+           if key == '_id'
+               next
+           end
+           record[key] = value
+       end
+
+       $wo_collection.save(record)
+
+       redirect_to controller: "work_order", action: "show", id: record['_id']
+
+    end
+    
+    
     def destroy
         tobeDeleted = $wo_collection.find({_id: BSON::ObjectId(params['id'])}).to_a[0]
         projectId = tobeDeleted['projectId']

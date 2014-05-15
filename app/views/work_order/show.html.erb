@@ -1,4 +1,4 @@
-<%#= @wo%>
+<%#	= @wo%>
 <br>
 
 <%#= @childHierarchy %>
@@ -18,11 +18,19 @@
 			<%if @wo.has_key? 'parentWoId' %>
 				<% if @wo['type'].include? 'Pre-Approval'%>
 					<%idLabel = "Pre-Approval Request ID"%>
+					<% hideSomeFields = true %>
 				<% elsif @wo['type'].include? 'Authorization' %>
 					<%idLabel = "Authorization Request ID"%>
+					
+					<% if @wo.has_key? 'grant' and  @wo['grant']["status"] == "granted" %>
+						<% hideSomeFields = false %>
+					<% else %>
+						<% hideSomeFields = true %>
+					<% end %>
 				<% end %>
 			<% else %>
 				<%idLabel = "Work Order ID"%>
+				<% hideSomeFields = false %>
 			<% end %>
 			<%= idLabel %>: <br>
 			<% if  @wo.has_key? "workOrderId" %>
@@ -59,16 +67,6 @@
 			Site ID: <br>
 			<%= printReplaceEmpty @wo['siteId']%>
 		</p>
-	
-		<p>
-			RFx Number: <br>
-			<%= printReplaceEmpty @wo['rfxNumber']%>
-		</p>
-		
-		<p>
-			Bid Type: <br>
-			<%= printReplaceEmpty @wo['bidType']%>
-		</p>
 		
 		<%if not @wo['type'].nil? and not @wo['type'].include? 'Pre-Approval'%>
 			<p>
@@ -79,32 +77,88 @@
 				<%#= @wo['cpo']['cpoNum']%>
 			</p>
 		<% end %>
+
+		<% if not hideSomeFields%>
+			<%= form_for :work_order, url: {controller: 'work_order', action: 'update', id: @wo['_id']}, method: :patch do |f| %>
+			
+				<% showUpdateButton = false%>
+			
+			
+				<% if @wo['rfxNumber'].nil? or  @wo['rfxNumber'].empty? %>
+					<p>
+						<%= f.label :wo, 'RFx number'%><br>
+						<%= text_field_tag "work_order[rfxNumber]", "#{@wo['rfxNumber']}" %>
+						<% showUpdateButton = true%>
+					</p>
+				<% else %>
+					<p>
+						RFx Number: <br>
+						<%= printReplaceEmpty @wo['rfxNumber']%>
+					</p>
+				<% end %>
 		
+				<p>
+					Bid Type: <br>
+					<% if @wo['bidType'].nil? or  @wo['bidType'].empty? %>
+						<%= text_field_tag "work_order[bidType]", "#{@wo['bidType']}" %>
+						<% showUpdateButton = true%>
+					<% else %>	
+						<%= printReplaceEmpty @wo['bidType']%>
+					<% end %>
+				</p>
+			
+				<p>
+					Quantity: <br>
+					<% if @wo['quantity'].nil? or  @wo['quantity'].empty? %>
+						<%= text_field_tag "work_order[quantity]", "#{@wo['quantity']}" %>
+						<% showUpdateButton = true%>
+					<% else %>	
+						<%= printReplaceEmpty @wo['quantity']%>
+					<% end %>
+				</p>
+			
+				<p>
+					Unit Type: <br>
+					<% if @wo['unitType'].nil? or  @wo['unitType'].empty? %>
+						<%= text_field_tag "work_order[unitType]", "#{@wo['unitType']}" %>
+						<% showUpdateButton = true%>
+					<% else %>	
+						<%= printReplaceEmpty @wo['unitType']%>
+					<% end %>
+				</p>
+			
+				<p>
+					Unit Price: <br>
+					<% if @wo['unitPrice'].nil? or  @wo['unitPrice'].empty? %>
+						<% showUpdateButton = true%>
+						<%= text_field_tag "work_order[unitPrice]", "#{@wo['unitPrice']}" %>
+					<% else %>	
+						<%= printReplaceEmpty @wo['unitType']%>
+					<% end %>
+				</p>
+			
+				<p>
+					Total Price: <br>
+					<% if @wo['totalPrice'].nil? or  @wo['totalPrice'].empty? %>
+						<%= text_field_tag "work_order[totalPrice]", "#{@wo['totalPrice']}" %>
+						<% showUpdateButton = true%>
+					<% else %>	
+						<%= printReplaceEmpty @wo['totalPrice']%>
+					<% end %>
+				</p>
+				
+				<% if showUpdateButton %>
+					<%= f.submit "Update" %>
+				<% end %>
+			<% end %>
+		<% end %>
 		
 		<p>
 			Created At: <br>
 			<%= printReplaceEmpty @wo['createdAt'].to_s%>
 		</p>
 		
-		<p>
-			Quantity: <br>
-			<%= printReplaceEmpty @wo['quantity']%>
-		</p>
 		
-		<p>
-			Unit Type: <br>
-			<%= printReplaceEmpty @wo['unitType']%>
-		</p>
-		
-		<p>
-			Unit Price: <br>
-			<%= printReplaceEmpty @wo['unitPrice']%>
-		</p>
-		
-		<p>
-			Total Price: <br>
-			<%= printReplaceEmpty @wo['totalPrice']%>
-		</p>
 	
 	</div>
 	

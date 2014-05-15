@@ -31,8 +31,11 @@
 
 <div style="float:left; width:500px;">
 	<%if @cr.has_key? 'pm3sGrant'%>
-
-		<%= link_to '3SN PM Grant', action: 'showPm3sGrant', id:@cr['_id']%><br>
+		<% if @cr['pm3sGrant']["status"] == "granted" %>
+			<%= link_to '3SN PM Acceptance', action: 'showPm3sGrant', id:@cr['_id']%><br>
+		<% else %>
+			<%= link_to '3SN PM Rejection', action: 'showPm3sGrant', id:@cr['_id']%><br>
+		<% end %>
 		<div style="width:300px;">
 			<hr>
 		</div>
@@ -58,7 +61,7 @@
 		<div style="float:left; ">
 			<%= form_for :change_request, url: "/change_request/#{@cr['_id']}/update3sPmGrant" do |f| %>
 				<input type="hidden" name="change_request[pm3sGrant][status]" value="granted" />					
-				<%= f.submit "Grant" %>
+				<%= f.submit "Accept" %>
 			<% end %>
 
 		</div>

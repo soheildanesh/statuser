@@ -1,6 +1,5 @@
 
 
-
 <%= form_for :work_order, url: '/work_order' do |f| %>
 
 	<input type="hidden" name="work_order[projectId]" value='<%= @projctId %>' />
@@ -24,7 +23,6 @@
 			
 		<% elsif @crType.include? 'Pre-Approval Request' %>
 			<%idLable = "3SN Pre-Approval Request ID"%>
-			
 		<% elsif @crType.include? 'Authorization Request' %>
 			<%idLable = "3SN Authorization Request ID"%>
 			
@@ -72,7 +70,7 @@
 	
 	
 
-		<% #if true or not @crType.nil? and  @crType.include? 'Pre-Approval Request' #not needed for pre-approval %>
+		<% if  @parentChangeRequestId.nil? %>
 			<p>
 				<%= f.label :rfxNumber, "RFx Number" %><br>
 				<%= f.text_field :rfxNumber %><br>
@@ -113,7 +111,7 @@
 				<%= f.label :totalPrice, "Total Price"%><br>
 				<%= f.text_field :totalPrice %><br>
 			</p>
-		<% #end %>
+		<% end %>
 
 	
 	<p>
