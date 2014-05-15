@@ -81,6 +81,8 @@
 			<hr>
 			Existing Authorization / Pre-Approval Requests:
 		</div>
+		
+
 		<% for wo in @childWos%>
 			
 			<div style="margin-top:30px; float:left;">
@@ -92,7 +94,7 @@
 
 					Authorization Request:
 				<% end %>
-				<%= render :partial => 'work_order/show' , :locals => { :wo => wo } %>
+				<%= render :partial => 'work_order/show' , :locals => { :wo => wo, backGround: 'white' } %>
 			</div>
 		
 		<% end %>
