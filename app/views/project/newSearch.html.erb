@@ -2,7 +2,7 @@
 
 <h2> Search Projects:</h2>
 
-<%= form_for :project, url: {controller: 'project', action: 'search', id:'dummy'} do |f| %>
+<%= form_for :project, url: {controller: 'project', action: 'search', id:'dummy'}, method: 'get' do |f| %>
 	
 	<p>
 		<%= f.label :projId3s, "3SN Project ID" %><br>

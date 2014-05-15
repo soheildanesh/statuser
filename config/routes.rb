@@ -40,7 +40,7 @@ Statuser::Application.routes.draw do
     resources :project do
         member do
             get :newSearch
-            post :search
+            get :search
         end
     end
     
@@ -62,7 +62,7 @@ Statuser::Application.routes.draw do
             get :showWoAcceptance
             get :showWorkComplete
             get :newSearch
-            post :search
+            get :search
         end
     end
     
