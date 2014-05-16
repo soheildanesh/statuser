@@ -1,0 +1,129 @@
+<%#= @project%>
+
+<div style="width:1250px;">
+	
+<h2> Ericsson Project </h2>
+
+<div style="float:left; width:300px;">
+
+	<%#= render partial: 'show', locals: {project:  @project} %>
+	<p>
+		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %>  <br><br>
+	</p>
+
+	<p>
+		<span style="font-style:bold;"> <%= "3SN Project ID" %> </span> <br>
+		<% if @project['projId3s'].nil? or @project['projId3s'].empty? %>
+			<% linkText = @project['_id'].to_s %>
+		<% else %>
+			<% linkText = @project['projId3s'] %>
+		<% end %>
+		<%= printReplaceEmpty linkText %>
+	</p>
+
+	<p>
+		<%=  "3SN Project Name" %><br>
+		<%= printReplaceEmpty @project['projName']%>
+	</p>
+
+	<p>
+		<%= "3SN Program" %><br>
+		<%= printReplaceEmpty getProgramName  @project['program']%>
+	</p>
+	
+	<p>
+		<%= "3SN Project Type" %><br>
+		<%= printReplaceEmpty getNameFromBsonId $projectType_collection,  'projectTypeName', @project['projType'] %> 
+		
+	</p>
+
+	<p>
+		<%= "3SN Customer ID" %><br>
+		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerId'] %>
+	</p>
+
+
+	<p>
+		<%=  "3SN Operator ID" %><br>
+		<%= printReplaceEmpty @project['operatorId']%>
+	</p>
+
+	<p>
+		<%=  "3SN Project Manager" %><br>
+		<%= printReplaceEmpty getPersonEmail @project['projManager']%>
+	</p>
+
+	<p>
+		<%=  "3SN Project Controller" %><br>
+		<%= printReplaceEmpty getPersonEmail @project['projController']%>
+	</p>
+
+	<p>
+		<%= "Start Date" %><br>
+		<%if @project.has_key? 'startDate(1i)'%>
+			<%= render partial: "layouts/show_date", locals: {year:  @project['startDate(1i)'], month:  @project['startDate(2i)'] , day: @project['startDate(3i)'] } %>
+		<% else %>
+		 _
+		<% end %>
+	</p>
+
+	<p>
+		<%=  "End Date" %><br>
+		<%if @project.has_key? 'endDate(1i)'%>
+			<%= render partial: "layouts/show_date", locals: {year:  @project['endDate(1i)'], month:  @project['endDate(2i)'] , day: @project['endDate(3i)'] } %>
+		<% else %>
+		 _
+		<% end %>
+		<%#= printReplaceEmpty @project['endDate']%>
+	</p>
+
+
+	<p>
+		<%=  "Created AT" %><br>
+		<%= printReplaceEmpty @project['createdAt'].to_s %>
+	</p>
+
+
+
+</div>
+
+<div style = "width:900px; float:left;">
+	<div>
+		<p>
+			<div style="width:900px;">
+				<hr>
+				<%= link_to "Add Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
+			</div>
+		</p>
+	</div>
+	<%if @wos.nil? or @wos.empty? %>
+		- No work orders under this project currently.
+	<% else %>
+		<p>
+			<b> Project's Work Orders: </b>
+		</p>
+		
+		<%= render partial: 'work_order/show_work_orders', locals: {wos: @wos, backGround: 'white'} %> <br>
+		
+		<% if false%>
+		<%shadedBg=false%>
+			<% for wo in @wos%>
+				<%if shadedBg%>
+					<div style="_background-color:beige; padding:0px; width:900px; float:center;">
+				<%end%>
+				<%= render :partial => 'work_order/show' , :locals => { :wo => wo ,backGround: 'white'} %>
+				<%if shadedBg%>
+					</div>
+					<%shadedBg=false%>
+				<%else%>
+					<%shadedBg=true%>
+				<%end%>
+			<% end %>
+			<br>
+			<br>
+		<% end %>
+	
+	<% end %>
+</div>
+
+</div>

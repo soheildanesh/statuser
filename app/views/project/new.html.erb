@@ -1,6 +1,6 @@
 
 
-<h2> New Project:</h2>
+<h2> New <%= getCustomerMode %> Project:</h2>
 
 <%= form_for :project, url: '/project' do |f| %>
 	
@@ -10,10 +10,20 @@
 		<br>
 	</p>
 	
+	<% if false #now that we have customerMode, the project customer id is simpley that of whaterver mode the current user is int%>
 	<p>
 		<%= f.label :customerId, "3SN Customer ID" %><br>
 		<%= f.text_field :customerId, "class" => "required customerInput" %>
 	</p>
+	<% end %>
+	<%= f.text_field :customerId, value: current_user['customerMode']['customerId'],:style => "display:none" %>
+	
+	<% if getCustomerMode == "sprint"%>
+		<p>
+			<%= f.label :sprintSiteId, "Sprint Site ID" %><br>
+			<%= f.text_field :sprintSiteId, "class" => "required" %>
+		</p>
+	<% end %>
 	
 	<p>
 		<%= f.label :program, "3SN Program" %><br>

@@ -1,3 +1,14 @@
+<% if current_user.has_key? 'customerMode'%>
+	<% currentMode = current_user['customerMode']['customerId']%>
+<% else %>
+	<% currentMode = 0 %>
+<% end %>
+<%= form_for :person, url: {controller: "person", action: "changeMode", id: current_user['_id']}, method: "PATCH" , class: "nifty_form" do |f| %>
+	Mode: <%= select("person[customerMode]", "customerId", options_for_select( $customer_collection.find().to_a.collect {|c| [ c['customerName'], c['_id'] ] } , currentMode),  {include_blank: 'All'}) %>
+	<%= f.submit "Change Mode"%>
+<% end %><br><br>
+
+
 <%= link_to "Manage Projects",  :controller => 'project', :action => 'index' %>  <br><br>
 <%= link_to "Manage Sites",  :controller => 'site', :action => 'index' %>	<br><br>
 <%= link_to "Manage Events",  :controller => 'log_entry', :action => 'index' %> <br><br>

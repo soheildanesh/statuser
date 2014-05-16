@@ -12,7 +12,12 @@ Statuser::Application.routes.draw do
         end
     end
     
-    resources :person
+    resources :person do
+        member do
+            patch :changeMode
+        end
+    end
+
     resources :login_session
     resources :site do
         member do

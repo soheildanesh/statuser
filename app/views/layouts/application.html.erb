@@ -7,7 +7,7 @@
   	<%= csrf_meta_tags %>
 </head>
 <body style="font-family: 'Arial';">
-	
+	<%= current_user%>
 	<div style="width:1600px; height:80px;">
 		<div style="float:left;">
 			<%= image_tag "/assets/3SN_Logo.jpg" ,{style: "width:200px;"}%>
@@ -20,7 +20,7 @@
 		<% else %>
 			<%= link_to "Login",  {:controller => "login_session", :action => "new" } %>
 		<% end %>
-		| <%= link_to "Dashboard",  :controller => 'list', :action => 'index' %>	
+		| <%= link_to "Dashboard",  :controller => 'list', :action => 'index' %> 
 		<br>
 		<br>
 	

@@ -1,6 +1,8 @@
 <%#= @project%>
 
 <div style="width:1250px;">
+	
+<h2> Sprint Project </h2>
 
 <div style="float:left; width:300px;">
 
@@ -38,6 +40,11 @@
 	<p>
 		<%= "3SN Customer ID" %><br>
 		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerId'] %>
+	</p>
+	
+	<p>
+		<%= "Customer Site ID" %><br>
+		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerSiteId'] %>
 	</p>
 
 
@@ -85,43 +92,6 @@
 
 </div>
 
-<div style = "width:900px; float:left;">
-	<div>
-		<p>
-			<div style="width:900px;">
-				<hr>
-				<%= link_to "Add Work Order", {controller: 'work_order', action: 'new', id: @project['_id'].to_s}, {style: "color:blue;"} %>
-			</div>
-		</p>
-	</div>
-	<%if @wos.nil? or @wos.empty? %>
-		- No work orders under this project currently.
-	<% else %>
-		<p>
-			<b> Project's Work Orders: </b>
-		</p>
-		
-		<%= render partial: 'work_order/show_work_orders', locals: {wos: @wos, backGround: 'white'} %> <br>
-		
-		<% if false%>
-		<%shadedBg=false%>
-			<% for wo in @wos%>
-				<%if shadedBg%>
-					<div style="_background-color:beige; padding:0px; width:900px; float:center;">
-				<%end%>
-				<%= render :partial => 'work_order/show' , :locals => { :wo => wo ,backGround: 'white'} %>
-				<%if shadedBg%>
-					</div>
-					<%shadedBg=false%>
-				<%else%>
-					<%shadedBg=true%>
-				<%end%>
-			<% end %>
-			<br>
-			<br>
-		<% end %>
-	
-	<% end %>
-</div>
+<h2> Project Milestones </h2>
 
-</div>
+

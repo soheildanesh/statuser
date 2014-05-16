@@ -1,23 +1,32 @@
 class ProjectController < ApplicationController
     def new
-        @projId3s = genSamllUniqId $project_collection, 'projId3s'        
+        @projId3s = genSamllUniqId $project_collection, 'projId3s'
     end
     
     def show
         id = params['id']
         @project = $project_collection.find({:_id => BSON::ObjectId(id) } ).to_a[0]
         
-         @wos = Array.new
-         @project.each do |key, value|
-             if(key.include? 'wo_id')
-                 wo = $wo_collection.find(:_id => value).to_a[0]
-                 if(not wo.nil?)
-                     @wos << wo
-                 end   
-             end
-         end
+        @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
+        
+        if( @projectCustomerName == "ericsson")
+            @wos = Array.new
+            @project.each do |key, value|
+                if(key.include? 'wo_id')
+                    wo = $wo_collection.find(:_id => value).to_a[0]
+                    if(not wo.nil?)
+                        @wos << wo
+                    end   
+                end
+            end
+            @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
+        end
+        
+        if( @projectCustomerName  == "sprint")
+            #get the milestone list for this project
+        end
          
-         @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
+        render "show_#{@projectCustomerName}"
          
     end
     
@@ -52,16 +61,20 @@ class ProjectController < ApplicationController
         okToCreate = true
 
         #make sure all fields have been entered before creating object
+        missingKey = ""
         @project.each do |key, value|
           if value.nil?
               okToCreate = false
+              missingKey = key
           elsif value.to_s.empty?
               okToCreate = false
+              missingKey = key
           end
+
         end
 
         if(not okToCreate)
-            flash[:error] = "Project could not be created because not all fields required for a new project were entered."
+            flash[:error] = "Project could not be created because not all ( #{missingKey}) fields required for a new project were entered."
         end
 
         if(okToCreate)
@@ -134,8 +147,16 @@ class ProjectController < ApplicationController
              render '/login_session/new'
              return
          elsif(current_user['role'] == 'admin')
-             @projects = $project_collection.find().sort( :_id => :desc ).to_a
+             if(current_user['customerMode']['customerId'] == "All Customers")
+                 @projects = $project_collection.find().sort( :_id => :desc ).to_a
+                 @customerInMode = "All Customers"
+             else
+                 @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] }).sort( :_id => :desc ).to_a
+                 @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(current_user['customerMode']['customerId']) } )['customerName']
+             end
          end
+         
+         render "index"
     end
     
     def newSearch

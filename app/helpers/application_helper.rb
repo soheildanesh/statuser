@@ -1,6 +1,10 @@
 module ApplicationHelper
     
     
+    def getCustomerMode
+       return $customer_collection.find_one( :_id => BSON::ObjectId(current_user['customerMode']['customerId']))["customerName"]
+    end
+    
     #generate a small 6 digit id that is unique in the passed in collection
     def genSamllUniqId collection, columnName = 'id3s'
         #generate a unique random 3s id

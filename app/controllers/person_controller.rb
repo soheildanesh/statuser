@@ -1,5 +1,20 @@
 class PersonController < ApplicationController
   
+    def changeMode
+        #prolly have to check person's authorization here later on
+        if(params['person']["customerMode"]['customerId'] == "")
+            current_user['customerMode']['customerId'] =  "All Customers"
+        else
+            current_user['customerMode'] = params['person']["customerMode"]
+        end
+        $person_collection.save(current_user)
+        redirect_to controller: 'list', action: 'index'
+    end
+    
+    def update
+        
+    end
+    
     def destroy
         if(current_user.nil?)
             redirect_to controller:'login_session', action:'new'

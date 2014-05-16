@@ -2,9 +2,10 @@
 	<%= link_to 'Add Project', {controller: 'project', action: 'new'}, {style: "color:blue;"} %> | 	<%= link_to 'Search Projects', {controller: 'project', action: 'newSearch', id:'dummy'}, {style: "color:blue;"} %> | <%= link_to 'Search Work Orders', {controller: 'work_order', action: 'newSearch', id:'dummy'}, {style: "color:blue;"} %> 
 
 
+	<h1><%= @customerInMode %> Projects:</h1>
 	<%if !@projects.nil? %>
 		<%if !@projects.empty? %>
-			<h1>All Projects:</h1>
+		
 			<%shadedBg = false;%>
 			<% for entry in @projects %>
 				
