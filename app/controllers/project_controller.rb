@@ -105,9 +105,17 @@ class ProjectController < ApplicationController
         #incoming: milestones => {m1 = {property2 => value2} ... }
         #outcome: milestones => {m1 => {prop1 => value1, prop2 => value2}, ...}
         # milestone "m1" has been updated
-        @project['milestones'].merge!(params['project']['milestones']) do 
+        
+        puts("@project['milestones'] = #{@project['milestones']}")
+        puts("params['project']['milestones'] = #{params['project']['milestones']}")
+        
+        byebug
+        @project['milestones'] = @project['milestones'].merge (params['project']['milestones']) do 
             |key, v1, v2|
-            if(v1.class == Hash and v2.class == Hash)
+            puts"we hea with key = #{key}, v1 = #{v1}, v2 = #{v2}"
+            puts("v1.class = #{v1.class}")
+            puts("v2.class = #{v2.class}")
+            if(v1.is_a? Hash and v2.is_a? Hash)
                 v1.merge v2
             else
                 v2
