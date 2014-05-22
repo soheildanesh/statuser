@@ -1,0 +1,2 @@
+alert(<%= @numlines %>);
+$('#linesGoHere').html("<%= escape_javascript render :partial => 'project/sprintOrderLines', locals: {numlines: @numlines, orderId3sn: @orderId3sn} %>").fadeIn();

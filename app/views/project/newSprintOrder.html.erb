@@ -1,0 +1,32 @@
+<% orderId3sn = "#{@project['projId3s']}-#{@orderCount}"%>
+
+
+<div id="lineGenerationFrom">
+	<%= form_tag({controller: 'project', action: 'generateSprintOrderLines', id:'dummy'}, {method: :get,  remote: true}) do %>
+		Number of PO/Bid lines: <br>
+		<%= text_field_tag "numLines" %> 
+		<%= text_field_tag "orderId3sn", value= orderId3sn, style:"display:none;"  %><br>
+		<%= submit_tag "Generate"%>
+	<% end %>
+</div>
+<br><br>
+<%= form_for :order, url:{controller:'project', action: 'createOrUpdateSprintOrder'}, method: 'patch' do |f| %>
+
+	<%= text_field_tag 'orderId3sn', orderId3sn , style:"display:none;"  %><br>
+
+	<%#= f.label "3snOrderId", "3SN Order Id" %>
+	<%#= f.text_field "[#{orderId3sn}]", value:orderId3sn, disabled: "disabled"  %><br>
+	<%#= f.text_field "[#{orderId3sn}]", value:orderId3sn, style:"display:none;"%><br>
+	
+
+
+	<br>
+	<div id='linesGoHere'>
+	</div>
+	
+	Upload Bid Document:
+	<%= f.file_field "[bidFile]" %><br><br>
+	
+	<%= f.submit "Submit"%>
+	
+<% end %>

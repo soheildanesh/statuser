@@ -1,0 +1,57 @@
+<%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %><br><br>
+
+<% order = @project['orders'][@orderId3sn]%>
+Order ID:<br>
+<%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
+
+Bid File:<br>
+<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{order['bidFile']}"%><br>
+
+<br>
+
+
+
+
+<%if order.has_key? 'bid' and order['bid'].has_key? 'lines'%>
+	Bid Lines:
+	<% for i in 1..order['bid']['lines'].length%>
+
+		<div id="bidLines" style="width:2500px;">
+
+			<div class='wSmall'>
+				Line Number <br>
+				<%= i %>
+			</div>
+			<div class='wSmall'>
+				Item Type <br>
+				<%= order['bid']['lines']["#{i}"]['itemType'] %>
+			</div>
+			<div class='wSmall'>
+				Item ID <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['itemId'] %>
+			</div>
+			<div class='wSmall'>
+				Item Description <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['itemDesc']%>
+			</div>
+			<div class='wSmall'>
+				Unit Type <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['unitType'] %>
+			</div>
+			<div class='wSmall'>
+				Unit Price <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['unitPrice']%>
+			</div>
+			<div class='wSmall'>
+				Quantity <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['quantity'] %>
+			</div>
+			<div class='wSmall'>
+				Total Price <br>
+				<%= order['bid']['lines']["#{i}"]['itemType']['totalPrice'] %>
+			</div>
+		</div>
+		<br>
+		<br>
+	<% end %>
+<% end %>

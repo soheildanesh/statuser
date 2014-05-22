@@ -46,6 +46,14 @@ Statuser::Application.routes.draw do
         member do
             get :newSearch
             get :search
+            patch :updateMilestone
+            patch :uploadMilestoneFile
+            get :newSprintBid
+            get :indexSprintOrders
+            get :newSprintOrder
+            get :generateSprintOrderLines
+            patch :createOrUpdateSprintOrder
+            get :showSprintOrder
         end
     end
     

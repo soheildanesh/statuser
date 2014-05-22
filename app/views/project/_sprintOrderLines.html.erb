@@ -1,0 +1,34 @@
+
+<% for i in 1..numlines.to_i%>
+	Line Number <%= i %>
+	<div>
+		Item Type <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][itemType]" %>
+	</div>
+	<div>
+		Item ID <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][itemId]" %>
+	</div>
+	<div>
+		Item Description <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][itemDesc]" %>
+	</div>
+	<div>
+		Unit Type <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][unitType]" %>
+	</div>
+	<div>
+		Unit Price <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][unitPrice]" %>
+	</div>
+	<div>
+		Quantity <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][quantity]" %>
+	</div>
+	<div>
+		Total Price <br>
+		<%= text_field_tag "[order][bid][lines][#{i}][totalPrice]" %>
+	</div>
+	<br>
+	<br>
+<% end %>

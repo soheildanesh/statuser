@@ -1,0 +1,6 @@
+<%if milestone.has_key? 'files'%>
+	<% milestone['files'].each do |key, val|%>
+		<%=link_to val['fileName'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{val['fileName']}"%>
+	<% end %>
+	<%=link_to 'See Milestone Files' %>
+<% end %>

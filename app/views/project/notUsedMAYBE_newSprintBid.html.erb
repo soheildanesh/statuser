@@ -1,0 +1,24 @@
+<h2> New Bid:</h2>
+
+
+<%= form_for :project, url: '/project/newSprintBid' do |f| %>
+<p>
+	<%= f.label "3snOrderId", "3SN Order Id" %>
+	<%= f.text_field 'orderId3sn' %><br>
+	
+	<%= f.label "docType", "Document Type" %>
+	<%= f.text_field 'docType' %><br>
+	
+	<%= f.label "docDate", "Document Date" %>
+	<%= f.text_field 'odcDate' %><br>
+	
+	<%= f.label "docRevision", "Document Revision" %>
+	<%= f.text_field 'docRevision' %><br>
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

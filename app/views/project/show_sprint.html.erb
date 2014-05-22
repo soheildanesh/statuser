@@ -1,15 +1,22 @@
 <%#= @project%>
 
-<div style="width:1250px;">
+<div style="width:400px;">
 	
 <h2> Sprint Project </h2>
 
-<div style="float:left; width:300px;">
+<div style="float:left; width:400px;">
 
 	<%#= render partial: 'show', locals: {project:  @project} %>
 	<p>
 		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %>  <br><br>
 	</p>
+	<p>
+		<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br><br>
+
+		<%= link_to "Project Milestones", "#milestones"%>
+	</p>
+	
+	
 
 	<p>
 		<span style="font-style:bold;"> <%= "3SN Project ID" %> </span> <br>
@@ -85,13 +92,53 @@
 
 	<p>
 		<%=  "Created AT" %><br>
-		<%= printReplaceEmpty @project['createdAt'].to_s %>
+		<%= printReplaceEmpty @project['createdAt'].to_s %><br><br>
 	</p>
 
 
 
 </div>
+<br><br>
+<div>
+	<div>
+		<h2> <a id="milestones">Project Milestones</a> </h2>
+	</div>
 
-<h2> Project Milestones </h2>
+	<% for dependency in @milestoneDependecies %>
+		<% prereqs = dependency.slice(1,dependency.length) %>
+		<% milestone = dependency[0] %>
+	
+		<div> <span style="float:left;"> <%= milestone %> </span> <br>
 
-
+		<% if @project.has_key? 'milestones' and @project['milestones'].has_key? milestone #milestone is in progress or done %>
+			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
+				done
+			<% else %>
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>
+			<% end %>
+			<%= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
+	
+		<% elsif prereqs.empty?  #milestone ready to be started as it has no prereqs%>
+			<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>		
+		<% elsif  @project.has_key? 'milestones' %>
+			<% #see if prereqs are met %>
+			<% prerecsMet = true %>
+			<% for prereq in prereqs %>
+				<% if not (@project['milestones'].has_key? prereq and @project['milestones'][prereq].has_key? 'done' and @project['milestones'][prereq]['done'] == 'true') %>
+					<% prerecsMet = false %>
+				<% end %>
+			<% end %>
+			<% if prerecsMet == true %>
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>	
+			<% else #milestone has unmet prereqs'%>
+				Not Ready for Start
+			<% end %>
+		<% else %>
+			Not Ready for Start
+		<% end %>
+		
+		</div>
+		<br>
+		
+	<% end %>
+</div>

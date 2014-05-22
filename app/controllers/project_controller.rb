@@ -1,4 +1,166 @@
 class ProjectController < ApplicationController
+
+    #sprint
+    def createOrUpdateSprintOrder
+        
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        #save the bid file and replace it with the address on file system in params
+        bidFile = nil
+        
+        if not @project.has_key? 'orders'
+            @project['orders'] = Hash.new
+            ordCount = 0
+        else
+            ordCount = @project['orders'].length
+        end
+        ordCount = ordCount+1 #so we start with 1
+
+
+        if(params['order'].has_key? 'bidFile' )
+            bidFile = params['order']['bidFile']
+            
+        
+        
+            FileUtils.cd(Rails.root)
+            FileUtils.cd('public')
+            if(not FileUtils.pwd().split("/").last == "uploads")
+                FileUtils.cd('uploads')
+            end
+        
+            if not Dir.exists? ("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                FileUtils.mkdir("#{@project['projId3s']}__#{@project['_id'].to_s}")
+            end
+            FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+        
+            if not Dir.exists? ("orders")
+                FileUtils.mkdir("orders")
+            end
+            FileUtils.cd("orders")
+            
+            if not Dir.exists? (ordCount.to_s)
+                FileUtils.mkdir(ordCount.to_s)
+            end
+            FileUtils.cd(ordCount.to_s)
+        
+            File.open( bidFile.original_filename, 'wb') do |file|
+                file.write(bidFile.read)
+            end 
+
+            params['order']['bidFile'] = bidFile.original_filename
+        end
+        
+        @project['orders']["#{ordCount}"] = params['order']
+        
+        $project_collection.save(@project)
+        redirect_to controller:'project', action: 'indexSprintOrders', id: @project['_id']    
+    end
+    
+    def showSprintOrder
+        
+        @orderId3sn = params['orderId3sn']
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+    end
+    
+    def generateSprintOrderLines
+        @numlines = params['numLines']
+        @orderId3sn = params['orderId3sn']
+        
+        respond_to do |format|
+            format.html
+            format.js
+        end
+    end
+    
+    def indexSprintOrders
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+    end
+    
+    def newSprintOrder
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        @orderCount = 1
+        if( @project.has_key? 'orders')
+            puts("project orders = #{@project['orders']}")
+            @orderCount = @project['orders'].length + 1
+        end
+    end
+    
+    
+    #sprint
+    def updateMilestone
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        #projMilestoneUpdate = params['project']
+        if(not @project.has_key? 'milestones')
+            @project['milestones'] = Hash.new
+        end
+        
+        #note duplicate keys get overwritten and set to what's in projMilestoneUpdate
+        #how this works
+        #exsiting:
+        #milestones => {m1 => {proerty1 => value1} m2 => ...}
+        #incoming: milestones => {m1 = {property2 => value2} ... }
+        #outcome: milestones => {m1 => {prop1 => value1, prop2 => value2}, ...}
+        # milestone "m1" has been updated
+        @project['milestones'].merge!(params['project']['milestones']) do 
+            |key, v1, v2|
+            if(v1.class == Hash and v2.class == Hash)
+                v1.merge v2
+            else
+                v2
+            end
+        end
+        
+        $project_collection.save(@project)
+        puts("project = #{@project}")
+        redirect_to controller:'project', action: 'show', id: @project['_id']
+    end
+    
+    def uploadMilestoneFile 
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        if(not @project.has_key? 'milestones')
+            @project['milestones'] = Hash.new
+        end
+        
+        params['project']['milestones'].each do |milestone, uploadedFile|
+            if(not  @project['milestones'].has_key? milestone)
+                @project['milestones'][milestone] = Hash.new
+            end
+            puts("pwd = #{FileUtils.pwd()}")
+            FileUtils.cd(Rails.root)
+            FileUtils.cd('public')
+            if(not FileUtils.pwd().split("/").last == "uploads")
+                FileUtils.cd('uploads')
+            end
+            
+            if Dir.exists? ("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+            else
+                FileUtils.mkdir("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+            end
+            
+            File.open( uploadedFile.original_filename, 'wb') do |file|
+                file.write(uploadedFile.read)
+            end
+            
+            if(not @project['milestones'][milestone].has_key? "files")
+                @project['milestones'][milestone]["files"] = Hash.new
+            end
+            numExistingMsFiles = @project['milestones'][milestone]["files"].length
+            @project['milestones'][milestone]["files"][(numExistingMsFiles+1).to_s] = {fileName: uploadedFile.original_filename , uploadTime: Time.now, uploadedBy: current_user['_id'] }
+            
+        end
+        flash[:notice] = "File uploaded"
+        $project_collection.save(@project)
+        
+        redirect_to action: 'show'
+    end
+    
     def new
         @projId3s = genSamllUniqId $project_collection, 'projId3s'
     end
@@ -23,7 +185,59 @@ class ProjectController < ApplicationController
         end
         
         if( @projectCustomerName  == "sprint")
-            #get the milestone list for this project
+
+            #get the milestone dependecies list for this project. Each array in the array represents a depndecy. The first memebr is the milestone and the others are the ones it depends on ie its prereqs
+ #[ ["m1"], ["m2", "m1"], ["m3", "m2"]]
+ 
+            @milestoneDependecies =  [
+            ["Bid Invitation Received"],
+            ["Pre-Bid Conference Complete", "Bid Invitation Received"],
+            ["Bid Walk Complete", "Pre-Bid Conference Complete"],
+            ["Bid Complete", "Bid Walk Complete"],
+            ["Bid Review Complete", "Bid Complete"],
+            ["SAP Submitted", "Bid Review Complete"],
+            ["SAP Approved", "SAP Submitted"],
+            ["Initial Bid POR Submitted", "SAP Approved"],
+            ["Initial Bid PO Received", "Initial Bid POR Submitted"],
+            ["NTP Received", "Initial Bid PO Received"],
+            ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
+            ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
+            ["Material Order Submitted", "Cell Site Verification Complete"],
+            ["Material Received", "Material Order Submitted"],
+            ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
+
+            ["Equipment Inventory Complete", "Equipment Pickup Complete"],
+            ["Construction Start", "Equipment Inventory Complete", "Material Received"],
+
+            ["Change Request Submitted", "Construction Start"],
+            ["Change Request Approved", "Change Request Submitted"],
+            ["Change Request PO Received", "Change Request Approved"],
+            ["Ground Level Construction Complete", "Construction Start"],
+            ["Tower Level Construction Complete" , "Construction Start"],
+            ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+            ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
+            ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+            ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
+
+            ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+            ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+            ["Construction Documents Submitted", "Construction Documents Complete"],
+            ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+            ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
+
+
+            ["Final Acceptance Documents Complete", "Construction Complete"],
+            ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
+            ["Final Acceptance", "Acceptance Request Submitted"]]
+            
         end
          
         render "show_#{@projectCustomerName}"

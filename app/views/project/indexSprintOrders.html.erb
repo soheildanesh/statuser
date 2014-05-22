@@ -1,0 +1,11 @@
+
+<%= link_to 'Parent Project', {controller: 'project', action: 'show', id: @project['_id']}%> <br>
+<%= link_to 'New Order', {controller: 'project', action: 'newSprintOrder', id: @project['_id']}%>
+<br>
+<% if @project.has_key? 'orders' and not @project['orders'].nil?%>
+	<% @project['orders'].each do |orderId3sn, vals| %>
+		<br> <%= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+	<% end %>
+<% else %>
+	<br><br>No orders for this project yet
+<% end %>
