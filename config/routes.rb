@@ -52,8 +52,10 @@ Statuser::Application.routes.draw do
             get :indexSprintOrders
             get :newSprintOrder
             get :generateSprintOrderLines
-            patch :createOrUpdateSprintOrder
+            patch :createSprintOrder
             get :showSprintOrder
+            patch :addPoToSprintOrder
+            get :milestone_files
         end
     end
     

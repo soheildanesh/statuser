@@ -1,34 +1,66 @@
 
 <% for i in 1..numlines.to_i%>
 	Line Number <%= i %>
-	<div>
-		Item Type <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][itemType]" %>
-	</div>
-	<div>
-		Item ID <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][itemId]" %>
-	</div>
-	<div>
-		Item Description <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][itemDesc]" %>
-	</div>
-	<div>
-		Unit Type <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][unitType]" %>
-	</div>
-	<div>
-		Unit Price <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][unitPrice]" %>
-	</div>
-	<div>
-		Quantity <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][quantity]" %>
-	</div>
-	<div>
-		Total Price <br>
-		<%= text_field_tag "[order][bid][lines][#{i}][totalPrice]" %>
-	</div>
+	<% if prefillBidOrPo.nil? %>
+		<div>
+			Item Type <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]" %>
+		</div>
+		<div>
+			Item ID <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]" %>
+		</div>
+		<div>
+			Item Description <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]" %>
+		</div>
+		<div>
+			Unit Type <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" %>
+		</div>
+		<div>
+			Unit Price <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]" %>
+		</div>
+		<div>
+			Quantity <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]" %>
+		</div>
+		<div>
+			Total Price <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]" %>
+		</div>
+	<% else %>
+		<div>
+			Item Type <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", prefillBidOrPo['lines']["#{i}"]["itemType"] %>
+		</div>
+		<div>
+			Item ID <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]", prefillBidOrPo["lines"]["#{i}"]["itemId"] %>
+		</div>
+		<div>
+			Item Description <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]", prefillBidOrPo["lines"]["#{i}"]["itemDesc"] %>
+		</div>
+		<div>
+			Unit Type <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , prefillBidOrPo["lines"]["#{i}"]["unitType"]%>
+		</div>
+		<div>
+			Unit Price <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]", prefillBidOrPo["lines"]["#{i}"]["unitPrice"] %>
+		</div>
+		<div>
+			Quantity <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]", prefillBidOrPo["lines"]["#{i}"]["quantity"] %>
+		</div>
+		<div>
+			Total Price <br>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]", prefillBidOrPo["lines"]["#{i}"]["totalPrice"] %>
+		</div>
+		
+	<% end %>
 	<br>
 	<br>
 <% end %>

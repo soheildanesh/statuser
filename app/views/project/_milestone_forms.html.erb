@@ -1,8 +1,8 @@
-<%= form_for :project, url:{conroller:'project', action:'updateMilestone', id: id}, method: "PATCH", style: "float:left;" do |f| %>
-	<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
-	<%= f.submit "Done"%>
-<% end %>
 <%= form_for :project, url:{conroller:'project', action:'uploadMilestoneFile', id: id}, method: "PATCH", style: "float:left;" do |f| %>
 	<%= f.file_field "[milestones][#{milestone}]" %>
 	<%= f.submit "Upload"%>
+<% end %>
+<%= form_for :project, url:{conroller:'project', action:'updateMilestone', id: id}, method: "PATCH", style: "float:left;" do |f| %>
+	<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
+	<%= f.submit "Milestone is Done"%>
 <% end %>

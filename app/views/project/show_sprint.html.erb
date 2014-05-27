@@ -9,13 +9,12 @@
 	<%#= render partial: 'show', locals: {project:  @project} %>
 	<p>
 		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %>  <br><br>
+		
+		<%= link_to "Milestones", "#milestones"%> | 
+		<% if @project.has_key? 'orders'%>
+			<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br><br>
+		<% end %>
 	</p>
-	<p>
-		<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br><br>
-
-		<%= link_to "Project Milestones", "#milestones"%>
-	</p>
-	
 	
 
 	<p>
@@ -111,12 +110,14 @@
 		<div> <span style="float:left;"> <%= milestone %> </span> <br>
 
 		<% if @project.has_key? 'milestones' and @project['milestones'].has_key? milestone #milestone is in progress or done %>
+			<%= link_to "Milestone Files", {controller: 'project', action: 'milestone_files', id: @project['_id'], milestone: milestone  }%>
+			<%= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
 			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
 				done
 			<% else %>
 				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>
 			<% end %>
-			<%= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
+			
 	
 		<% elsif prereqs.empty?  #milestone ready to be started as it has no prereqs%>
 			<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>		

@@ -1,7 +1,14 @@
 class ProjectController < ApplicationController
 
     #sprint
-    def createOrUpdateSprintOrder
+    def milestone_files
+        @milestone = params['milestone']
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        puts("@project = #{@project} @milestone = #{@milestone}")
+        #@milestone = @project['']
+    end
+    
+    def createSprintOrder
         
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
@@ -61,12 +68,18 @@ class ProjectController < ApplicationController
         @orderId3sn = params['orderId3sn']
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
+        #set in addPoToSprintOrder if po has non matching line with bid
+        @nonMatchLine = nil 
+        @poNotMatchingBid = nil
+        ####
+        
     end
     
     def generateSprintOrderLines
         @numlines = params['numLines']
         @orderId3sn = params['orderId3sn']
-        
+        @prefillBidOrPo = nil
+        @bidOrPo = 'bid'
         respond_to do |format|
             format.html
             format.js
@@ -86,6 +99,41 @@ class ProjectController < ApplicationController
             puts("project orders = #{@project['orders']}")
             @orderCount = @project['orders'].length + 1
         end
+    end
+    
+    def addPoToSprintOrder
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        @orderId3sn = params['orderId3sn']
+        @po = params['order']['po']
+        puts("@project[orders][#{@orderId3sn}] = #{@project}['orders'][#{@orderId3sn}]")
+        if @project["orders"]["#{@orderId3sn}"].has_key? 'bid'
+            @bid = @project["orders"]["#{@orderId3sn}"]['bid']
+        else
+            flash[:notice] = "Order has no bid yet!"
+            render 'showSprintOrder'
+        end
+            
+        
+        @nonMatchLine = nil
+        @bid['lines'].each do |lineNum, val|
+            if val != @po['lines'][lineNum]
+               @nonMatchLine = lineNum.to_i 
+               flash[:error] = "PO line entered #{@nonMatchLine} does not match the bid. Check PO file"
+               @poNotMatchingBid = params['order']['po']
+               break
+            end
+        end
+        
+        if @nonMatchLine.nil?
+           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true
+           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedBy"] = current_user['_id']
+           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedAt"] = Time.now
+           
+           $project_collection.save(@project) 
+        end
+        
+        render 'showSprintOrder'
+        
     end
     
     
@@ -109,7 +157,7 @@ class ProjectController < ApplicationController
         puts("@project['milestones'] = #{@project['milestones']}")
         puts("params['project']['milestones'] = #{params['project']['milestones']}")
         
-        byebug
+        
         @project['milestones'] = @project['milestones'].merge (params['project']['milestones']) do 
             |key, v1, v2|
             puts"we hea with key = #{key}, v1 = #{v1}, v2 = #{v2}"

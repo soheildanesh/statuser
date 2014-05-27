@@ -10,7 +10,7 @@
 	<% end %>
 </div>
 <br><br>
-<%= form_for :order, url:{controller:'project', action: 'createOrUpdateSprintOrder'}, method: 'patch' do |f| %>
+<%= form_for :order, url:{controller:'project', action: 'createSprintOrder'}, method: 'patch' do |f| %>
 
 	<%= text_field_tag 'orderId3sn', orderId3sn , style:"display:none;"  %><br>
 
