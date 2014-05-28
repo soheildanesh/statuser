@@ -486,8 +486,10 @@ class ProjectController < ApplicationController
              return
          elsif(current_user['role'] == 'admin')
              if(not current_user.has_key? 'customerMode')
+                 current_user['customerMode'] = Hash.new
                  current_user['customerMode']['customerId'] == "All Customers"
-             end    
+             end
+                 
              if(current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
                  @customerInMode = "All Customers"
