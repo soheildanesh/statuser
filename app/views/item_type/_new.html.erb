@@ -1,0 +1,15 @@
+<h2> New Item Type Form:</h2>
+
+<%= form_for :item_type, url: '/item_type' do |f| %>
+<p>
+	<%= f.label :itemType, "Item Type" %>
+	<%= f.text_field 'itemTypeName' %><br>
+	
+	
+	<p>
+    	<%= f.submit "Submit" %>
+  	</p>
+	
+</p>
+	
+<% end %>

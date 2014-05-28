@@ -56,6 +56,7 @@ Statuser::Application.routes.draw do
             get :showSprintOrder
             patch :addPoToSprintOrder
             get :milestone_files
+            get :showMilestones
         end
     end
     
@@ -97,6 +98,8 @@ Statuser::Application.routes.draw do
     resources :customer
     
     resources :project_type
+    
+    resources :item_type
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -4,7 +4,7 @@
 	<% if prefillBidOrPo.nil? %>
 		<div>
 			Item Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", "", {class: 'itemTypeInput'} %>
 		</div>
 		<div>
 			Item ID <br>

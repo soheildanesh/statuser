@@ -1,5 +1,55 @@
 class ProjectController < ApplicationController
 
+    @milestoneDependecies =  [
+    ["Bid Invitation Received"],
+    ["Pre-Bid Conference Complete", "Bid Invitation Received"],
+    ["Bid Walk Complete", "Pre-Bid Conference Complete"],
+    ["Bid Complete", "Bid Walk Complete"],
+    ["Bid Review Complete", "Bid Complete"],
+    ["SAP Submitted", "Bid Review Complete"],
+    ["SAP Approved", "SAP Submitted"],
+    ["Initial Bid POR Submitted", "SAP Approved"],
+    ["Initial Bid PO Received", "Initial Bid POR Submitted"],
+    ["NTP Received", "Initial Bid PO Received"],
+    ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
+    ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
+    ["Material Order Submitted", "Cell Site Verification Complete"],
+    ["Material Received", "Material Order Submitted"],
+    ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
+
+    ["Equipment Inventory Complete", "Equipment Pickup Complete"],
+    ["Construction Start", "Equipment Inventory Complete", "Material Received"],
+
+    ["Change Request Submitted", "Construction Start"],
+    ["Change Request Approved", "Change Request Submitted"],
+    ["Change Request PO Received", "Change Request Approved"],
+    ["Ground Level Construction Complete", "Construction Start"],
+    ["Tower Level Construction Complete" , "Construction Start"],
+    ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+    ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
+    ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+    ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
+
+    ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+    ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+    ["Construction Documents Submitted", "Construction Documents Complete"],
+    ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+    ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
+
+
+    ["Final Acceptance Documents Complete", "Construction Complete"],
+    ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
+    ["Final Acceptance", "Acceptance Request Submitted"]]
+    
+    
     #sprint
     def milestone_files
         @milestone = params['milestone']
@@ -9,9 +59,15 @@ class ProjectController < ApplicationController
     end
     
     def createSprintOrder
-        
+
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
+        if(not params.has_key? 'order')
+            flash[:notice] = "Submitted form was empty!"
+            redirect_to controller: 'project', action: 'newSprintOrder', id: @project['_id']
+            return 
+        end
+            
         #save the bid file and replace it with the address on file system in params
         bidFile = nil
         
@@ -56,6 +112,8 @@ class ProjectController < ApplicationController
 
             params['order']['bidFile'] = bidFile.original_filename
         end
+        
+        params['order']['createdAt'] = Time.now
         
         @project['orders']["#{ordCount}"] = params['order']
         
@@ -110,7 +168,6 @@ class ProjectController < ApplicationController
             @bid = @project["orders"]["#{@orderId3sn}"]['bid']
         else
             flash[:notice] = "Order has no bid yet!"
-            render 'showSprintOrder'
         end
             
         
@@ -118,7 +175,7 @@ class ProjectController < ApplicationController
         @bid['lines'].each do |lineNum, val|
             if val != @po['lines'][lineNum]
                @nonMatchLine = lineNum.to_i 
-               flash[:error] = "PO line entered #{@nonMatchLine} does not match the bid. Check PO file"
+               flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
                @poNotMatchingBid = params['order']['po']
                break
             end
@@ -132,8 +189,11 @@ class ProjectController < ApplicationController
            $project_collection.save(@project) 
         end
         
-        render 'showSprintOrder'
         
+        @orderId3sn = params['orderId3sn']
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        redirect_to action: 'showSprintOrder', orderId3sn: @orderId3sn, id: @project['_id']
     end
     
     
@@ -172,7 +232,7 @@ class ProjectController < ApplicationController
         
         $project_collection.save(@project)
         puts("project = #{@project}")
-        redirect_to controller:'project', action: 'show', id: @project['_id']
+        redirect_to controller:'project', action: 'showMilestones', id: @project['_id']
     end
     
     def uploadMilestoneFile 
@@ -181,40 +241,100 @@ class ProjectController < ApplicationController
         if(not @project.has_key? 'milestones')
             @project['milestones'] = Hash.new
         end
-        
-        params['project']['milestones'].each do |milestone, uploadedFile|
-            if(not  @project['milestones'].has_key? milestone)
-                @project['milestones'][milestone] = Hash.new
-            end
-            puts("pwd = #{FileUtils.pwd()}")
-            FileUtils.cd(Rails.root)
-            FileUtils.cd('public')
-            if(not FileUtils.pwd().split("/").last == "uploads")
-                FileUtils.cd('uploads')
-            end
+        if(params.has_key? 'project')
+            params['project']['milestones'].each do |milestone, uploadedFile|
+                if(not  @project['milestones'].has_key? milestone)
+                    @project['milestones'][milestone] = Hash.new
+                end
+                puts("pwd = #{FileUtils.pwd()}")
+                FileUtils.cd(Rails.root)
+                FileUtils.cd('public')
+                if(not FileUtils.pwd().split("/").last == "uploads")
+                    FileUtils.cd('uploads')
+                end
             
-            if Dir.exists? ("#{@project['projId3s']}__#{@project['_id'].to_s}")
-                FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
-            else
-                FileUtils.mkdir("#{@project['projId3s']}__#{@project['_id'].to_s}")
-                FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
-            end
+                if Dir.exists? ("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                    FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+                else
+                    FileUtils.mkdir("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                    FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+                end
             
-            File.open( uploadedFile.original_filename, 'wb') do |file|
-                file.write(uploadedFile.read)
-            end
+                File.open( uploadedFile.original_filename, 'wb') do |file|
+                    file.write(uploadedFile.read)
+                end
             
-            if(not @project['milestones'][milestone].has_key? "files")
-                @project['milestones'][milestone]["files"] = Hash.new
+                if(not @project['milestones'][milestone].has_key? "files")
+                    @project['milestones'][milestone]["files"] = Hash.new
+                end
+                numExistingMsFiles = @project['milestones'][milestone]["files"].length
+                @project['milestones'][milestone]["files"][(numExistingMsFiles+1).to_s] = {fileName: uploadedFile.original_filename , uploadTime: Time.now, uploadedBy: current_user['_id'] }
             end
-            numExistingMsFiles = @project['milestones'][milestone]["files"].length
-            @project['milestones'][milestone]["files"][(numExistingMsFiles+1).to_s] = {fileName: uploadedFile.original_filename , uploadTime: Time.now, uploadedBy: current_user['_id'] }
-            
+            flash[:notice] = "File uploaded"
+        else
+            flash[:error] = "Error. Make sure a file was selected"
         end
-        flash[:notice] = "File uploaded"
+
         $project_collection.save(@project)
         
-        redirect_to action: 'show'
+        redirect_to action: 'showMilestones'
+    end
+    
+    def showMilestones
+        
+         #get the milestone dependecies list for this project. Each array in the array represents a depndecy. The first memebr is the milestone and the others are the ones it depends on ie its prereqs
+ #[ ["m1"], ["m2", "m1"], ["m3", "m2"]]
+        @milestoneDependecies =  [
+           ["Bid Invitation Received"],
+           ["Pre-Bid Conference Complete", "Bid Invitation Received"],
+           ["Bid Walk Complete", "Pre-Bid Conference Complete"],
+           ["Bid Complete", "Bid Walk Complete"],
+           ["Bid Review Complete", "Bid Complete"],
+           ["SAP Submitted", "Bid Review Complete"],
+           ["SAP Approved", "SAP Submitted"],
+           ["Initial Bid POR Submitted", "SAP Approved"],
+           ["Initial Bid PO Received", "Initial Bid POR Submitted"],
+           ["NTP Received", "Initial Bid PO Received"],
+           ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
+           ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
+           ["Material Order Submitted", "Cell Site Verification Complete"],
+           ["Material Received", "Material Order Submitted"],
+           ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
+
+           ["Equipment Inventory Complete", "Equipment Pickup Complete"],
+           ["Construction Start", "Equipment Inventory Complete", "Material Received"],
+
+           ["Change Request Submitted", "Construction Start"],
+           ["Change Request Approved", "Change Request Submitted"],
+           ["Change Request PO Received", "Change Request Approved"],
+           ["Ground Level Construction Complete", "Construction Start"],
+           ["Tower Level Construction Complete" , "Construction Start"],
+           ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+           ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
+           ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+           ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
+
+           ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+           ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+           ["Construction Documents Submitted", "Construction Documents Complete"],
+           ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+           ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
+
+
+           ["Final Acceptance Documents Complete", "Construction Complete"],
+           ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
+           ["Final Acceptance", "Acceptance Request Submitted"]]
+        id = params['id']
+        @project = $project_collection.find({:_id => BSON::ObjectId(id) } ).to_a[0]
+        
     end
     
     def new
@@ -241,59 +361,7 @@ class ProjectController < ApplicationController
         end
         
         if( @projectCustomerName  == "sprint")
-
-            #get the milestone dependecies list for this project. Each array in the array represents a depndecy. The first memebr is the milestone and the others are the ones it depends on ie its prereqs
- #[ ["m1"], ["m2", "m1"], ["m3", "m2"]]
- 
-            @milestoneDependecies =  [
-            ["Bid Invitation Received"],
-            ["Pre-Bid Conference Complete", "Bid Invitation Received"],
-            ["Bid Walk Complete", "Pre-Bid Conference Complete"],
-            ["Bid Complete", "Bid Walk Complete"],
-            ["Bid Review Complete", "Bid Complete"],
-            ["SAP Submitted", "Bid Review Complete"],
-            ["SAP Approved", "SAP Submitted"],
-            ["Initial Bid POR Submitted", "SAP Approved"],
-            ["Initial Bid PO Received", "Initial Bid POR Submitted"],
-            ["NTP Received", "Initial Bid PO Received"],
-            ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
-            ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
-            ["Material Order Submitted", "Cell Site Verification Complete"],
-            ["Material Received", "Material Order Submitted"],
-            ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
-
-            ["Equipment Inventory Complete", "Equipment Pickup Complete"],
-            ["Construction Start", "Equipment Inventory Complete", "Material Received"],
-
-            ["Change Request Submitted", "Construction Start"],
-            ["Change Request Approved", "Change Request Submitted"],
-            ["Change Request PO Received", "Change Request Approved"],
-            ["Ground Level Construction Complete", "Construction Start"],
-            ["Tower Level Construction Complete" , "Construction Start"],
-            ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-            ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
-            ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
-            ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
-
-            ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
-            ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
-            ["Construction Documents Submitted", "Construction Documents Complete"],
-            ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
-            ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
-
-
-            ["Final Acceptance Documents Complete", "Construction Complete"],
-            ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
-            ["Final Acceptance", "Acceptance Request Submitted"]]
-            
+            #nothing to do yet
         end
          
         render "show_#{@projectCustomerName}"

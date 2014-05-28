@@ -1,0 +1,50 @@
+<%= link_to 'Parent Project', {controller: 'project', action: 'show', id: @project['_id']}%> <br>
+
+<div>
+	<div>
+		<h2> <a id="milestones">Project Milestones</a> </h2>
+	</div>
+
+	<% for dependency in @milestoneDependecies %>
+		<% prereqs = dependency.slice(1,dependency.length) %>
+		<% milestone = dependency[0] %>
+	
+		<div> <b> <span style="float:left;"> <%= milestone %> </span> </b> <br>
+
+		<% if @project.has_key? 'milestones' and @project['milestones'].has_key? milestone  #milestone is in progress or done %>
+			<% if  @project['milestones'][milestone].has_key? 'files'%>
+				<%= link_to "Milestone Files", {controller: 'project', action: 'milestone_files', id: @project['_id'], milestone: milestone  }%><br>
+			<% end %>
+			<%#= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
+			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
+				Milestone Is Done
+			<% else %>
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>
+			<% end %>
+			
+	
+		<% elsif prereqs.empty?  #milestone ready to be started as it has no prereqs%>
+			<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>		
+		<% elsif  @project.has_key? 'milestones' %>
+			<% #see if prereqs are met %>
+			<% prerecsMet = true %>
+			<% for prereq in prereqs %>
+				<% if not (@project['milestones'].has_key? prereq and @project['milestones'][prereq].has_key? 'done' and @project['milestones'][prereq]['done'] == 'true') %>
+					<% prerecsMet = false %>
+				<% end %>
+			<% end %>
+			<% if prerecsMet == true %>
+			milestone = <%= milestone%>
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>	
+			<% else #milestone has unmet prereqs'%>
+				Not Ready for Start
+			<% end %>
+		<% else %>
+			Not Ready for Start
+		<% end %>
+		
+		</div>
+		<br>
+		
+	<% end %>
+</div>

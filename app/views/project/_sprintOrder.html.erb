@@ -1,0 +1,64 @@
+<% order = project['orders'][orderId3sn]%> 
+
+
+
+
+
+<div style="width:1600px;">
+	<hr style="margin:0px;">
+	<div style="width:1600px; _background-color:#CEF6CE;">
+		<div class='wSmall'>
+			<b> 3SN Order Id </b>
+		</div>
+		
+		<div class='wSmall'>
+			<b> Amount </b>
+		</div>
+		
+		
+		<div class='wSmall' style="_background-color:#CEF6CE;">
+			<b> PO Submitted? </b>
+		</div>
+		
+		<div class='wSmall' style="_background-color:#CEF6CE;">
+			<b> Created At </b>
+		</div>
+
+		
+	</div>
+	
+	<div style="width:2000px; float:left;">
+		
+		<div class='wSmall'>
+			<%= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+		</div>
+		
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			TODO 
+		</div>
+		
+		
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			<%if order.has_key? 'matchingPoLinesSubmitted' and order['matchingPoLinesSubmitted'] == true %>
+				Yes
+			<% else %>
+				No
+			<% end %>
+		</div>
+		
+		<div class='wSmall' >
+			<%= printReplaceEmpty order['createdAt'] %> 
+		</div>
+		
+		
+		<div class='wSmall'>
+			<%= link_to 'Delete TODO maybe make order collection separate', {action: 'destroy', id: project['_id'], orderId3sn: orderId3sn}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</div>
+	</div>
+	<br>
+	<br>
+
+</div>
+
+
+

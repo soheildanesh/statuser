@@ -1,0 +1,10 @@
+<%#= @persons %>
+
+<%= render :partial => "new"%>
+
+<%if !@itemTypes.nil? %>
+<h1>All Item Types:</h1>
+	<% for entry in @itemTypes %>
+	    <%= render partial: 'show', locals: {entry: entry} %> <br><br><br>
+	<% end %>
+<%end%>

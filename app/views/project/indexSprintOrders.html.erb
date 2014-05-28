@@ -2,9 +2,14 @@
 <%= link_to 'Parent Project', {controller: 'project', action: 'show', id: @project['_id']}%> <br>
 <%= link_to 'New Order', {controller: 'project', action: 'newSprintOrder', id: @project['_id']}%>
 <br>
+<div>
+	<h2> <a id="milestones">Project Orders</a> </h2>
+</div>
 <% if @project.has_key? 'orders' and not @project['orders'].nil?%>
 	<% @project['orders'].each do |orderId3sn, vals| %>
-		<br> <%= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+		<br> <%#= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+		
+		<%= render partial: 'sprintOrder', locals: {project: @project, orderId3sn: orderId3sn} %>
 	<% end %>
 <% else %>
 	<br><br>No orders for this project yet

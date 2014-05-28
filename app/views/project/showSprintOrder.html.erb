@@ -1,10 +1,10 @@
 <%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %><br><br>
 
-<% order = @project['orders'][@orderId3sn]%>
+<% order = @project['orders'][@orderId3sn]%><br>
 Order ID:<br>
 <%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
 
-<%if order.has_key? 'bidFile '%>
+<%if order.has_key? 'bidFile'%>
 	Bid File:<br>
 	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{order['bidFile']}"%><br>
 <% end %>
@@ -56,89 +56,47 @@ Order ID:<br>
 		<br>
 		<br>
 	<% end %>
-<% end %>
+	
+	<%if order.has_key? 'matchingPoLinesSubmitted'%>
+		<br><br>
+		<b> PO Lines </b> Entered PO Lines match those in bid. Entered by <%= linkToPerson order['matchingPoLinesSubmittedBy']%> At <%= order['matchingPoLinesSubmittedAt']%>
+
+	<% else %>
+
+		<br><br>
+		<h3> PO Form </h3>
+
+		Add PO Lines. If there are too many or too few lines in the form below the PO doesn't match the bid.
+
+		<%#TODOsprint require that they enter all fields before submitting, including a file%>
+		<%= form_for :order, url:{controller:'project', action: 'addPoToSprintOrder', id: @project['_id'] }, method: 'patch' do |f| %>
+
+			<%= text_field_tag 'orderId3sn', @orderId3sn , style:"display:none;"  %><br>
 
 
-<%if order.has_key? 'matchingPoLinesSubmitted'%>
-	<br><br>
-	<b> PO Lines </b> Entered PO Lines match those in bid. Entered by <%= linkToPerson order['matchingPoLinesSubmittedBy']%> At <%= order['matchingPoLinesSubmittedAt']%>
-	<%if false%>
-		<%# not storing po lines since it matches bid lines exactly, leaving this here for when the lines dont match exactlly%>
-		PO Lines:
-		<% for i in 1..order['po']['lines'].length%>
+			<div>
+				<% if not @poNotMatchingBid.nil? %>
 
-			<div id="poLines" style="width:2500px;">
+					<%= render :partial => 'project/sprintOrderLines', locals: {numlines:                @poNotMatchingBid['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @poNotMatchingBid, bidOrPo: 'po'  } %>
 
-				<div class='wSmall'>
-					Line Number <br>
-					<%= i %>
-				</div>
-				<div class='wSmall'>
-					Item Type <br>
-					<%= order['bid']['lines']["#{i}"]['itemType'] %>
-				</div>
-				<div class='wSmall'>
-					Item ID <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['itemId'] %>
-				</div>
-				<div class='wSmall'>
-					Item Description <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['itemDesc']%>
-				</div>
-				<div class='wSmall'>
-					Unit Type <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['unitType'] %>
-				</div>
-				<div class='wSmall'>
-					Unit Price <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['unitPrice']%>
-				</div>
-				<div class='wSmall'>
-					Quantity <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['quantity'] %>
-				</div>
-				<div class='wSmall'>
-					Total Price <br>
-					<%= order['bid']['lines']["#{i}"]['itemType']['totalPrice'] %>
-				</div>
+				<% else %>
+
+					<%= render :partial => 'project/sprintOrderLines', locals: {numlines: order['bid']['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @bid, bidOrPo: 'po'  }  %>
+					<%# #passing bid since po and bid lines are exact match ^ %>
+
+
+				<% end %>
 			</div>
-			<br>
-			<br>
+
+			Upload PO Document:
+			<%= f.file_field "[poFile]" %><br><br>
+
+			<%= f.submit "Submit"%>
+
 		<% end %>
-	<% end %>
-<% else %>
-	
-	<br><br>
-	<h3> PO Form </h3>
 
-	Add PO Lines. If there are too many or too few lines in the form below the PO doesn't match the bid.
-	
-	<%#TODOsprint require that they enter all fields before submitting, including a file%>
-	<%= form_for :order, url:{controller:'project', action: 'addPoToSprintOrder', id: @project['_id'] }, method: 'patch' do |f| %>
-
-		<%= text_field_tag 'orderId3sn', @orderId3sn , style:"display:none;"  %><br>
-		
-		
-		<div>
-			<% if not @poNotMatchingBid.nil? %>
-		
-				<%= render :partial => 'project/sprintOrderLines', locals: {numlines:                @poNotMatchingBid['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo:                @poNotMatchingBid, bidOrPo: 'po'  } %>
-		
-			<% else %>
-				
-				<%= render :partial => 'project/sprintOrderLines', locals: {numlines: order['bid']['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @bid, bidOrPo: 'po'  }  %>
-				<%# #passing bid since po and bid lines are exact match ^ %>
-			
-
-			<% end %>
-		</div>
-
-		Upload PO Document:
-		<%= f.file_field "[poFile]" %><br><br>
-
-		<%= f.submit "Submit"%>
 
 	<% end %>
-	
-
 <% end %>
+
+

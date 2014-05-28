@@ -4,5 +4,5 @@
 <% end %>
 <%= form_for :project, url:{conroller:'project', action:'updateMilestone', id: id}, method: "PATCH", style: "float:left;" do |f| %>
 	<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
-	<%= f.submit "Milestone is Done"%>
+	<%= f.submit "Mark Milestone as Done"%>
 <% end %>
