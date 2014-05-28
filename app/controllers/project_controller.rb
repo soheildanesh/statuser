@@ -488,6 +488,7 @@ class ProjectController < ApplicationController
              if(not current_user.has_key? 'customerMode')
                  current_user['customerMode'] = Hash.new
                  current_user['customerMode']['customerId'] == "All Customers"
+                 $person_collection.save(current_user)
              end
                  
              if(current_user['customerMode']['customerId'] == "All Customers")
