@@ -45,6 +45,6 @@ gem 'actionmailer'
 # gem 'capistrano', group: :development
 
 # Use debugger
-gem 'byebug', "group" => [:development, :test]
+#gem 'byebug', "group" => [:development, :test] #giving error on amazon server, for now commenting out
 
 gem 'thin'
