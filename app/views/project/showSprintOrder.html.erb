@@ -1,6 +1,6 @@
 <%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %><br><br>
 
-<%= order = @project['orders'][@orderId3sn]%><br>
+<% order = @project['orders'][@orderId3sn]%><br>
 Order ID:<br>
 <%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
 
