@@ -1,6 +1,6 @@
 <%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %><br><br>
 
-<% order = @project['orders'][@orderId3sn]%><br>
+<%= order = @project['orders'][@orderId3sn]%><br>
 Order ID:<br>
 <%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
 
@@ -8,7 +8,6 @@ Order ID:<br>
 	Bid File:<br>
 	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/#{order['bidFile']}"%><br>
 	
-	<%#=link_to val['fileName'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{val['fileName']}"%><br>
 <% end %>
 
 <br>
@@ -34,27 +33,27 @@ Order ID:<br>
 			</div>
 			<div class='wSmall'>
 				Item ID <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['itemId'] %>
+				<%= order['bid']['lines']["#{i}"]['itemId'] %>
 			</div>
 			<div class='wSmall'>
 				Item Description <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['itemDesc']%>
+				<%= order['bid']['lines']["#{i}"]['itemDesc']%>
 			</div>
 			<div class='wSmall'>
 				Unit Type <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['unitType'] %>
+				<%= order['bid']['lines']["#{i}"]['unitType'] %>
 			</div>
 			<div class='wSmall'>
 				Unit Price <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['unitPrice']%>
+				<%= order['bid']['lines']["#{i}"]['unitPrice']%>
 			</div>
 			<div class='wSmall'>
 				Quantity <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['quantity'] %>
+				<%= order['bid']['lines']["#{i}"]['quantity'] %>
 			</div>
 			<div class='wSmall'>
 				Total Price <br>
-				<%= order['bid']['lines']["#{i}"]['itemType']['totalPrice'] %>
+				<%= order['bid']['lines']["#{i}"]['totalPrice'] %>
 			</div>
 		</div>
 		<br>
