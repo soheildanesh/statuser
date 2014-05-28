@@ -6,14 +6,16 @@ Order ID:<br>
 
 <%if order.has_key? 'bidFile'%>
 	Bid File:<br>
-	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{order['bidFile']}"%><br>
+	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/#{order['bidFile']}"%><br>
+	
+	<%#=link_to val['fileName'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{val['fileName']}"%><br>
 <% end %>
 
 <br>
 
 
 
-
+<%#= order %>
 <%if order.has_key? 'bid' and order['bid'].has_key? 'lines'%>
 	Bid Lines:
 	<% for i in 1..order['bid']['lines'].length%>
@@ -26,7 +28,9 @@ Order ID:<br>
 			</div>
 			<div class='wSmall'>
 				Item Type <br>
-				<%= order['bid']['lines']["#{i}"]['itemType'] %>
+				<%= printReplaceEmpty getNameFromBsonId( $itemType_collection, "itemTypeName", order['bid']['lines']["#{i}"]['itemType'] ) %>
+
+				<%#= order['bid']['lines']["#{i}"]['itemType'] %>
 			</div>
 			<div class='wSmall'>
 				Item ID <br>

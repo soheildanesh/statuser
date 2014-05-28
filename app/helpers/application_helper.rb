@@ -38,10 +38,11 @@ module ApplicationHelper
     
     def getNameFromBsonId collection,  nameColumnName, id
         begin 
+            puts("collection = #{collection}, nameColumnName= #{nameColumnName} and id = #{id}")
             a = collection.find({:_id => BSON::ObjectId( id ) } ).to_a
             return a[0][nameColumnName]
         rescue 
-            puts("ERROR: invalid  mongodb id format in  getNameFromBsonId")
+            puts("ERROR: invalid  mongodb id format, or something else, in  getNameFromBsonId")
             return id
         end
     end
