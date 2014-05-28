@@ -485,6 +485,9 @@ class ProjectController < ApplicationController
              render '/login_session/new'
              return
          elsif(current_user['role'] == 'admin')
+             if(not current_user.has_key? 'customerMode')
+                 current_user['customerMode']['customerId'] == "All Customers"
+             end    
              if(current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
                  @customerInMode = "All Customers"
