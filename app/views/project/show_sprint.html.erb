@@ -11,9 +11,8 @@
 		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %>  <br><br>
 		
 		<%= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%> | 
-		<% if @project.has_key? 'orders'%>
-			<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br><br>
-		<% end %>
+		<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
+
 	</p>
 	
 
