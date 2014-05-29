@@ -2,7 +2,7 @@ class ItemTypeController < ApplicationController
 
   def destroy
       if(current_user.nil?)
-          flash[:notice] = "only an admin can delete"
+          flash[:notice] = "log in to delete"
           redirect_to controller:'login_session', action:'new'
           return
       elsif(current_user['role'] != 'admin')
@@ -42,7 +42,7 @@ class ItemTypeController < ApplicationController
   def create
 
       if(current_user.nil?)
-          flash[:notice] = "only an admin can create"
+          flash[:notice] = "log in to create"
           render :controller => 'item_type', :action => 'index'
           return
 

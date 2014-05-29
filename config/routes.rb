@@ -1,5 +1,7 @@
 Statuser::Application.routes.draw do
   
+    resources :feedback
+    
     resources :log_entry do
         member do
             get :add_cr_to_activity_report

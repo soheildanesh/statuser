@@ -62,7 +62,13 @@ Order ID:<br>
 	
 	<%if order.has_key? 'matchingPoLinesSubmitted'%>
 		<br><br>
-		<b> PO Lines </b> Entered PO Lines match those in bid. Entered by <%= linkToPerson order['matchingPoLinesSubmittedBy']%> At <%= order['matchingPoLinesSubmittedAt']%>
+		<p>
+		<b> PO Number: </b> <%= order['poNumber'] %>
+		</p>
+		<p>
+		<b> PO Date: </b>  <%= render partial: "layouts/show_date", locals: {year:  order['poDate']['poDate(1i)'], month:  order['poDate']['poDate(2i)'] , day: order['poDate']['poDate(3i)'] } %>
+		</p>
+		<b> PO Lines: </b> Entered PO Lines match those in bid. Entered by <%= linkToPerson order['matchingPoLinesSubmittedBy']%> At <%= order['matchingPoLinesSubmittedAt']%>
 
 	<% else %>
 
@@ -75,18 +81,24 @@ Order ID:<br>
 		<%= form_for :order, url:{controller:'project', action: 'addPoToSprintOrder', id: @project['_id'] }, method: 'patch' do |f| %>
 
 			<%= text_field_tag 'orderId3sn', @orderId3sn , style:"display:none;"  %><br>
-
-
+			<p>
+				PO Number:<br>
+				<%= text_field_tag 'poNumber', "" , class:"textField"  %><br>
+			</p>
+			<p>
+				PO Date:
+				<%= date_select 'poDate', :poDate %>
+			</p>
+			<br><br>
 			<div>
 				<% if not @poNotMatchingBid.nil? %>
-
+					<%# i don't think this branch of if is ever taken, delete later%>
 					<%= render :partial => 'project/sprintOrderLines', locals: {numlines:                @poNotMatchingBid['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @poNotMatchingBid, bidOrPo: 'po'  } %>
 
 				<% else %>
 
 					<%= render :partial => 'project/sprintOrderLines', locals: {numlines: order['bid']['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @bid, bidOrPo: 'po'  }  %>
 					<%# #passing bid since po and bid lines are exact match ^ %>
-
 
 				<% end %>
 			</div>

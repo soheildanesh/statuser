@@ -17,7 +17,7 @@
 			<% end %>
 			<%#= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
 			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
-				Milestone Is Done
+				Done : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
 			<% else %>
 				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>
 			<% end %>
@@ -34,7 +34,6 @@
 				<% end %>
 			<% end %>
 			<% if prerecsMet == true %>
-			milestone = <%= milestone%>
 				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>	
 			<% else #milestone has unmet prereqs'%>
 				Not Ready for Start

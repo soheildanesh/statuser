@@ -2,32 +2,42 @@
 
 <%= form_for :site, url: '/site' do |f| %>
 
-	<%= f.label :siteId, "Site ID" %>
-	<%= f.text_field :siteId%><br><br>
+
+	<%= f.label :customerSiteId, "Customer Site ID" %>
+	<%= f.text_field :customerSiteId%><br><br>
 	
-	<%= f.label :projectCode, "Project Code" %>
-	<%= f.text_field :projectCode%><br><br>
+	<%= f.label :siteName, "Site Name" %>
+	<%= f.text_field :siteName%><br><br>
 	
-	<%= f.label :siteType, "Site Type" %>
-	<%= f.text_field :siteType%><br><br>
+	<%= f.label :structureType, "Structure Type" %>
+	<%= f.text_field :structureType%><br><br>
+	
+	<%= f.label :towerCompany, "Tower Company" %>
+	<%= f.text_field :towerCompany%><br><br>
 	
 	<%= f.label :siteAddress, "Site Address" %>
 	<%= f.text_field :siteAddress%><br><br>
 	
-	<%= f.label :siteLat, "Site Latitude" %>
-	<%= f.text_field :siteLat%><br><br>
+	<%= f.label :siteZip, "Site Zip" %>
+	<%= f.text_field :siteZip%><br><br>
+	
+	<%= f.label :siteCity, "Site City" %>
+	<%= f.text_field :siteCity%><br><br>
 	
 	<%= f.label :siteLong, "Site Longitude" %>
 	<%= f.text_field :siteLong%><br><br>
 	
-	<%= f.label :projMan, "Site Project Manager" %>
-	<%= f.text_field :projMan, "class" => "personInput"%><br><br>
+	<%= f.label :siteLat, "Site Latitude" %>
+	<%= f.text_field :siteLat%><br><br>
 	
-	<%= f.label :constMan, "Site Construction Manager" %>
-	<%= f.text_field :constMan, "class" => "personInput"%><br><br>
+	<%#= f.label :projMan, "Site Project Manager" %>
+	<%#= f.text_field :projMan, "class" => "personInput"%>
 	
-	<%= f.label :copInCharge, "COP In Charge" %>
-	<%= f.text_field :copInCharge, "class" => "personInput"%><br><br>
+	<%#= f.label :constMan, "Site Construction Manager" %>
+	<%#= f.text_field :constMan, "class" => "personInput"%>
+	
+	<%#= f.label :copInCharge, "COP In Charge" %>
+	<%#= f.text_field :copInCharge, "class" => "personInput"%>
 	
 	<p>
 		<%= f.label :notes, "Enter any additional notes" %><br>

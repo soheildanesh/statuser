@@ -2,7 +2,7 @@ class ProgramController < ApplicationController
   
     def destroy
         if(current_user.nil?)
-            flash[:notice] = "only an admin can delete a propgram"
+            flash[:notice] = "log in to delete a propgram"
             redirect_to controller:'login_session', action:'new'
             return
         elsif(current_user['role'] != 'admin')
@@ -42,7 +42,7 @@ class ProgramController < ApplicationController
     def create
         
         if(current_user.nil?)
-            flash[:notice] = "only an admin can create a propgram"
+            flash[:notice] = "log in to create a propgram"
             render :controller => 'project', :action => 'index'
             return
         

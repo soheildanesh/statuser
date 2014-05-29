@@ -1,63 +1,94 @@
+<% style = "width:200px"%>
+
 
 <% for i in 1..numlines.to_i%>
-	Line Number <%= i %>
+	<b> <%= bidOrPo.capitalize %> Line Number <%= i %> </b>
 	<% if prefillBidOrPo.nil? %>
 		<div>
+			<p>
 			Item Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", "", {class: 'itemTypeInput'} %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", "", {class: 'itemTypeInput textField'} %>
+			</p>
 		</div>
 		<div>
+			<p>
 			Item ID <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Item Description <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Unit Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Unit Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Quantity <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Total Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]" %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]" , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 	<% else %>
 		<div>
+			<p>
 			Item Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", prefillBidOrPo['lines']["#{i}"]["itemType"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", prefillBidOrPo['lines']["#{i}"]["itemType"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
+		
 		<div>
+			<p>
 			Item ID <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]", prefillBidOrPo["lines"]["#{i}"]["itemId"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]", prefillBidOrPo["lines"]["#{i}"]["itemId"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Item Description <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]", prefillBidOrPo["lines"]["#{i}"]["itemDesc"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]", prefillBidOrPo["lines"]["#{i}"]["itemDesc"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Unit Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , prefillBidOrPo["lines"]["#{i}"]["unitType"]%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , prefillBidOrPo["lines"]["#{i}"]["unitType"], "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Unit Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]", prefillBidOrPo["lines"]["#{i}"]["unitPrice"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]", prefillBidOrPo["lines"]["#{i}"]["unitPrice"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Quantity <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]", prefillBidOrPo["lines"]["#{i}"]["quantity"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]", prefillBidOrPo["lines"]["#{i}"]["quantity"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		<div>
+			<p>
 			Total Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]", prefillBidOrPo["lines"]["#{i}"]["totalPrice"] %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]", prefillBidOrPo["lines"]["#{i}"]["totalPrice"] , "", {class: 'itemTypeInput textField'}%>
+			</p>
 		</div>
 		
 	<% end %>

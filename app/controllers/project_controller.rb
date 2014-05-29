@@ -186,6 +186,9 @@ class ProjectController < ApplicationController
            @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedBy"] = current_user['_id']
            @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedAt"] = Time.now
            
+           @project['orders']["#{@orderId3sn}"]["poNumber"] = params['poNumber']
+           @project['orders']["#{@orderId3sn}"]["poDate"] = params['poDate']
+           
            $project_collection.save(@project) 
         end
         
