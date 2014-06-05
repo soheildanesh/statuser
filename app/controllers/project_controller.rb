@@ -152,16 +152,20 @@ class ProjectController < ApplicationController
         end
             
         
-        #@nonMatchLine = Array.new
+        @nonMatchLines = Array.new
         @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true#checkthis TODO
         @bid['lines'].each do |lineNum, val|
             if val != @po['lines'][lineNum]
-               #@nonMatchLine << lineNum.to_i 
+               @nonMatchLines << lineNum.to_i 
                flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
                @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
                #@poNotMatchingBid = params['order']['po']
                #break
             end
+        end
+        
+        if(not @nonMatchLines.empty? )
+            @project['orders']["#{@orderId3sn}"]['nonMatchLines'] = @nonMatchLines
         end
         
         #if @nonMatchLine.empty?
@@ -575,6 +579,19 @@ class ProjectController < ApplicationController
         params['order']['createdBy'] = current_user['_id']
         
         @project['orders']["#{@orderId3sn}"] = params['order']
+        
+        @nonMatchLines = Array.new
+        @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true
+        @project['orders']["#{@orderId3sn}"]['bid']['lines'].each do |lineNum, val|
+            if val != @project['orders']["#{@orderId3sn}"]['po']['lines'][lineNum]
+               @nonMatchLines << lineNum.to_i 
+               flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
+               @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
+            end
+        end
+        if(not @nonMatchLines.empty? )
+            @project['orders']["#{@orderId3sn}"]['nonMatchLines'] = @nonMatchLines
+        end
         
         $project_collection.save(@project)
         

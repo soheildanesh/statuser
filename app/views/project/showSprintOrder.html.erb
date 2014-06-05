@@ -37,7 +37,8 @@
 			</p>
 		<% else %>
 		<p>	<br>
-			<b> PO Lines: </b> Entered PO Lines <b> Do Not </b> match those in bid. 
+			<b> PO Lines: </b> Entered PO Lines <b> Do Not </b> match those in bid.<br>
+			Non-Matching Lines = <%= @project['orders']["#{@orderId3sn}"]['nonMatchLines'] %>	
 		</p>
 		<% end %>
 		<b> PO Lines:<br> </b>
