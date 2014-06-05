@@ -4,13 +4,12 @@
 
 
 
-<%= order = @project['orders'][@orderId3sn] %><br>
+<% order = @project['orders'][@orderId3sn] %><br>
 <b> Order ID: </b><br>
 <%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
 
 <%if order.has_key? 'bidFile'%>
-	<b> Bid File: </b><br>
-	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/#{order['bidFile']}"%><br>
+	<b> Bid File: </b>	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/#{order['bidFile']}"%><br>
 	
 <% end %>
 
@@ -80,6 +79,9 @@
 		<%#TODOsprint require that they enter all fields before submitting, including a file%>
 		<%= form_for :order, url:{controller:'project', action: 'addPoToSprintOrder', id: @project['_id'] }, method: 'patch' do |f| %>
 
+			<div id='linesGoHere'>
+			</div>
+			
 			<%= text_field_tag 'orderId3sn', @orderId3sn , style:"display:none;"  %><br>
 			<p>
 				PO Number:<br>
@@ -91,8 +93,7 @@
 			</p>
 			<br><br>
 			
-			<div id='linesGoHere'>
-			</div>
+			
 
 
 			Upload PO Document:
