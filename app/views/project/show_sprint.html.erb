@@ -1,4 +1,4 @@
-<%#= @project%>
+<%= @project%>
 
 <div style="width:400px;">
 	
@@ -8,7 +8,9 @@
 
 	<%#= render partial: 'show', locals: {project:  @project} %>
 	<p>
-		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %>  <br><br>
+		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %> 
+		|	
+		<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> <br><br>
 		
 		<%= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%> | 
 		<%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
@@ -17,7 +19,7 @@
 	
 
 	<p>
-		<span style="font-style:bold;"> <%= "3SN Project ID" %> </span> <br>
+		<b><span style="font-style:bold;"> <%= "3SN Project ID" %> </span> </b><br>
 		<% if @project['projId3s'].nil? or @project['projId3s'].empty? %>
 			<% linkText = @project['_id'].to_s %>
 		<% else %>
@@ -27,49 +29,49 @@
 	</p>
 
 	<p>
-		<%=  "3SN Project Name" %><br>
+		<b> <%=  "3SN Project Name" %> </b><br>
 		<%= printReplaceEmpty @project['projName']%>
 	</p>
 
 	<p>
-		<%= "3SN Program" %><br>
+		<b> <%= "3SN Program" %> </b> <br>
 		<%= printReplaceEmpty getProgramName  @project['program']%>
 	</p>
 	
 	<p>
-		<%= "3SN Project Type" %><br>
+		<b><%= "3SN Project Type" %></b><br>
 		<%= printReplaceEmpty getNameFromBsonId $projectType_collection,  'projectTypeName', @project['projType'] %> 
 		
 	</p>
 
 	<p>
-		<%= "3SN Customer ID" %><br>
+		<b><%= "3SN Customer ID" %></b><br>
 		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerId'] %>
 	</p>
 	
 	<p>
-		<%= "Customer Site ID" %><br>
+		<b><%= "Customer Site ID" %></b><br>
 		<%= printReplaceEmpty getNameFromBsonId $customer_collection,  'customerName', @project['customerSiteId'] %>
 	</p>
 
 
 	<p>
-		<%=  "3SN Operator ID" %><br>
+		<b>	<%=  "3SN Operator ID" %></b><br>
 		<%= printReplaceEmpty @project['operatorId']%>
 	</p>
 
 	<p>
-		<%=  "3SN Project Manager" %><br>
+		<b><%=  "3SN Project Manager" %></b><br>
 		<%= printReplaceEmpty getPersonEmail @project['projManager']%>
 	</p>
 
 	<p>
-		<%=  "3SN Project Controller" %><br>
+		<b><%=  "3SN Project Controller" %></b><br>
 		<%= printReplaceEmpty getPersonEmail @project['projController']%>
 	</p>
 
 	<p>
-		<%= "Start Date" %><br>
+		<b><%= "Start Date" %></b><br>
 		<%if @project.has_key? 'startDate(1i)'%>
 			<%= render partial: "layouts/show_date", locals: {year:  @project['startDate(1i)'], month:  @project['startDate(2i)'] , day: @project['startDate(3i)'] } %>
 		<% else %>
@@ -78,7 +80,7 @@
 	</p>
 
 	<p>
-		<%=  "End Date" %><br>
+		<b><%=  "End Date" %></b><br>
 		<%if @project.has_key? 'endDate(1i)'%>
 			<%= render partial: "layouts/show_date", locals: {year:  @project['endDate(1i)'], month:  @project['endDate(2i)'] , day: @project['endDate(3i)'] } %>
 		<% else %>
@@ -89,7 +91,7 @@
 
 
 	<p>
-		<%=  "Created AT" %><br>
+		<b><%=  "Created AT" %></b><br>
 		<%= printReplaceEmpty @project['createdAt'].to_s %><br><br>
 	</p>
 

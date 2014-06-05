@@ -4,12 +4,20 @@
 	<div>
 		<h2> <a id="milestones">Project Milestones</a> </h2>
 	</div>
-
+	<%backgroundAlternater = -1%>
 	<% for dependency in @milestoneDependecies %>
+		<hr style="margin:0px">
 		<% prereqs = dependency.slice(1,dependency.length) %>
 		<% milestone = dependency[0] %>
-	
-		<div> <b> <span style="float:left;"> <%= milestone %> </span> </b> <br>
+
+		<%if backgroundAlternater < 0%>
+			<div style="background-color: white; height:100px;"> <b> <span style="float:left;"> <%= milestone %> </span> </b> <br>
+		<% else %>
+			<div style="background-color: beige; height:100px;"> <b> <span style="float:left;"> <%= milestone %> </span> </b> <br>
+		<% end %>
+		<%backgroundAlternater = -1 * backgroundAlternater%>
+		
+			
 
 		<% if @project.has_key? 'milestones' and @project['milestones'].has_key? milestone  #milestone is in progress or done %>
 			<% if  @project['milestones'][milestone].has_key? 'files'%>
@@ -17,7 +25,7 @@
 			<% end %>
 			<%#= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
 			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
-				Done : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
+				Done : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'].split(" ")[0] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
 			<% else %>
 				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>
 			<% end %>
@@ -36,14 +44,14 @@
 			<% if prerecsMet == true %>
 				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone} %>	
 			<% else #milestone has unmet prereqs'%>
-				Not Ready for Start
+				<%#Not Ready for Start %>
 			<% end %>
 		<% else %>
-			Not Ready for Start
+			<%# Not Ready for Start %>
 		<% end %>
 		
+		
 		</div>
-		<br>
 		
 	<% end %>
 </div>

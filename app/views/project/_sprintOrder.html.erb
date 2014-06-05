@@ -1,12 +1,10 @@
 <% order = project['orders'][orderId3sn]%> 
+<%#= project %>
 
 
-
-
-
-<div style="width:1600px;">
-	<hr style="margin:0px;">
-	<div style="width:1600px; _background-color:#CEF6CE;">
+<div style="width:2000px; background-color:<%=background_color%>; height:60px; margin:0px; padding:0px; float:left;">
+	<hr style="margin:0px;" >
+	<div style="width:1600px; float:left; background-color:<%=background_color%>; height:30px;">
 		<div class='wSmall'>
 			<b> 3SN Order Id </b>
 		</div>
@@ -27,14 +25,14 @@
 		
 	</div>
 	
-	<div style="width:2000px; float:left;">
+	<div style="width:2000px; float:left; background-color:<%=background_color%>; height:30px; padding:0px;">
 		
 		<div class='wSmall'>
-			<%= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+			<%= link_to "#{project['projId3s']}-#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
 		</div>
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
-			TODO 
+			<%= getTotalForOrder order  %>
 		</div>
 		
 		
@@ -52,13 +50,13 @@
 		
 		
 		<div class='wSmall'>
-			<%= link_to 'Delete TODO maybe make order collection separate', {action: 'destroy', id: project['_id'], orderId3sn: orderId3sn}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+			<%= link_to 'Delete', {action: 'destroy', id: project['_id'], orderId3sn: orderId3sn}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</div>
+		
 	</div>
-	<br>
-	<br>
-
+	
 </div>
+
 
 
 

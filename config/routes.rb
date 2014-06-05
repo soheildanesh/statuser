@@ -59,6 +59,8 @@ Statuser::Application.routes.draw do
             patch :addPoToSprintOrder
             get :milestone_files
             get :showMilestones
+            get :editSprintOrder
+            patch :updateOrder
         end
     end
     

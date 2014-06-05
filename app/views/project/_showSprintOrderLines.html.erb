@@ -1,0 +1,57 @@
+
+
+<% for i in 1..order[bidOrPo]['lines'].length%>
+
+	<div id="bidLines" style="width:2500px;">
+		<hr style="margin:0px;">
+		<div class='wSmall'>
+			Line Number <br>
+			<%= i %>
+		</div>
+		<div class='wSmall'>
+			Item Type <br>
+			<%= printReplaceEmpty getNameFromBsonId( $itemType_collection, "itemTypeName", order[bidOrPo]['lines']["#{i}"]['itemType'] ) %>
+
+			<%#= order[bidOrPo]['lines']["#{i}"]['itemType'] %>
+		</div>
+		<div class='wSmall'>
+			Item ID <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['itemId'] %>
+		</div>
+		
+		<%if bidOrPo == 'po'  %>
+			<div class='wSmall'>
+				Invoice Trigger <br>
+				<%= order['po']['lineAtts_poSpecific']["#{i}"]['invoiceTrigger'] %>
+			</div>
+			<div class='wSmall'>
+				Invoice Number <br>
+				<%= order['po']['lineAtts_poSpecific']["#{i}"]['invoiceNumber'] %>
+			</div>
+		<% end %>
+		
+		
+		<div class='wSmall'>
+			Item Description <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['itemDesc']%>
+		</div>
+		<div class='wSmall'>
+			Unit Type <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['unitType'] %>
+		</div>
+		<div class='wSmall'>
+			Unit Price <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['unitPrice']%>
+		</div>
+		<div class='wSmall'>
+			Quantity <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['quantity'] %>
+		</div>
+		<div class='wSmall'>
+			Total Price <br>
+			<%= order[bidOrPo]['lines']["#{i}"]['totalPrice'] %>
+		</div>
+	</div>
+	<br>
+	<br>
+<% end %>

@@ -2,8 +2,8 @@
 
 
 <div id="lineGenerationFrom">
-	<%= form_tag({controller: 'project', action: 'generateSprintOrderLines', id:'dummy'}, {method: :get,  remote: true}) do %>
-		Number of PO/Bid lines: <br>
+	<%= form_tag({controller: 'project', action: 'generateSprintOrderLines', id:'bid'}, {method: :get,  remote: true}) do %>
+		Number of Bid lines: <br>
 		<%= text_field_tag "numLines" %> 
 		<%= text_field_tag "orderId3sn", value= orderId3sn, style:"display:none;"  %><br>
 		<%= submit_tag "Generate"%>

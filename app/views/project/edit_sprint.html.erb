@@ -1,0 +1,66 @@
+<%= link_to "Back To Project", {controller: 'project', action: 'show', id: @project['_id'].to_s}, {style: "color:green;"} %>
+
+<h1>Editing Project</h1>
+ 
+<%= form_for :project, url: {controller: 'project', action: 'update', id: @project['_id']}, method: :patch do |f| %>
+	
+	<p>
+		<%= f.label :proj, 'Project ID'%><br>
+		<%= text_field_tag "project[projId3s]", "#{@project['projId3s']}" , disabled: true%>
+	</p>
+	
+	
+	<p>
+		<%=  "3SN Project Name" %><br>
+		<%= text_field_tag "project[projName]", "#{@project['projName']}", {class: 'textField'} %>
+		<%#= printReplaceEmpty @project['projName']%>
+	</p>
+
+	<p>
+		<%= "3SN Program" %><br>
+		<%= text_field_tag "project[program]", "", {class: 'textField programInput'} %>
+	</p>
+	
+	<p>
+		<%= "3SN Project Type" %><br>
+		<%= text_field_tag "project[projType]", "", {class: 'textField projTypeInput'} %>
+	</p>
+	
+	<p>
+		<%= "3SN Customer ID" %><br>
+		<%= text_field_tag "project[customerId]", "", {class: 'textField customerInput'} %>
+	</p>
+
+	<p>
+		<%=  "3SN Operator ID" %><br>
+		<%= text_field_tag "project['operatorId']", @project['operatorId'], {class: 'textField'} %>
+	</p>
+
+	<p>
+		<%=  "3SN Project Manager" %><br>
+		<%= text_field_tag "project['projManager']", "", {class: 'textField projManager'} %>	
+	</p>
+	
+	<p>
+		<%=  "3SN Project Controller" %><br>
+		<%= text_field_tag "project['projController']", "", {class: 'textField projController'} %>	
+	</p>
+	
+	<p>
+		<%= f.label :startDate, "Start Date" %><br>
+		<%= f.date_select :startDate, selected: @startDate %>
+		<%#= f.text_field :startDate%>
+	</p>
+	
+	
+	<p>
+		<%= f.label :endDate, "End Date" %><br>
+		<%= f.date_select :endDate, selected: @endDate %>
+		<%#= f.text_field :startDate%>
+	</p>
+	
+	<p>
+		<%= f.submit %>
+	</p>
+	
+<% end %>

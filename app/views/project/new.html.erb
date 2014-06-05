@@ -1,82 +1,85 @@
+<% if(current_user["customerMode"]['customerId'] == "" or current_user["customerMode"]['customerId'] == "All Customers")%>
+	Please choose a specific customer mode in dashboard
+<%else %>
 
+	<h2> New <%= getCustomerMode.capitalize %> Project:</h2>
 
-<h2> New <%= getCustomerMode %> Project:</h2>
-
-<%= form_for :project, url: '/project' do |f| %>
+	<%= form_for :project, url: '/project' do |f| %>
 	
-	<p>
-		<%= f.label :projId3s, "3SN Project ID" %><br>
-		<%= f.text_field :projId3s, :value => @projId3s, "class" => "required textField", readonly: true%>
-		<br>
-	</p>
-	
-	<% if false #now that we have customerMode, the project customer id is simpley that of whaterver mode the current user is int%>
-	<p>
-		<%= f.label :customerId, "3SN Customer ID" %><br>
-		<%= f.text_field :customerId, "class" => "required customerInput textField" %>
-	</p>
-	<% end %>
-	<%= f.text_field :customerId, value: current_user['customerMode']['customerId'],:style => "display:none" %>
-	
-	<% if getCustomerMode == "sprint"%>
 		<p>
-			<%= f.label :sprintSiteId, "Sprint Site ID" %><br>
-			<%= f.text_field :sprintSiteId, "class" => "required textField" %>
+			<%= f.label :projId3s, "3SN Project ID" %><br>
+			<%= f.text_field :projId3s, :value => @projId3s, "class" => "required textField", readonly: true%>
+			<br>
 		</p>
-	<% end %>
 	
-	<p>
-		<%= f.label :program, "3SN Program" %><br>
-		<%= f.text_field :program, "class" => "required programInput textField"%>
-	</p>
+		<% if false #now that we have customerMode, the project customer id is simpley that of whaterver mode the current user is int%>
+		<p>
+			<%= f.label :customerId, "3SN Customer ID" %><br>
+			<%= f.text_field :customerId, "class" => "required customerInput textField" %>
+		</p>
+		<% end %>
+		<%= f.text_field :customerId, value: current_user['customerMode']['customerId'],:style => "display:none" %>
+	
+
+		<p>
+			<%= f.label :customerSiteId, "Sprint Site ID" %><br>
+			<%= f.text_field :customerSiteId, "class" => "required textField siteidInput" %>
+		</p>
+
+	
+		<p>
+			<%= f.label :program, "3SN Program" %><br>
+			<%= f.text_field :program, "class" => "required programInput textField"%>
+		</p>
 	
 	
-	<p>
-		<%= f.label :projName, "3SN Project Name" %><br>
-		<%= f.text_field :projName, "class" => "required textField"%>
-	</p>
+		<p>
+			<%= f.label :projName, "3SN Project Name" %><br>
+			<%= f.text_field :projName, "class" => "required textField"%>
+		</p>
 	
 	
-	<p>
-		<%= f.label :projType, "Project Type" %><br>
-		<%= f.text_field :projType, "class" => "required projectTypeInput textField"%>
-	</p>
+		<p>
+			<%= f.label :projType, "Project Type" %><br>
+			<%= f.text_field :projType, "class" => "required projectTypeInput textField"%>
+		</p>
 	
-	<p>
-		<%= f.label :operatorId, "3SN Operator ID" %><br>
-		<%= f.text_field :operatorId, "class" => "required textField"%>
-	</p>
+		<p>
+			<%= f.label :operatorId, "3SN Operator ID" %><br>
+			<%= f.text_field :operatorId, "class" => "required textField"%>
+		</p>
 	
-	<p>
-		<div id="projManager">
-			<%= f.label :projManager, "3SN Project Manager" %><br>
-			<%#= f.text_field :projManager%>
-			<%= f.text_field :projManager, "class" => "personInput required textField", style: 'width:100px; display:none;', size:10%>
-		</div>
-	</p>
+		<p>
+			<div id="projManager">
+				<%= f.label :projManager, "3SN Project Manager" %><br>
+				<%#= f.text_field :projManager%>
+				<%= f.text_field :projManager, "class" => "personInput required textField", style: 'width:100px; display:none;', size:10%>
+			</div>
+		</p>
 	
-	<p>
-		<div id="projController">
-			<%= f.label :projController, "3SN Project Controller" %><br>
-			<%#= f.text_field :projController%>
-			<%= f.text_field :projController, "class" => "personInput required textField"%>
-		</div>
-	</p>
+		<p>
+			<div id="projController">
+				<%= f.label :projController, "3SN Project Controller" %><br>
+				<%#= f.text_field :projController%>
+				<%= f.text_field :projController, "class" => "personInput required textField"%>
+			</div>
+		</p>
 	
-	<p>
-		<%= f.label :startDate, "Start Date" %><br>
-		<%= f.date_select :startDate, class: "required textField" %>
-		<%#= f.text_field :startDate%>
-	</p>
+		<p>
+			<%= f.label :startDate, "Start Date" %><br>
+			<%= f.date_select :startDate, class: "required textField" %>
+			<%#= f.text_field :startDate%>
+		</p>
 	
-	<p>
-		<%= f.label :endDate, "End Date" %><br>
-		<%= f.date_select :endDate, class: "required textField" %>
-		<%#= f.text_field :endDate%>
-	</p>
+		<p>
+			<%= f.label :endDate, "End Date" %><br>
+			<%= f.date_select :endDate, class: "required textField" %>
+			<%#= f.text_field :endDate%>
+		</p>
 	
-	<%#= f.submit "Submit", class: 'disabledTillFilled' %>
-	<%= f.submit "Submit", class: 'disabledTillFilled' , disabled:"disabled"%>
+		<%#= f.submit "Submit", class: 'disabledTillFilled' %>
+		<%= f.submit "Submit", class: 'disabledTillFilled' , disabled:"disabled"%>
 	
-<%end%>
-<br>
+	<%end%>
+	<br>
+<% end %>

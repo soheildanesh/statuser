@@ -1,93 +1,125 @@
 <% style = "width:200px"%>
 
 
+<%= javascript_tag "calcTotal()" %>
+<%#= prefillBidOrPo%>
+
 <% for i in 1..numlines.to_i%>
 	<b> <%= bidOrPo.capitalize %> Line Number <%= i %> </b>
 	<% if prefillBidOrPo.nil? %>
 		<div>
 			<p>
 			Item Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", "", {class: 'itemTypeInput textField'} %>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", "", {class: "itemTypeInput textField"} %>
 			</p>
 		</div>
 		<div>
 			<p>
 			Item ID <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]" , "", {class: 'textField'}%>
 			</p>
 		</div>
+		<% if bidOrPo == "po"%>
+			<div>
+				<p>
+				Invoice Trigger <br>
+				<%= text_field_tag "[order][#{bidOrPo}][lineAtts_poSpecific][#{i}][invoiceTrigger]" , "", {class: 'textField'}%>
+				</p>
+			</div>
+			<div>
+				<p>
+				Invoice Number <br>
+				<%= text_field_tag "[order][#{bidOrPo}][lineAtts_poSpecific][#{i}][invoiceNumber]" , "", {class: 'textField'}%>
+				</p>
+			</div>
+		<% end %>
+		
 		<div>
 			<p>
 			Item Description <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]" , "", {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Unit Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , "", {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Unit Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]" , "", {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Quantity <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]" , "", {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Total Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]" , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]" , "", {class: 'textField', onclick: "calcTotal(#{i});"}%> 
 			</p>
 		</div>
 	<% else %>
 		<div>
 			<p>
 			Item Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", prefillBidOrPo['lines']["#{i}"]["itemType"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemType]", prefillBidOrPo['lines']["#{i}"]["itemType"] , {class: "#{bidOrPo}ItemTypeInput textField"}%>
 			</p>
 		</div>
 		
 		<div>
 			<p>
 			Item ID <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]", prefillBidOrPo["lines"]["#{i}"]["itemId"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemId]", prefillBidOrPo["lines"]["#{i}"]["itemId"] , {class: 'textField'}%>
 			</p>
 		</div>
+		<% if bidOrPo == "po"%>
+			<div>
+				<p>
+				Invoice Trigger <br>
+				<%= text_field_tag "[order][#{bidOrPo}][lineAtts_poSpecific][#{i}][invoiceTrigger]" , prefillBidOrPo["lineAtts_poSpecific"]["#{i}"]["invoiceTrigger"], {class: 'textField'}%>
+				</p>
+			</div>
+			<div>
+				<p>
+				Invoice Number <br>
+				<%= text_field_tag "[order][#{bidOrPo}][lineAtts_poSpecific][#{i}][invoiceNumber]" , 	prefillBidOrPo["lineAtts_poSpecific"]["#{i}"]["invoiceNumber"], {class: 'textField'}%>
+				</p>
+			</div>
+		<% end %>
 		<div>
 			<p>
 			Item Description <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]", prefillBidOrPo["lines"]["#{i}"]["itemDesc"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][itemDesc]", prefillBidOrPo["lines"]["#{i}"]["itemDesc"] , {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Unit Type <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , prefillBidOrPo["lines"]["#{i}"]["unitType"], "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitType]" , prefillBidOrPo["lines"]["#{i}"]["unitType"], {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Unit Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]", prefillBidOrPo["lines"]["#{i}"]["unitPrice"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][unitPrice]", prefillBidOrPo["lines"]["#{i}"]["unitPrice"] , {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Quantity <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]", prefillBidOrPo["lines"]["#{i}"]["quantity"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][quantity]", prefillBidOrPo["lines"]["#{i}"]["quantity"] , {class: 'textField'}%>
 			</p>
 		</div>
 		<div>
 			<p>
 			Total Price <br>
-			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]", prefillBidOrPo["lines"]["#{i}"]["totalPrice"] , "", {class: 'itemTypeInput textField'}%>
+			<%= text_field_tag "[order][#{bidOrPo}][lines][#{i}][totalPrice]", prefillBidOrPo["lines"]["#{i}"]["totalPrice"] , {class: 'textField', onclick: 'calcTotal()'}%>
 			</p>
 		</div>
 		

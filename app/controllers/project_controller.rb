@@ -1,55 +1,13 @@
 class ProjectController < ApplicationController
-
-    @milestoneDependecies =  [
-    ["Bid Invitation Received"],
-    ["Pre-Bid Conference Complete", "Bid Invitation Received"],
-    ["Bid Walk Complete", "Pre-Bid Conference Complete"],
-    ["Bid Complete", "Bid Walk Complete"],
-    ["Bid Review Complete", "Bid Complete"],
-    ["SAP Submitted", "Bid Review Complete"],
-    ["SAP Approved", "SAP Submitted"],
-    ["Initial Bid POR Submitted", "SAP Approved"],
-    ["Initial Bid PO Received", "Initial Bid POR Submitted"],
-    ["NTP Received", "Initial Bid PO Received"],
-    ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
-    ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
-    ["Material Order Submitted", "Cell Site Verification Complete"],
-    ["Material Received", "Material Order Submitted"],
-    ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
-
-    ["Equipment Inventory Complete", "Equipment Pickup Complete"],
-    ["Construction Start", "Equipment Inventory Complete", "Material Received"],
-
-    ["Change Request Submitted", "Construction Start"],
-    ["Change Request Approved", "Change Request Submitted"],
-    ["Change Request PO Received", "Change Request Approved"],
-    ["Ground Level Construction Complete", "Construction Start"],
-    ["Tower Level Construction Complete" , "Construction Start"],
-    ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-    ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
-    ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
-    ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
-
-    ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
-    ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
-    ["Construction Documents Submitted", "Construction Documents Complete"],
-    ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
-    ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
-
-
-    ["Final Acceptance Documents Complete", "Construction Complete"],
-    ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
-    ["Final Acceptance", "Acceptance Request Submitted"]]
     
-    
+    before_action :clearGon
+     
+    #clear js variable gon, see gon gem 
+    def clearGon
+        gon.clear()
+    end
+
+
     #sprint
     def milestone_files
         @milestone = params['milestone']
@@ -63,10 +21,31 @@ class ProjectController < ApplicationController
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
         if(not params.has_key? 'order')
-            flash[:notice] = "Submitted form was empty!"
+            flash[:error] = "Submitted form was empty!"
             redirect_to controller: 'project', action: 'newSprintOrder', id: @project['_id']
             return 
         end
+        
+        if(not params['order'].has_key? 'bid')
+            flash[:error] = "Please enter the bid lines."
+            redirect_to controller: 'project', action: 'newSprintOrder', id: @project['_id']
+            return 
+        end
+        
+        if(not params['order'].has_key? 'bidFile')
+            flash[:error] = "Please enter the bid file."
+            redirect_to controller: 'project', action: 'newSprintOrder', id: @project['_id']
+            return 
+        end
+        
+        
+        if(not params['order']['bid'].has_key? 'lines')
+            flash[:error] = "Please enter the bid lines!"
+            redirect_to controller: 'project', action: 'newSprintOrder', id: @project['_id']
+            return 
+        end
+        
+        
             
         #save the bid file and replace it with the address on file system in params
         bidFile = nil
@@ -114,6 +93,8 @@ class ProjectController < ApplicationController
         end
         
         params['order']['createdAt'] = Time.now
+        params['order']['createdBy'] = current_user['_id']
+        
         
         @project['orders']["#{ordCount}"] = params['order']
         
@@ -137,7 +118,7 @@ class ProjectController < ApplicationController
         @numlines = params['numLines']
         @orderId3sn = params['orderId3sn']
         @prefillBidOrPo = nil
-        @bidOrPo = 'bid'
+        @bidOrPo = params['id']
         respond_to do |format|
             format.html
             format.js
@@ -171,26 +152,74 @@ class ProjectController < ApplicationController
         end
             
         
-        @nonMatchLine = nil
+        #@nonMatchLine = Array.new
+        @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true#checkthis TODO
         @bid['lines'].each do |lineNum, val|
             if val != @po['lines'][lineNum]
-               @nonMatchLine = lineNum.to_i 
+               #@nonMatchLine << lineNum.to_i 
                flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
-               @poNotMatchingBid = params['order']['po']
-               break
+               @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
+               #@poNotMatchingBid = params['order']['po']
+               #break
             end
         end
         
-        if @nonMatchLine.nil?
-           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true
-           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedBy"] = current_user['_id']
-           @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmittedAt"] = Time.now
+        #if @nonMatchLine.empty?
+            if(params['order'].has_key? 'poFile' )
+                poFile = params['order']['poFile']
+
+                FileUtils.cd(Rails.root)
+                FileUtils.cd('public')
+                if(not FileUtils.pwd().split("/").last == "uploads")
+                    FileUtils.cd('uploads')
+                end
+
+                if not Dir.exists? ("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                    FileUtils.mkdir("#{@project['projId3s']}__#{@project['_id'].to_s}")
+                end
+                FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")                
+
+                if not Dir.exists? ("orders")
+                    FileUtils.mkdir("orders")
+                end
+                FileUtils.cd("orders")
+
+                if not Dir.exists? (@orderId3sn)
+                    FileUtils.mkdir(@orderId3sn)
+                end
+                FileUtils.cd(@orderId3sn)
+                
+                if not Dir.exists? ("poFile")
+                    FileUtils.mkdir("poFile")
+                end
+                FileUtils.cd("poFile")
+
+                File.open( poFile.original_filename, 'wb') do |file|
+                    file.write(poFile.read)
+                end 
+
+                params['order']['poFile'] = poFile.original_filename
+            end
+            
+            
+            @project['orders']["#{@orderId3sn}"]["poLinesSubmittedBy"] = current_user['_id']
+            @project['orders']["#{@orderId3sn}"]["poLinesSubmittedAt"] = Time.now
+
+            @project['orders']["#{@orderId3sn}"]["poNumber"] = params['poNumber']
+            @project['orders']["#{@orderId3sn}"]["poDate"] = params['poDate']
+            @project['orders']["#{@orderId3sn}"]["poFile"] = params['order']['poFile']
+            
+            if not @project['orders']["#{@orderId3sn}"].has_key? 'po'
+                @project['orders']["#{@orderId3sn}"]['po'] = Hash.new
+                @project['orders']["#{@orderId3sn}"]['po']['lineAtts_poSpecific'] = Hash.new
+            end
+            
+            
+            @project['orders']["#{@orderId3sn}"]['po']['lineAtts_poSpecific'] = params['order']['po']['lineAtts_poSpecific']
+            @project['orders']["#{@orderId3sn}"]['po'] = params['order']['po']
            
-           @project['orders']["#{@orderId3sn}"]["poNumber"] = params['poNumber']
-           @project['orders']["#{@orderId3sn}"]["poDate"] = params['poDate']
-           
-           $project_collection.save(@project) 
-        end
+            $project_collection.save(@project) 
+        #end
         
         
         @orderId3sn = params['orderId3sn']
@@ -315,26 +344,17 @@ class ProjectController < ApplicationController
            ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
            ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
            ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
            ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
-
            ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-
-
            ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
            ["Construction Documents Submitted", "Construction Documents Complete"],
            ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-
-
            ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
-
-
            ["Final Acceptance Documents Complete", "Construction Complete"],
            ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
            ["Final Acceptance", "Acceptance Request Submitted"]]
+           
+           
         id = params['id']
         @project = $project_collection.find({:_id => BSON::ObjectId(id) } ).to_a[0]
         
@@ -446,13 +466,124 @@ class ProjectController < ApplicationController
         end
     end
     
+    def editSprintOrder
+        @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+        @orderId3sn = params['orderId3sn']
+        
+        order = @project['orders'][@orderId3sn]
+        puts("order = #{order}")
+        
+        if(order.has_key? "bid")
+            @prefillBid = order["bid"]
+            if(order['bid'].has_key? 'lines')
+                @numBidLines = order['bid']['lines'].size
+            else
+                @numBidLines = 0
+            end
+        else
+            @numBidLines = 0
+            @prefillBid = nil
+        end
+        
+        if(order.has_key? 'po')
+            @prefillPo = order['po']
+            if(order['po'].has_key? 'lines')
+                @numPoLines = order['po']['lines'].size
+            else
+                @numPoLines = 0
+            end
+        else
+            @numPoLines = 0
+            @prefillPo = nil
+        end
+        
+        if(order.has_key? 'poDate')
+            @poDate = Date.new(order['poDate']['poDate(1i)'].to_i, order['poDate']['poDate(2i)'].to_i, order['poDate']['poDate(3i)'].to_i)
+        end
+
+        gon.bidItemTypes = Array.new
+        (1 .. @numBidLines).each do |i|
+            itemType = order['bid']['lines'][i.to_s]['itemType']
+            if(not itemType.empty? and not itemType.nil?)
+                bidItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['bid']['lines'][i.to_s]['itemType'])})
+                gon.bidItemTypes << [{ 'name' => bidItemType['itemTypeName'], 'id'=> bidItemType['_id'].to_s }]
+            else
+                gon.bidItemTypes << nil
+            end
+            
+        end
+        
+        gon.poItemTypes = Array.new
+        (1 .. @numPoLines).each do |i|
+            itemType = order['po']['lines'][i.to_s]['itemType']
+            if(not itemType.empty? and not itemType.nil?)
+                poItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['po']['lines'][i.to_s]['itemType'])})
+                gon.poItemTypes << [{ 'name' => poItemType['itemTypeName'], 'id'=> poItemType['_id'].to_s }]
+            else
+                gon.poItemTypes << nil
+            end
+            
+        end
+        
+        #render :partial => 'project/sprintOrderLines', locals: {numlines: @numlines, orderId3sn: @orderId3sn, prefillBidOrPo: @prefillBidOrPo, bidOrPo: @bidOrPo  }
+    end
+    
     def edit
          @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+                  
+         program = $program_collection.find_one({:_id => BSON::ObjectId(@project['program'])})
+         gon.program = [{ 'name' => program['programName'], 'id'=> program['_id'].to_s }]
+         
+         projType = $projectType_collection.find_one({:_id => BSON::ObjectId(@project['projType'])})
+         gon.projType = [{ 'name' => projType['projectTypeName'], 'id'=> projType['_id'].to_s }]
+
+         customer = $customer_collection.find_one({:_id => BSON::ObjectId(@project['customerId'])})
+         gon.customer = [{ 'name' => customer['customerName'], 'id'=> customer['_id'].to_s }]
+         
+         projManager = $person_collection.find_one({:_id => @project['projManager'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
+         gon.projManager = [{ 'name' => projManager['name'], 'id'=> projManager['_id'].to_s }]
+         
+         projController = $person_collection.find_one({:_id => @project['projController'].to_i})
+         gon.projController = [{ 'name' => projController['name'], 'id'=> projController['_id'].to_s }]
+         
+         @startDate = Date.new(@project['startDate(1i)'].to_i, @project['startDate(2i)'].to_i, @project['startDate(3i)'].to_i)
+         
+         @endDate = Date.new(@project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
+         
+         @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
+         render "edit_#{@projectCustomerName}"
+    end
+    
+    def updateOrder
+        
+        if(not current_user.nil?)
+             if(not current_user['role'] == 'admin')
+                 flash[:notice] = "Have to be admin user for this"
+                 render '/login_session/new'
+                 return
+             end
+        else
+            flash[:notice] = "Have to be logged in for this"
+            render '/login_session/new'
+            return
+        end
+        
+        @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+        @orderId3sn = params["orderId3sn"]
+        
+        params['order']['createdAt'] = Time.now
+        params['order']['createdBy'] = current_user['_id']
+        
+        @project['orders']["#{@orderId3sn}"] = params['order']
+        
+        $project_collection.save(@project)
+        
+        render 'showSprintOrder'
     end
     
     def update
         
-         if(not current_user.nil?)
+        if(not current_user.nil?)
              if(not current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
                  render '/login_session/new'

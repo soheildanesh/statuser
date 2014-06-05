@@ -6,10 +6,17 @@
 	<h2> <a id="milestones">Project Orders</a> </h2>
 </div>
 <% if @project.has_key? 'orders' and not @project['orders'].nil?%>
+	<% i = -1 %>
 	<% @project['orders'].each do |orderId3sn, vals| %>
-		<br> <%#= link_to "#{orderId3sn}", controller: 'project', action:'showSprintOrder', id: @project['_id'], orderId3sn: orderId3sn%> 
+	
+		<br> 
+		<% if i > 0 %>
+			<%= render partial: 'sprintOrder', locals: {project: @project, orderId3sn: orderId3sn, background_color: "white" } %>
+		<% else %>
+			<%= render partial: 'sprintOrder', locals: {project: @project, orderId3sn: orderId3sn, background_color: "beige" } %>
+		<% end %>
+		<% i = -1 * i %>
 		
-		<%= render partial: 'sprintOrder', locals: {project: @project, orderId3sn: orderId3sn} %>
 	<% end %>
 <% else %>
 	<br><br>No orders for this project yet

@@ -1,84 +1,40 @@
-
-<%= f.label :customerSiteId, "Customer Site ID" %>
-<%= f.text_field :customerSiteId%><br><br>
-
-<%= f.label :siteName, "Site Name" %>
-<%= f.text_field :siteName%><br><br>
-
-<%= f.label :structureType, "Structure Type" %>
-<%= f.text_field :structureType%><br><br>
-
-<%= f.label :towerCompany, "Tower Company" %>
-<%= f.text_field :towerCompany%><br><br>
-
-<%= f.label :siteAddress, "Site Address" %>
-<%= f.text_field :siteAddress%><br><br>
-
-<%= f.label :siteZip, "Site Zip" %>
-<%= f.text_field :siteZip%><br><br>
-
-<%= f.label :siteCity, "Site City" %>
-<%= f.text_field :siteCity%><br><br>
-
-<%= f.label :siteLong, "Site Longitude" %>
-<%= f.text_field :siteLong%><br><br>
-
-<%= f.label :siteLat, "Site Latitude" %>
-<%= f.text_field :siteLat%><br><br>
-
-<%#= f.label :projMan, "Site Project Manager" %>
-<%#= f.text_field :projMan, "class" => "personInput"%>
-
-<%#= f.label :constMan, "Site Construction Manager" %>
-<%#= f.text_field :constMan, "class" => "personInput"%>
-
-<%#= f.label :copInCharge, "COP In Charge" %>
-<%#= f.text_field :copInCharge, "class" => "personInput"%>
-
-<p>
-	<%= f.label :notes, "Enter any additional notes" %><br>
-	<%= f.text_area :notes %>
-</p>
-
-
+<%#= site %>
 
 <div style=''>
-	<div style="width:2000px; float:left;">
+	<div style="width:2500px; float:left;">
 		<hr>
+		<div class='wSmall'> Customer</div>
 		<div class='wSmall'> Customer Site ID</div>
 		<div class='wSmall'> Site Name</div>
 		<div class='wSmall'> Structure Type</div>
-		<div class='wSmall'> Tower Company</div> <<<Continue here
-		<div >		
-				
-				
-		<div class='wSmall'>Project Code</div>
-		<div class='wSmall'>Site Type</div>
-		<div class='wSmall'>Site Address</div>
-		<div class='wSmall'>Project Manager</div>
-		<div class='wSmall'>Construction Manager</div>
-		<div class='wSmall'>COP In Charge</div>
-	</div>
-	<div style="width:2000px; float:left;">
-		<div class='wSmall'><%= site['siteId']%></div> 
-		<div class='wSmall'><%= site['projectCode']%></div> 
-		<div class='wSmall'><%= site['siteType']%></div>
-		<div class='wSmall'><%= site['siteAddress']%></div>
-		<div class='wSmall'>
-			<%= linkToPerson(site['projMan']) %>
-		</div>
-		<div class='wSmall'>
-			<%= linkToPerson(site['constMan']) %>
-		</div>
-		<div class='wSmall'>
-			<%= linkToPerson(site['copInCharge']) %>
-		</div>
+		<div class='wSmall'> Tower Company</div> 
+		<div class='wSmall'> Site Address</div>
+		<div class='wSmall'> Site Zip Code</div>
+		<div class='wSmall'> Site City</div>
+		<div class='wSmall'> Longitude</div>
+		<div class='wSmall'> Latitude</div>
 		
+		<div >		
+			
+	</div>
+	<div style="width:2500px; float:left;">
+		<div class='wSmall'><%= getNameFromBsonId $customer_collection,  'customerName', site['customerId']%></div> 
+		<div class='wSmall'><%= site['customerSiteId']%></div> 
+		<div class='wSmall'><%= site['siteName']%></div> 
+		<div class='wSmall'><%= site['structureType']%></div>
+		<div class='wSmall'><%= site['towerCompany']%></div>
+		<div class='wSmall'><%= site['siteAddress']%></div>
+		<div class='wSmall'><%= site['siteZip']%></div>
+		<div class='wSmall'><%= site['siteCity']%></div>
+		<div class='wSmall'><%= site['siteLong']%></div>
+		<div class='wSmall'><%= site['siteLat']%></div>
+
+	
 		
 	</div>
 	
 	<div class='wSmall'> 
-		<%= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
+		<%#= link_to 'Submit Activity Report', controller: 'log_entry', action: 'new_activity_report', id: site['_id']%>
 	</div>
 	
 	

@@ -87,7 +87,7 @@ class SiteController < ApplicationController
        #     return
        # end
         
-        existing_site = ($site_collection.find({:siteId => params[:site][:siteId]}).to_a)[0]
+        existing_site = ($site_collection.find({:customerId => params[:site][:customerId], :customerSiteId => params[:site][:customerSiteId] }).to_a)[0]
 
         #TODO check to see if the people listed in the crew exist in the db
         if(!existing_site.nil?)
@@ -129,7 +129,8 @@ class SiteController < ApplicationController
         else
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
-                @allSites = $site_collection.find({'siteId' => Regexp.new(searchString)})
+                puts("current_user['customerMode']['customerId'] = #{current_user['customerMode']['customerId']}")
+                @allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString), "customerId" => current_user['customerMode']['customerId'] })
             elsif(current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
                 @allSites = $site_collection.find().to_a.reverse
             else
@@ -147,7 +148,7 @@ class SiteController < ApplicationController
         
         respond_to do |format|
             format.html
-            format.json { render :json => @allSites.map{ |site| { 'name' => site['siteId'], 'id'=> site['siteId'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
+            format.json { render :json => @allSites.map{ |site| { 'name' => site['customerSiteId'], 'id'=> site['customerSiteId'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
         end
     end
 end

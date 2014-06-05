@@ -1,11 +1,15 @@
-<%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %><br><br>
 
-<% order = @project['orders'][@orderId3sn]%><br>
-Order ID:<br>
+
+<%= link_to 'Orders', {controller: 'project', action: 'indexSprintOrders', id: @project['_id']} %> | <%= link_to 'Edit', {controller: 'project', action: 'editSprintOrder', id: @project['_id'], orderId3sn: @orderId3sn } %><br><br>
+
+
+
+<%= order = @project['orders'][@orderId3sn] %><br>
+<b> Order ID: </b><br>
 <%= "#{@project['projId3s']}-#{@orderId3sn}"%><br><br>
 
 <%if order.has_key? 'bidFile'%>
-	Bid File:<br>
+	<b> Bid File: </b><br>
 	<%=link_to order['bidFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/#{order['bidFile']}"%><br>
 	
 <% end %>
@@ -15,67 +19,63 @@ Order ID:<br>
 
 
 <%#= order %>
-<%if order.has_key? 'bid' and order['bid'].has_key? 'lines'%>
-	Bid Lines:
-	<% for i in 1..order['bid']['lines'].length%>
+<%if  order.has_key? 'bid' and order['bid'].has_key? 'lines'%>
 
-		<div id="bidLines" style="width:2500px;">
+	<b>
+	<%#if order.has_key? 'matchingPoLinesSubmitted'%>
 
-			<div class='wSmall'>
-				Line Number <br>
-				<%= i %>
-			</div>
-			<div class='wSmall'>
-				Item Type <br>
-				<%= printReplaceEmpty getNameFromBsonId( $itemType_collection, "itemTypeName", order['bid']['lines']["#{i}"]['itemType'] ) %>
+		Bid Lines:
 
-				<%#= order['bid']['lines']["#{i}"]['itemType'] %>
-			</div>
-			<div class='wSmall'>
-				Item ID <br>
-				<%= order['bid']['lines']["#{i}"]['itemId'] %>
-			</div>
-			<div class='wSmall'>
-				Item Description <br>
-				<%= order['bid']['lines']["#{i}"]['itemDesc']%>
-			</div>
-			<div class='wSmall'>
-				Unit Type <br>
-				<%= order['bid']['lines']["#{i}"]['unitType'] %>
-			</div>
-			<div class='wSmall'>
-				Unit Price <br>
-				<%= order['bid']['lines']["#{i}"]['unitPrice']%>
-			</div>
-			<div class='wSmall'>
-				Quantity <br>
-				<%= order['bid']['lines']["#{i}"]['quantity'] %>
-			</div>
-			<div class='wSmall'>
-				Total Price <br>
-				<%= order['bid']['lines']["#{i}"]['totalPrice'] %>
-			</div>
-		</div>
-		<br>
-		<br>
+	</b>
+	
+	<%= render partial: "showSprintOrderLines", locals: { order: order, bidOrPo: 'bid'} %>
+	
+	<%if order.has_key? 'po'%>
+		
+		<%if order.has_key? 'matchingPoLinesSubmitted' and order['matchingPoLinesSubmitted'] == true%>
+			<p>	<br>
+				<b> PO Lines: </b> Entered PO Lines match those in bid. 
+			</p>
+		<% else %>
+		<p>	<br>
+			<b> PO Lines: </b> Entered PO Lines <b> Do Not </b> match those in bid. 
+		</p>
+		<% end %>
+		<b> PO Lines:<br> </b>
+		<%= render partial: "showSprintOrderLines", locals: { order: order, bidOrPo: 'po'} %>
+		
+		<p>
+			<b> PO Number: </b> <%= order['poNumber'] %>
+		</p>
+		<p>
+			<b> PO Date: </b>  <%= render partial: "layouts/show_date", locals: {year:  order['poDate']['poDate(1i)'], month:  order['poDate']['poDate(2i)'] , day: order['poDate']['poDate(3i)'] } %>
+		</p>
+		<% if order.has_key? 'poFile' and order['poFile'] != nil%>
+			<p>
+				<b> PO File: </b> <%=link_to order['poFile'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/orders/#{@orderId3sn}/poFile/#{order['poFile']}"%><br>
+			</p>
+		<% else %>
+			<p>
+				<b> PO File: </b> No PO file submitted
+			</p>
+		<% end %>
+		Entered by <%= linkToPerson order['createdBy']%> At <%= 	order['createdAt']%>
 	<% end %>
 	
-	<%if order.has_key? 'matchingPoLinesSubmitted'%>
-		<br><br>
-		<p>
-		<b> PO Number: </b> <%= order['poNumber'] %>
-		</p>
-		<p>
-		<b> PO Date: </b>  <%= render partial: "layouts/show_date", locals: {year:  order['poDate']['poDate(1i)'], month:  order['poDate']['poDate(2i)'] , day: order['poDate']['poDate(3i)'] } %>
-		</p>
-		<b> PO Lines: </b> Entered PO Lines match those in bid. Entered by <%= linkToPerson order['matchingPoLinesSubmittedBy']%> At <%= order['matchingPoLinesSubmittedAt']%>
-
-	<% else %>
+	<% if not order.has_key? 'po' %>
 
 		<br><br>
 		<h3> PO Form </h3>
+		
+		<div id="lineGenerationFrom">
+			<%= form_tag({controller: 'project', action: 'generateSprintOrderLines', id:'po'}, {method: :get,  remote: true}) do %>
+				Number of PO lines: <br>
 
-		Add PO Lines. If there are too many or too few lines in the form below the PO doesn't match the bid.
+				<%= text_field_tag "numLines", value="#{order['bid']['lines'].size}" %> 
+				<%= text_field_tag "orderId3sn", value= @orderId3sn, style:"display:none;"  %><br>
+				<%= submit_tag "Generate"%>
+			<% end %>
+		</div>
 
 		<%#TODOsprint require that they enter all fields before submitting, including a file%>
 		<%= form_for :order, url:{controller:'project', action: 'addPoToSprintOrder', id: @project['_id'] }, method: 'patch' do |f| %>
@@ -90,18 +90,10 @@ Order ID:<br>
 				<%= date_select 'poDate', :poDate %>
 			</p>
 			<br><br>
-			<div>
-				<% if not @poNotMatchingBid.nil? %>
-					<%# i don't think this branch of if is ever taken, delete later%>
-					<%= render :partial => 'project/sprintOrderLines', locals: {numlines:                @poNotMatchingBid['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @poNotMatchingBid, bidOrPo: 'po'  } %>
-
-				<% else %>
-
-					<%= render :partial => 'project/sprintOrderLines', locals: {numlines: order['bid']['lines'].length, orderId3sn: @orderId3sn, prefillBidOrPo: @bid, bidOrPo: 'po'  }  %>
-					<%# #passing bid since po and bid lines are exact match ^ %>
-
-				<% end %>
+			
+			<div id='linesGoHere'>
 			</div>
+
 
 			Upload PO Document:
 			<%= f.file_field "[poFile]" %><br><br>

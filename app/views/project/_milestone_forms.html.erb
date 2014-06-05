@@ -6,5 +6,6 @@
 	<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
 	<%= f.text_field "[milestones][#{milestone}][markedDoneAt]", value: Time.now.to_s, style:"display:none;" %>
 	<%= f.text_field "[milestones][#{milestone}][markedDoneBy]", value: current_user['_id'], style:"display:none;" %>
-	<%= f.submit "Mark Milestone as Done"%>
+	<br>
+	<%= f.submit "Complete"%>
 <% end %>

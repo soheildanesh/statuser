@@ -1,8 +1,29 @@
 module ApplicationHelper
     
+    #sprint functions
+    def getTotalForOrder order
+        if(order.has_key? 'bid') 
+            bid = order['bid']
+            if bid.has_key? 'lines'
+                lines = bid['lines']
+                total = 0
+                lines.each do |linNum,  orderLine|
+                    total = total + orderLine['totalPrice'].to_f
+                end
+                return total
+            end
+        end
+        return 0
+    end
+    #################
+    
     
     def getCustomerMode
-       return $customer_collection.find_one( :_id => BSON::ObjectId(current_user['customerMode']['customerId']))["customerName"]
+        if( current_user['customerMode']['customerId'] == "All Customers")
+            return current_user['customerMode']['customerId']
+        else
+            return $customer_collection.find_one( :_id => BSON::ObjectId(current_user['customerMode']['customerId']))["customerName"]
+        end
     end
     
     #generate a small 6 digit id that is unique in the passed in collection
