@@ -9,16 +9,15 @@
 		<%= text_field_tag "project[projId3s]", "#{@project['projId3s']}" , disabled: true%>
 	</p>
 	
+	<p>
+		<%= "3SN Program" %><br>
+		<%= text_field_tag "project[program]", "", {class: 'textField programInput'} %>
+	</p>
 	
 	<p>
 		<%=  "3SN Project Name" %><br>
 		<%= text_field_tag "project[projName]", "#{@project['projName']}", {class: 'textField'} %>
 		<%#= printReplaceEmpty @project['projName']%>
-	</p>
-
-	<p>
-		<%= "3SN Program" %><br>
-		<%= text_field_tag "project[program]", "", {class: 'textField programInput'} %>
 	</p>
 	
 	<p>

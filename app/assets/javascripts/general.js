@@ -82,6 +82,7 @@ $( document ).ready(
 				{
 					$("#_order_bid_lines_"+String(i+1)+"_itemType").tokenInput("/item_type",
 					{tokenLimit: 1});
+					
 				}
 				
 			}
