@@ -31,6 +31,10 @@
 				<%= entry['createdAt'] %>
 		</div>
 		
+		<div class='wSmall'>
+			<%= link_to 'Delete', {action: 'destroy', id: entry['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
+		</div>
+
 	</div>
 	
 </div>

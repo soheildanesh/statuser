@@ -3,14 +3,15 @@ class ProgramController < ApplicationController
     def destroy
         if(current_user.nil?)
             flash[:notice] = "log in to delete a propgram"
-            redirect_to controller:'login_session', action:'new'
+            redirect_to  action:'index'
             return
         elsif(current_user['role'] != 'admin')
             flash[:notice] = "only an admin can delete a propgram"
-            redirect_to controller:'login_session', action:'new'
+            redirect_to action:'index'
             return
         else
             $program_collection.remove({:_id => BSON::ObjectId(params['id']) })
+            flash['notice'] = 'Program Deleted'
             redirect_to controller:'program', action:'index'
             return
         end

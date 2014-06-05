@@ -143,6 +143,21 @@ class ProjectController < ApplicationController
     def addPoToSprintOrder
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         @orderId3sn = params['orderId3sn']
+        
+        if params.has_key? 'order'
+            if params['order'].has_key? 'po'
+                
+            else
+                flash[:error] = "Please submite PO lines!"
+                redirect_to action: 'showSprintOrder', orderId3sn: @orderId3sn, id: @project['_id']
+                return
+            end
+        else         
+            flash[:error] = "Please submite PO lines!"
+            redirect_to action: 'showSprintOrder', orderId3sn: @orderId3sn, id: @project['_id']
+            return
+        end
+        
         @po = params['order']['po']
         puts("@project[orders][#{@orderId3sn}] = #{@project}['orders'][#{@orderId3sn}]")
         if @project["orders"]["#{@orderId3sn}"].has_key? 'bid'
@@ -580,18 +595,35 @@ class ProjectController < ApplicationController
         
         @project['orders']["#{@orderId3sn}"] = params['order']
         
-        @nonMatchLines = Array.new
-        @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true
-        @project['orders']["#{@orderId3sn}"]['bid']['lines'].each do |lineNum, val|
-            if val != @project['orders']["#{@orderId3sn}"]['po']['lines'][lineNum]
-               @nonMatchLines << lineNum.to_i 
-               flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
-               @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
+        #if a po has been submitted check to see if po and bid are the same
+        if @project['orders']["#{@orderId3sn}"].has_key? 'po'
+            if @project['orders']["#{@orderId3sn}"]['po'].has_key? 'lines'
+                @nonMatchLines = Array.new
+                @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = true
+                @project['orders']["#{@orderId3sn}"]['bid']['lines'].each do |lineNum, val|
+                    if(@project['orders']["#{@orderId3sn}"]['po']['lines'].has_key? lineNum.to_s)
+                        if val != @project['orders']["#{@orderId3sn}"]['po']['lines'][lineNum]
+                            puts("val = #{val}")
+                            puts("val po = #{@project['orders']["#{@orderId3sn}"]['po']['lines'][lineNum]}")
+                            #po has that line but it doesn't match bid
+                            @nonMatchLines << lineNum.to_i 
+                            flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
+                            @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
+                        end
+                    else 
+                        #po doesn't have that line
+                        @nonMatchLines << lineNum.to_i 
+                        flash[:error] = "PO line #{@nonMatchLine} does not match the bid. Check PO file"
+                        @project['orders']["#{@orderId3sn}"]["matchingPoLinesSubmitted"] = false
+                    end
+                end
             end
-        end
-        if(not @nonMatchLines.empty? )
-            @project['orders']["#{@orderId3sn}"]['nonMatchLines'] = @nonMatchLines
-        end
+            if(not @nonMatchLines.empty? )
+                @project['orders']["#{@orderId3sn}"]['nonMatchLines'] = @nonMatchLines
+            end
+       end
+                
+
         
         $project_collection.save(@project)
         
