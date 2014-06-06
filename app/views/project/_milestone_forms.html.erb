@@ -2,10 +2,13 @@
 	<%= f.file_field "[milestones][#{milestone}]" %>
 	<%= f.submit "Upload"%>
 <% end %>
-<%= form_for :project, url:{conroller:'project', action:'updateMilestone', id: id}, method: "PATCH", style: "float:left;" do |f| %>
-	<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
-	<%= f.text_field "[milestones][#{milestone}][markedDoneAt]", value: Time.now.to_s, style:"display:none;" %>
-	<%= f.text_field "[milestones][#{milestone}][markedDoneBy]", value: current_user['_id'], style:"display:none;" %>
-	<br>
-	<%= f.submit "Complete"%>
+
+<% if  not filesOnly.nil? and filesOnly != true %>
+	<%= form_for :project, url:{conroller:'project', action:'updateMilestone', id: id}, method: "PATCH", style: "float:left;" do |f| %>
+		<%= f.text_field "[milestones][#{milestone}][done]", value: 'true', style:"display:none;" %>
+		<%= f.text_field "[milestones][#{milestone}][markedDoneAt]", value: Time.now.to_s, style:"display:none;" %>
+		<%= f.text_field "[milestones][#{milestone}][markedDoneBy]", value: current_user['_id'], style:"display:none;" %>
+		<br>
+		<%= f.submit "Complete"%>
+	<% end %>
 <% end %>

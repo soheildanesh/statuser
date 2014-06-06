@@ -336,42 +336,42 @@ class ProjectController < ApplicationController
          #get the milestone dependecies list for this project. Each array in the array represents a depndecy. The first memebr is the milestone and the others are the ones it depends on ie its prereqs
  #[ ["m1"], ["m2", "m1"], ["m3", "m2"]]
         @milestoneDependecies =  [
-           ["Bid Invitation Received"],
-           ["Pre-Bid Conference Complete", "Bid Invitation Received"],
-           ["Bid Walk Complete", "Pre-Bid Conference Complete"],
-           ["Bid Complete", "Bid Walk Complete"],
-           ["Bid Review Complete", "Bid Complete"],
-           ["SAP Submitted", "Bid Review Complete"],
-           ["SAP Approved", "SAP Submitted"],
-           ["Initial Bid POR Submitted", "SAP Approved"],
-           ["Initial Bid PO Received", "Initial Bid POR Submitted"],
-           ["NTP Received", "Initial Bid PO Received"],
-           ["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
-           ["Cell Site Verification Complete", "Pre-Construction Visit Complete"],
-           ["Material Order Submitted", "Cell Site Verification Complete"],
-           ["Material Received", "Material Order Submitted"],
-           ["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received"],
+           [{milestone: "Bid Invitation Received", number: 100}],
+           [{milestone: "Pre-Bid Conference Complete", number: 105}, "Bid Invitation Received"],
+           [{milestone: "Bid Walk Complete", number: 110}, "Pre-Bid Conference Complete"],
+           [{milestone: "Bid Complete", number: 115}, "Bid Walk Complete"],
+           [{milestone: "Bid Review Complete", number: 120}, "Bid Complete"],
+           [{milestone: "SAP Submitted", number: 125}, "Bid Review Complete"],
+           [{milestone: "SAP Approved", number: 130}, "SAP Submitted"],
+           [{milestone: "Initial Bid POR Submitted", number: 135}, "SAP Approved"],
+           [{milestone: "Initial Bid PO Received", number: 140}, "Initial Bid POR Submitted"],
+           [{milestone: "NTP Received", number: 145}, "Initial Bid PO Received"],
+           [{milestone: "Pre-Construction Visit Complete", number: 150}, "Initial Bid PO Received", "NTP Received"],
+           [{milestone: "Cell Site Verification Complete", number: 155}, "Pre-Construction Visit Complete"],
+           [{milestone: "Material Order Submitted", number: 160}, "Cell Site Verification Complete"],
+           [{milestone: "Material Received", number: 165}, "Material Order Submitted"],
+           [{milestone: "Equipment Pickup Complete", number: 170}, "Initial Bid PO Received", "NTP Received"],
 
-           ["Equipment Inventory Complete", "Equipment Pickup Complete"],
-           ["Construction Start", "Equipment Inventory Complete", "Material Received"],
+           [{milestone: "Equipment Inventory Complete", number: 175}, "Equipment Pickup Complete"],
+           [{milestone: "Construction Start", number: 200 }, "Equipment Inventory Complete", "Material Received"],
 
-           ["Change Request Submitted", "Construction Start"],
-           ["Change Request Approved", "Change Request Submitted"],
-           ["Change Request PO Received", "Change Request Approved"],
-           ["Ground Level Construction Complete", "Construction Start"],
-           ["Tower Level Construction Complete" , "Construction Start"],
-           ["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-           ["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
-           ["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-           ["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
-           ["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
-           ["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-           ["Construction Documents Submitted", "Construction Documents Complete"],
-           ["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
-           ["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
-           ["Final Acceptance Documents Complete", "Construction Complete"],
-           ["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
-           ["Final Acceptance", "Acceptance Request Submitted"]]
+           [{milestone: "Change Request Submitted", number: 205}, "Construction Start"],
+           [{milestone: "Change Request Approved", number: 210}, "Change Request Submitted"],
+           [{milestone: "Change Request PO Received", number: 215}, "Change Request Approved"],
+           [{milestone: "Ground Level Construction Complete", number: 220}, "Construction Start"],
+           [{milestone: "Tower Level Construction Complete", number: 225} , "Construction Start"],
+           [{milestone: "Commissioning & Integration Schedule Complete", number: 245}, "Ground Level Construction Complete", "Tower Level Construction Complete"],
+           [{milestone: "Commissioning & Integration Complete", number: 250}, "Commissioning & Integration Schedule Complete"],
+           [{milestone: "Sprint-Provided Punchlist Received", number: 255}, "Ground Level Construction Complete", "Tower Level Construction Complete"],
+           [{milestone: "Punchlist Clean-up Complete", number: 260}, "Sprint-Provided Punchlist Received"],
+           [{milestone: "Return of Unused Equipment Complete", number: 265}, "Ground Level Construction Complete", "Tower Level Construction Complete"],
+           [{milestone: "Construction Documents Complete", number: 300}, "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+           [{milestone: "Construction Documents Submitted", number: 305}, "Construction Documents Complete"],
+           [{milestone: "Construction & Final Acceptance Checklist Complete", number: 310}, "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+           [{milestone: "Construction Complete", number: 315}, "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
+           [{milestone: "Final Acceptance Documents Complete", number: 320}, "Construction Complete"],
+           [{milestone: "Acceptance Request Submitted", number: 325}, "Final Acceptance Documents Complete"],
+           [{milestone: "Final Acceptance", number: 330}, "Acceptance Request Submitted"]]
            
            
         id = params['id']
@@ -670,10 +670,19 @@ class ProjectController < ApplicationController
          elsif(current_user['role'] == 'admin')
              if(not current_user.has_key? 'customerMode')
                  current_user['customerMode'] = Hash.new
-                 current_user['customerMode']['customerId'] == "All Customers"
+                 current_user['customerMode']['customerId'] = "All Customers"
                  $person_collection.save(current_user)
              end
-                 
+
+
+             puts("#{current_user['customerMode'].empty? }")
+             if( current_user['customerMode'].empty?)
+
+                  current_user['customerMode']['customerId'] = "All Customers"
+                  $person_collection.save(current_user)
+             end
+            
+            puts("current_User = #{current_user}")
              if(current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
                  @customerInMode = "All Customers"
