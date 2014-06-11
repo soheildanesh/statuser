@@ -682,7 +682,7 @@ class ProjectController < ApplicationController
                   $person_collection.save(current_user)
              end
             
-            puts("current_User = #{current_user}")
+            
              if(current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
                  @customerInMode = "All Customers"

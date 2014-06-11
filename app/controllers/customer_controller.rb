@@ -30,7 +30,7 @@ class CustomerController < ApplicationController
 
         if(params.has_key?("q"))
             searchString = ".*#{params['q']}.*"
-            @customers = $customer_collection.find({'customerName' => Regexp.new(searchString)})
+            @customers = $customer_collection.find({'customerName' => Regexp.new(searchString, "i")})
         else
             @customers = $customer_collection.find()
         end

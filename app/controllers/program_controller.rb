@@ -25,7 +25,7 @@ class ProgramController < ApplicationController
 
         if(params.has_key?("q"))
             searchString = ".*#{params['q']}.*"
-            @programs = $program_collection.find({'programName' => Regexp.new(searchString)})
+            @programs = $program_collection.find({'programName' => Regexp.new(searchString, "i")})
         else
             @programs = $program_collection.find()
         end

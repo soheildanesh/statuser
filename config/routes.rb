@@ -104,6 +104,8 @@ Statuser::Application.routes.draw do
     resources :project_type
     
     resources :item_type
+    
+    resources :todolist
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

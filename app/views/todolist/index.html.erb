@@ -1,0 +1,4 @@
+<% for todolist in @todolists %>
+	<%= link_to todolist['_id'].to_s, action: 'show', id: todolist['_id'].to_s %> 
+	<hr <<< bookmakr stopped here >>>>
+<% end %>

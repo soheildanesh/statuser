@@ -42,7 +42,7 @@ class PersonController < ApplicationController
         if(!current_user.nil? and current_user['role'] != 'admin')
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
-                @persons = $person_collection.find({'email' => Regexp.new(searchString)})
+                @persons = $person_collection.find({'email' => Regexp.new(searchString, "i")})
             else
                 flash[:notice] = "only an admin can see list of people!"
                 redirect_to :controller => 'log_entry', :action => 'index'

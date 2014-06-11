@@ -24,7 +24,7 @@ class ProjectTypeController < ApplicationController
 
         if(params.has_key?("q"))
             searchString = ".*#{params['q']}.*"
-            @projectTypes = $projectType_collection.find({'projectTypeName' => Regexp.new(searchString)})
+            @projectTypes = $projectType_collection.find({'projectTypeName' => Regexp.new(searchString, "i")})
         else
             @projectTypes = $projectType_collection.find()
         end

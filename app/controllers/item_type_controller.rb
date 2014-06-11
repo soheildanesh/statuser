@@ -24,7 +24,7 @@ class ItemTypeController < ApplicationController
 
       if(params.has_key?("q"))
           searchString = ".*#{params['q']}.*"
-          @itemTypes = $itemType_collection.find({'itemTypeName' => Regexp.new(searchString)})
+          @itemTypes = $itemType_collection.find({'itemTypeName' => Regexp.new(searchString, "i")})
       else
           @itemTypes = $itemType_collection.find()
       end
