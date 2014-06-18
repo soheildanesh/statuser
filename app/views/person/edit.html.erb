@@ -14,7 +14,9 @@
 		<%#= radio_button("person", "role", "cite manager") %> <!-- cite manager --> 
 
 		<%= radio_button_tag("person[role]", @roles[0], @preroleHash[@roles[0]])  %> Project Manager Admin: Can read / write project milestones list <br><br>
-		<%= radio_button_tag("person[role]", @roles[1], @preroleHash[@roles[1]]) %> Project Manager: Can read / write project milestones list and orders  <br><br>
+		<%= radio_button_tag("person[role]", @roles[1], @preroleHash[@roles[1]]) %> Project Manager: Can read / write project milestones list and orders. Can also read dashboard data  <br><br>
+		
+		<%= radio_button_tag("person[role]", @roles[3], @preroleHash[@roles[3]]) %> Project Controller: Can read / write project milestones list and orders. Can also read / write dashboard data  <br><br>
 		
 		<%= radio_button_tag("person[role]", @roles[2], @preroleHash[@roles[2]]) %> Admin: full access
 	</p>

@@ -1,8 +1,13 @@
 class PersonController < ApplicationController
-
-    @@roles = ["project manager admin", "project manager", "admin"]    
-    def edit
+    
+    #just cuz views don't have access to class variables so each method gets its own instance variable
+    before_action :setsRolesInstanceVariable
+    @@roles = ["project manager admin", "project manager", "admin", "project controller"]    
+    def setsRolesInstanceVariable
         @roles = @@roles
+    end
+    
+    def edit
         @person = $person_collection.find({"_id" => params['id'].to_i } ).to_a[0]
         
         @preroleHash = Hash.new
@@ -11,8 +16,6 @@ class PersonController < ApplicationController
             @preroleHash[role] = nil
         end
         @preroleHash[@person['role']] = {checked: "checked"}
-        
-        puts( "@person = #{@person}")
     end
   
     def changeMode

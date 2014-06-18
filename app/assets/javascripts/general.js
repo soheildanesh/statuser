@@ -241,6 +241,24 @@ $( document ).ready(
 	}
 );
 
+$( document ).ready(
+	function() {
+		
+		if(gon.projManagerAdmin != undefined && gon.projManagerAdmin != null)
+		{				
+		  	$(".projManagerAdmin").tokenInput("/person",
+			{prePopulate: gon.projManagerAdmin,
+			tokenLimit: 1});
+		}
+		else
+		{
+			$(".projManagerAdmin").tokenInput("/person",
+			{tokenLimit: 1});
+		}	
+	}
+);
+
+
 
 $( document ).ready(
 	function() {
