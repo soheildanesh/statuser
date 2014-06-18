@@ -1,4 +1,19 @@
 class PersonController < ApplicationController
+
+    @@roles = ["project manager admin", "project manager", "admin"]    
+    def edit
+        @roles = @@roles
+        @person = $person_collection.find({"_id" => params['id'].to_i } ).to_a[0]
+        
+        @preroleHash = Hash.new
+        
+        for role in @@roles
+            @preroleHash[role] = nil
+        end
+        @preroleHash[@person['role']] = {checked: "checked"}
+        
+        puts( "@person = #{@person}")
+    end
   
     def changeMode
         #prolly have to check person's authorization here later on
@@ -12,6 +27,33 @@ class PersonController < ApplicationController
     end
     
     def update
+        if(not current_user.nil?)
+             if(not current_user['role'] == 'admin')
+                 flash[:notice] = "Have to be admin user for this"
+                 render '/login_session/new'
+                 return
+             end
+        else
+            flash[:notice] = "Have to be logged in for this"
+            render '/login_session/new'
+            return
+        end
+
+
+
+        #find and remove record to be updated
+        record = $person_collection.find({"_id" => params['id'].to_i } ).to_a[0]
+
+        params['person'].each do |key, value| 
+            if key == '_id'
+                next
+            end
+            record[key] = value
+        end
+
+        $person_collection.save(record)
+
+        redirect_to controller: "person", action: "index"
         
     end
     

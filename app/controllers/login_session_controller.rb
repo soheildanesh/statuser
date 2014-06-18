@@ -15,8 +15,15 @@ class LoginSessionController < ApplicationController
       flash[:error] = "user not found!"
       redirect_to "/login_session/new"
     else
-      session[:current_user_email] = $current_user['email']
-      redirect_to "/project"
+        if not $current_user.nil? and not $current_user.has_key? 'customerMode'
+            #['customerMode']['customerId']
+            $current_user['customerMode'] = {'customerId'=>"All Customers"}
+            $person_collection.save($current_user)
+        end
+        
+        
+        session[:current_user_email] = $current_user['email']
+        redirect_to "/project"
     end
   end
   

@@ -11,9 +11,10 @@
 	<p> 
  		Person's Role:<br><br>
 		<%#= radio_button("person", "role", "cite manager") %> <!-- cite manager --> 
-		<%= radio_button("person", "role", "project manager") %> project manager role: Can see/edit/create own log entries <br><br>
+		<%= radio_button("person", "role", "project manager admin") %> Project Manager Admin: Can read / write project milestones list <br><br>
+		<%= radio_button("person", "role", "project manager") %> Project Manager: Can read / write project milestones list and orders  <br><br>
 		
-		<%= radio_button("person", "role", "admin") %> Admin (full access): Can create own log entries. See/edit everybody else's log entries. Can see list of all existing people and sites. Can delete/create new people and sites.
+		<%= radio_button("person", "role", "admin") %> Admin: full access
 	</p>
 	
 	<%= f.label :name, "Name" %>

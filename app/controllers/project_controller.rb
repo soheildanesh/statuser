@@ -662,8 +662,14 @@ class ProjectController < ApplicationController
         
      end
     
-    def index
-        if(current_user.nil?)
+     def index
+         
+        if(current_user['customerMode']['customerId'] == "All Customers")
+              @customerInMode = "All Customers"
+         else
+              @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(current_user['customerMode']['customerId']) } )['customerName']
+         end
+         if(current_user.nil?)
              flash[:notice] = "Have to be admin user for this"
              render '/login_session/new'
              return
@@ -674,24 +680,21 @@ class ProjectController < ApplicationController
                  $person_collection.save(current_user)
              end
 
-
-             puts("#{current_user['customerMode'].empty? }")
-             if( current_user['customerMode'].empty?)
-
-                  current_user['customerMode']['customerId'] = "All Customers"
-                  $person_collection.save(current_user)
-             end
-            
-            
              if(current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
-                 @customerInMode = "All Customers"
              else
                  @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] }).sort( :_id => :desc ).to_a
-                 @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(current_user['customerMode']['customerId']) } )['customerName']
+             end
+         elsif(current_user['role'].include? 'project')
+             if(current_user['role'] == 'project manager')
+                 if(current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 else
+                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 end
              end
          end
-         
+     
          render "index"
     end
     
