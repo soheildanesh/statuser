@@ -84,7 +84,7 @@ class SiteController < ApplicationController
              return
          end
          role = current_user['role']
-         if not( role == 'admin' or role == 'project controller')
+         if true or not( role == 'admin' or role == 'project controller')
              flash[:error] = "User not authorized"
              redirect_to action: 'index'
              return
@@ -136,7 +136,7 @@ class SiteController < ApplicationController
             return
         end
         role = current_user['role']
-        if not( role == 'admin' or role == 'project controller' or role == 'project manager')
+        if true or not( role == 'admin' or role == 'project controller' or role == 'project manager')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return

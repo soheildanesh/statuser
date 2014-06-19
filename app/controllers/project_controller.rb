@@ -109,6 +109,77 @@ class ProjectController < ApplicationController
         redirect_to controller:'project', action: 'indexSprintOrders', id: @project['_id']    
     end
     
+    def editSprintOrder
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
+        @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+        @orderId3sn = params['orderId3sn']
+        
+        order = @project['orders'][@orderId3sn]
+        puts("order = #{order}")
+        
+        if(order.has_key? "bid")
+            @prefillBid = order["bid"]
+            if(order['bid'].has_key? 'lines')
+                @numBidLines = order['bid']['lines'].size
+            else
+                @numBidLines = 0
+            end
+        else
+            @numBidLines = 0
+            @prefillBid = nil
+        end
+        
+        if(order.has_key? 'po')
+            @prefillPo = order['po']
+            if(order['po'].has_key? 'lines')
+                @numPoLines = order['po']['lines'].size
+            else
+                @numPoLines = 0
+            end
+        else
+            @numPoLines = 0
+            @prefillPo = nil
+        end
+        
+        if(order.has_key? 'poDate')
+            @poDate = Date.new(order['poDate']['poDate(1i)'].to_i, order['poDate']['poDate(2i)'].to_i, order['poDate']['poDate(3i)'].to_i)
+        end
+
+        gon.bidItemTypes = Array.new
+        (1 .. @numBidLines).each do |i|
+            itemType = order['bid']['lines'][i.to_s]['itemType']
+            if(not itemType.empty? and not itemType.nil?)
+                bidItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['bid']['lines'][i.to_s]['itemType'])})
+                gon.bidItemTypes << [{ 'name' => bidItemType['itemTypeName'], 'id'=> bidItemType['_id'].to_s }]
+            else
+                gon.bidItemTypes << nil
+            end
+            
+        end
+        
+        gon.poItemTypes = Array.new
+        (1 .. @numPoLines).each do |i|
+            itemType = order['po']['lines'][i.to_s]['itemType']
+            if(not itemType.empty? and not itemType.nil?)
+                poItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['po']['lines'][i.to_s]['itemType'])})
+                gon.poItemTypes << [{ 'name' => poItemType['itemTypeName'], 'id'=> poItemType['_id'].to_s }]
+            else
+                gon.poItemTypes << nil
+            end
+            
+        end
+        
+        #render :partial => 'project/sprintOrderLines', locals: {numlines: @numlines, orderId3sn: @orderId3sn, prefillBidOrPo: @prefillBidOrPo, bidOrPo: @bidOrPo  }
+    end
+    
+    
     def showSprintOrder
         
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
@@ -469,7 +540,7 @@ class ProjectController < ApplicationController
             return
         end
         role = current_user['role']
-        if not( role == 'admin' or role == 'project controller')
+        if true or not( role == 'admin' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -520,7 +591,7 @@ class ProjectController < ApplicationController
     
     def create
         
-        if not( role == 'admin' or role == 'project controller')
+        if true or not( role == 'admin' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -587,79 +658,10 @@ class ProjectController < ApplicationController
         end
     end
     
-    def editSprintOrder
-        
-        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
-            flash[:error] = "User not authorized"
-            redirect_to action: 'index'
-            return
-        end
-        
-        
-        @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
-        @orderId3sn = params['orderId3sn']
-        
-        order = @project['orders'][@orderId3sn]
-        puts("order = #{order}")
-        
-        if(order.has_key? "bid")
-            @prefillBid = order["bid"]
-            if(order['bid'].has_key? 'lines')
-                @numBidLines = order['bid']['lines'].size
-            else
-                @numBidLines = 0
-            end
-        else
-            @numBidLines = 0
-            @prefillBid = nil
-        end
-        
-        if(order.has_key? 'po')
-            @prefillPo = order['po']
-            if(order['po'].has_key? 'lines')
-                @numPoLines = order['po']['lines'].size
-            else
-                @numPoLines = 0
-            end
-        else
-            @numPoLines = 0
-            @prefillPo = nil
-        end
-        
-        if(order.has_key? 'poDate')
-            @poDate = Date.new(order['poDate']['poDate(1i)'].to_i, order['poDate']['poDate(2i)'].to_i, order['poDate']['poDate(3i)'].to_i)
-        end
-
-        gon.bidItemTypes = Array.new
-        (1 .. @numBidLines).each do |i|
-            itemType = order['bid']['lines'][i.to_s]['itemType']
-            if(not itemType.empty? and not itemType.nil?)
-                bidItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['bid']['lines'][i.to_s]['itemType'])})
-                gon.bidItemTypes << [{ 'name' => bidItemType['itemTypeName'], 'id'=> bidItemType['_id'].to_s }]
-            else
-                gon.bidItemTypes << nil
-            end
-            
-        end
-        
-        gon.poItemTypes = Array.new
-        (1 .. @numPoLines).each do |i|
-            itemType = order['po']['lines'][i.to_s]['itemType']
-            if(not itemType.empty? and not itemType.nil?)
-                poItemType = $itemType_collection.find_one({:_id => BSON::ObjectId(order['po']['lines'][i.to_s]['itemType'])})
-                gon.poItemTypes << [{ 'name' => poItemType['itemTypeName'], 'id'=> poItemType['_id'].to_s }]
-            else
-                gon.poItemTypes << nil
-            end
-            
-        end
-        
-        #render :partial => 'project/sprintOrderLines', locals: {numlines: @numlines, orderId3sn: @orderId3sn, prefillBidOrPo: @prefillBidOrPo, bidOrPo: @bidOrPo  }
-    end
     
     def edit
         
-        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -759,7 +761,7 @@ class ProjectController < ApplicationController
     
     def update
         
-        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
