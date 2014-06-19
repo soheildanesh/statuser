@@ -17,6 +17,13 @@ class ProjectController < ApplicationController
     end
     
     def createSprintOrder
+        
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
 
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
@@ -104,6 +111,13 @@ class ProjectController < ApplicationController
     
     def showSprintOrder
         
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
         @orderId3sn = params['orderId3sn']
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
@@ -127,6 +141,13 @@ class ProjectController < ApplicationController
     
     def indexSprintOrders
         
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
         role = current_user['role']
         if role == 'admin' or role == 'project controller' or role == 'project manager' 
             @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
@@ -138,6 +159,13 @@ class ProjectController < ApplicationController
     end
     
     def newSprintOrder
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
         @orderCount = 1
@@ -148,6 +176,13 @@ class ProjectController < ApplicationController
     end
     
     def addPoToSprintOrder
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         @orderId3sn = params['orderId3sn']
         
@@ -257,6 +292,19 @@ class ProjectController < ApplicationController
     
     #sprint
     def updateMilestone
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
         #projMilestoneUpdate = params['project']
@@ -293,7 +341,21 @@ class ProjectController < ApplicationController
         redirect_to controller:'project', action: 'showMilestones', id: @project['_id']
     end
     
-    def uploadMilestoneFile 
+    def uploadMilestoneFile
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
         if(not @project.has_key? 'milestones')
@@ -339,6 +401,19 @@ class ProjectController < ApplicationController
     end
     
     def showMilestones
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         
          #get the milestone dependecies list for this project. Each array in the array represents a depndecy. The first memebr is the milestone and the others are the ones it depends on ie its prereqs
  #[ ["m1"], ["m2", "m1"], ["m3", "m2"]]
@@ -387,6 +462,19 @@ class ProjectController < ApplicationController
     end
     
     def new
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         @projId3s = genSamllUniqId $project_collection, 'projId3s'
     end
     
@@ -419,18 +507,25 @@ class ProjectController < ApplicationController
     
     def destroy
         tobeDeleted = $project_collection.find({_id: params['id'].to_i}).to_a[0]
-        if(current_user['role'] == 'admin' or tobeDeleted['createdBy'] == current_user['_id'])
+        if(current_user['role'] == 'admin' )#or tobeDeleted['createdBy'] == current_user['_id'])
             $project_collection.remove({_id: BSON::ObjectId(params['id'])})
             redirect_to controller:'project', action:'index'
             return
         else
-            flash[:error] = "you dont have permission to delete this entry, contact and admin"
+            flash[:error] = "you dont have permission to delete this entry, contact an admin"
             redirect_to controller:'project', action:'index'
             return
         end
     end
     
     def create
+        
+        if not( role == 'admin' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         if( params['project'].nil? )
             return nil
         end
@@ -493,6 +588,14 @@ class ProjectController < ApplicationController
     end
     
     def editSprintOrder
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
         @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
         @orderId3sn = params['orderId3sn']
         
@@ -555,7 +658,14 @@ class ProjectController < ApplicationController
     end
     
     def edit
-         @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
                   
          program = $program_collection.find_one({:_id => BSON::ObjectId(@project['program'])})
          gon.program = [{ 'name' => program['programName'], 'id'=> program['_id'].to_s }]
@@ -584,6 +694,13 @@ class ProjectController < ApplicationController
     end
     
     def updateOrder
+        
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         
         if(not current_user.nil?)
              if(not current_user['role'] == 'admin')
@@ -642,6 +759,13 @@ class ProjectController < ApplicationController
     
     def update
         
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
         if(not current_user.nil?)
              if(not current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
@@ -671,7 +795,6 @@ class ProjectController < ApplicationController
         redirect_to controller: "project", action: "show", id: record['_id']
         
      end
-    
      def index
          
         if(current_user['customerMode']['customerId'] == "All Customers")
@@ -698,9 +821,22 @@ class ProjectController < ApplicationController
          elsif(current_user['role'].include? 'project')
              if(current_user['role'] == 'project manager')
                  if(current_user['customerMode']['customerId'] == "All Customers")
-                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                     @projects = $project_collection.find({"projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  else
                      @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 end
+             elsif(current_user['role'] == 'project controller')
+                 if(current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find({"projController" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 else
+                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projController" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 end
+             else
+                 #the above two roles were added early, starting with project manager admin and later on roles the role will match the key in the project
+                 if(current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find({current_user['role'] => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 else
+                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , current_user['role'] => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  end
              end
          end

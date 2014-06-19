@@ -8,6 +8,19 @@ class PersonController < ApplicationController
     end
     
     def edit
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         @person = $person_collection.find({"_id" => params['id'].to_i } ).to_a[0]
         
         @preroleHash = Hash.new
@@ -30,6 +43,19 @@ class PersonController < ApplicationController
     end
     
     def update
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         if(not current_user.nil?)
              if(not current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
@@ -61,20 +87,40 @@ class PersonController < ApplicationController
     end
     
     def destroy
+        
         if(current_user.nil?)
-            redirect_to controller:'login_session', action:'new'
-            return
-        elsif(current_user['role'] != 'admin')
-            redirect_to controller:'login_session', action:'new'
-            return
-        else
-            $person_collection.remove({_id: params['id'].to_i})
-            redirect_to controller:'person', action:'index'
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
             return
         end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
+        
+        $person_collection.remove({_id: params['id'].to_i})
+        redirect_to controller:'person', action:'index'
+        return
+        
     end
     
     def show
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         if(params[:id].nil?)
             #in this case it shows the current user's log entries
             redirect_to :controller => 'log_entry', :action => 'index'
@@ -84,6 +130,18 @@ class PersonController < ApplicationController
     end
   
     def index
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
+        
         if(!current_user.nil? and current_user['role'] != 'admin')
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
@@ -111,6 +169,18 @@ class PersonController < ApplicationController
     end
   
     def create
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' )
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
         
         if(current_user.nil?)
             flash[:notice] = "only an admin can create other users!"

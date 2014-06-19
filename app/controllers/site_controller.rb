@@ -20,6 +20,7 @@ class SiteController < ApplicationController
             redirect_to controller:'login_session', action:'new'
             return
         elsif(current_user['role'] != 'admin')
+            flash[:error] = 'User not authorized'
             redirect_to controller:'login_session', action:'new'
             return
         else
@@ -76,12 +77,19 @@ class SiteController < ApplicationController
      
        
      def create
+         
+         if(current_user.nil?)
+             flash[:notice] = "User not logged in"
+             render :action => 'index'
+             return
+         end
+         role = current_user['role']
+         if not( role == 'admin' or role == 'project controller')
+             flash[:error] = "User not authorized"
+             redirect_to action: 'index'
+             return
+         end
 
-        if(current_user['role'] != 'admin')
-            flash[:notice] = "only an admin can create a new site!"
-            redirect_to :controller => 'log_entry', :action => 'index'
-            return
-        end
         
        # if(!validateCrew params[:site][:crew])
        #     return
@@ -121,6 +129,18 @@ class SiteController < ApplicationController
     end
   
     def index
+        
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render :action => 'index'
+            return
+        end
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project controller' or role == 'project manager')
+            flash[:error] = "User not authorized"
+            redirect_to action: 'index'
+            return
+        end
         
         if(current_user.nil?)
             flash[:notice] = "LOGin to see the LOG!"

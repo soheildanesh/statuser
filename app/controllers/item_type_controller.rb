@@ -40,38 +40,37 @@ class ItemTypeController < ApplicationController
   end
 
   def create
-
+      
       if(current_user.nil?)
-          flash[:notice] = "log in to create"
-          render :controller => 'item_type', :action => 'index'
+          flash[:notice] = "User not logged in"
+          render :action => 'index'
           return
-
-      elsif( current_user['role'] != 'admin')
-
-          flash[:notice] = "only an admin can create "
-          render :controller => 'item_type', :action => 'index'
-          return
-
-      else
-
-          #check to see if the person already exists, 
-          existing_itemType = ($itemType_collection.find({:itemTypeName => params["item_type"]["itemTypeName"]}).to_a)[0]
-
-          if(!existing_itemType .nil?)
-              flash[:notice] = "An item type with this name exists already"
-          else    
-              params["item_type"]['createdAt'] = Time.now                
-              params["item_type"]['createdBy'] = current_user['_id']
-
-              $itemType_collection.insert(params["item_type"])
-              #ensure the insert happened
-              mongodbLastError = $testDb.get_last_error({:w => 1})
-              if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
-                  raise "mongodb returend error after write, write might not have happened!"  
-              end
-          end
-
       end
+      role = current_user['role']
+      if not( role == 'admin' or role == 'project controller')
+          flash[:error] = "User not authorized"
+          redirect_to action: 'index'
+          return
+      end
+
+
+      #check to see if the person already exists, 
+      existing_itemType = ($itemType_collection.find({:itemTypeName => params["item_type"]["itemTypeName"]}).to_a)[0]
+
+      if(!existing_itemType .nil?)
+          flash[:notice] = "An item type with this name exists already"
+      else    
+          params["item_type"]['createdAt'] = Time.now                
+          params["item_type"]['createdBy'] = current_user['_id']
+
+          $itemType_collection.insert(params["item_type"])
+          #ensure the insert happened
+          mongodbLastError = $testDb.get_last_error({:w => 1})
+          if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
+              raise "mongodb returend error after write, write might not have happened!"  
+          end
+      end
+
 
       @allItemTypes = $itemType_collection.find().to_a.reverse
       redirect_to controller:'item_type', action:'index'
