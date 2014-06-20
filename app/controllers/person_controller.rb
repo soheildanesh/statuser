@@ -117,7 +117,7 @@ class PersonController < ApplicationController
         role = current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
-            redirect_to action: 'index'
+            redirect_to controller: 'project', action: 'index'
             return
         end
         
@@ -132,13 +132,13 @@ class PersonController < ApplicationController
     def index
         if(current_user.nil?)
             flash[:notice] = "User not logged in"
-            render :action => 'index'
+            render  controller: 'login_session', :action => 'new'
             return
         end
         role = current_user['role']
-        if not( role == 'admin' )
+        if false and not( role == 'admin' )
             flash[:error] = "User not authorized"
-            redirect_to action: 'index'
+            redirect_to controller: 'project', action: 'index'
             return
         end
         
@@ -172,7 +172,7 @@ class PersonController < ApplicationController
         
         if(current_user.nil?)
             flash[:notice] = "User not logged in"
-            render :action => 'index'
+            render  controller: 'login_session', :action => 'new'
             return
         end
         role = current_user['role']
@@ -182,47 +182,36 @@ class PersonController < ApplicationController
             return
         end
         
-        if(current_user.nil?)
-            flash[:notice] = "only an admin can create other users!"
-            render :controller => 'log_entry', :action => 'index'
-            return
         
-        elsif( current_user['role'] != 'admin')
-        
-            flash[:notice] = "only an admin can create other users!"
-            render :controller => 'log_entry', :action => 'index'
-            return
-        
-        else
             
-            #check to see if the person already exists, 
-            existing_person = ($person_collection.find({:email => params[:person][:email]}).to_a)[0]
+        #check to see if the person already exists, 
+        existing_person = ($person_collection.find({:email => params[:person][:email]}).to_a)[0]
 
-            if(!existing_person.nil?)
-                flash[:notice] = "Person with this email exists already, can't use email to create new person"
+        if(!existing_person.nil?)
+            flash[:notice] = "Person with this email exists already, can't use email to create new person"
+        else
+            #produce an incremented id
+            last_entry = $person_collection.find().sort( :_id => :desc ).to_a
+            if(last_entry[0].nil? or last_entry.empty?)
+                id = 1
             else
-                #produce an incremented id
-                last_entry = $person_collection.find().sort( :_id => :desc ).to_a
-                if(last_entry[0].nil? or last_entry.empty?)
-                    id = 1
-                else
-                    id = last_entry[0]['_id'] + 1
-                end
-                params[:person]['_id'] = id
-                
-                params[:person][:time] = Time.now
-                params[:person][:email].downcase! 
-                
-                #otherwise insert him into database
-                $person_collection.insert(params[:person])
-                #ensure the insert happened
-                mongodbLastError = $testDb.get_last_error({:w => 1})
-                if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
-                    raise "mongodb returend error after write, write might not have happened!"  
-                end
+                id = last_entry[0]['_id'] + 1
             end
-        
+            params[:person]['_id'] = id
+            
+            params[:person][:time] = Time.now
+            params[:person][:email].downcase! 
+            
+            #otherwise insert him into database
+            $person_collection.insert(params[:person])
+            #ensure the insert happened
+            mongodbLastError = $testDb.get_last_error({:w => 1})
+            if(mongodbLastError["err"] != nil or mongodbLastError["ok"] != 1.0)
+                raise "mongodb returend error after write, write might not have happened!"  
+            end
         end
+    
+    
       
         @allPersons = $person_collection.find().to_a.reverse
         redirect_to controller:'person', action:'index'

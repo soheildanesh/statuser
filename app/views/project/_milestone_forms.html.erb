@@ -1,3 +1,4 @@
+<div style="margin:10px;">
 <%= form_for :project, url:{conroller:'project', action:'uploadMilestoneFile', id: id}, method: "PATCH", style: "float:left;" do |f| %>
 	<%= f.file_field "[milestones][#{milestone}]" %>
 	<%= f.submit "Upload"%>
@@ -12,3 +13,4 @@
 		<%= f.submit "Complete"%>
 	<% end %>
 <% end %>
+</div>

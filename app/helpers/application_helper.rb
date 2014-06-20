@@ -1,5 +1,16 @@
 module ApplicationHelper
     
+    #make sure user is logged in
+    
+    def ensureUserLoggedIn
+        if(current_user.nil?)
+            flash[:notice] = "User not logged in"
+            render controller: 'login_session', action: 'new'
+            return
+        end
+    end
+    
+    
     #sprint functions
     def getTotalForOrder order
         if(order.has_key? 'bid') 

@@ -1,6 +1,6 @@
 class ProjectController < ApplicationController
     
-    before_action :clearGon
+    before_action :clearGon, :ensureUserLoggedIn
      
     #clear js variable gon, see gon gem 
     def clearGon
@@ -212,6 +212,7 @@ class ProjectController < ApplicationController
     
     def indexSprintOrders
         
+        role = current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -416,7 +417,7 @@ class ProjectController < ApplicationController
         
         if(current_user.nil?)
             flash[:notice] = "User not logged in"
-            render :action => 'index'
+            render controller: 'login_session', action: 'new'
             return
         end
         role = current_user['role']
@@ -536,11 +537,11 @@ class ProjectController < ApplicationController
         
         if(current_user.nil?)
             flash[:notice] = "User not logged in"
-            render :action => 'index'
+            render controller: 'login_session', action: 'new'
             return
         end
         role = current_user['role']
-        if true or not( role == 'admin' or role == 'project controller')
+        if false and  not( role == 'admin' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -591,7 +592,7 @@ class ProjectController < ApplicationController
     
     def create
         
-        if true or not( role == 'admin' or role == 'project controller')
+        if false and  not( role == 'admin' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return

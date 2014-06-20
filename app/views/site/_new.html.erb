@@ -6,34 +6,34 @@
 
 	<%= form_for :site, url: '/site' do |f| %>
 
-		<%= f.text_field :customerId, value:current_user["customerMode"]['customerId'], style:'display:none;'%>
+		<%= f.text_field :customerId, value: current_user["customerMode"]['customerId'], style:'display:none;'%>
 	
-		<%= f.label :customerSiteId, "#{getCustomerMode.capitalize} Site ID" %>
-		<%= f.text_field :customerSiteId%><br><br>
+		<%= f.label :customerSiteId, "#{getCustomerMode.capitalize} Site ID" %><br>
+		<%= f.text_field :customerSiteId, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteName, "Site Name" %>
-		<%= f.text_field :siteName%><br><br>
+		<%= f.label :siteName, "Site Name" %><br>
+		<%= f.text_field :siteName, "class" => "textField"%><br><br>
 	
-		<%= f.label :structureType, "Structure Type" %>
-		<%= f.text_field :structureType%><br><br>
+		<%= f.label :structureType, "Structure Type" %><br>
+		<%= f.text_field :structureType, "class" => "textField"%><br><br>
 	
-		<%= f.label :towerCompany, "Tower Company" %>
-		<%= f.text_field :towerCompany%><br><br>
+		<%= f.label :towerCompany, "Tower Company" %><br>
+		<%= f.text_field :towerCompany, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteAddress, "Site Address" %>
-		<%= f.text_field :siteAddress%><br><br>
+		<%= f.label :siteAddress, "Site Address" %><br>
+		<%= f.text_field :siteAddress, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteZip, "Site Zip" %>
-		<%= f.text_field :siteZip%><br><br>
+		<%= f.label :siteZip, "Site Zip" %><br>
+		<%= f.text_field :siteZip, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteCity, "Site City" %>
-		<%= f.text_field :siteCity%><br><br>
+		<%= f.label :siteCity, "Site City" %><br>
+		<%= f.text_field :siteCity, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteLong, "Site Longitude" %>
-		<%= f.text_field :siteLong%><br><br>
+		<%= f.label :siteLong, "Site Longitude" %><br>
+		<%= f.text_field :siteLong, "class" => "textField"%><br><br>
 	
-		<%= f.label :siteLat, "Site Latitude" %>
-		<%= f.text_field :siteLat%><br><br>
+		<%= f.label :siteLat, "Site Latitude" %><br>
+		<%= f.text_field :siteLat, "class" => "textField"%><br><br>
 	
 		<%#= f.label :projMan, "Site Project Manager" %>
 		<%#= f.text_field :projMan, "class" => "personInput"%>

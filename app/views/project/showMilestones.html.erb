@@ -12,24 +12,32 @@
 		<% milestoneNumber = dependency[0][:number] %>
 
 		<%if backgroundAlternater < 0%>
-			<div style="background-color: white; height:100px;">  <span style="float:left;"> <%= milestoneNumber %> <b> <%= milestone %>  </b> </span> <br>
+			<div style="background-color: white; height:150px;">  <span style="float:left;"> <%= milestoneNumber %> <b> <%= milestone %>  </b> </span> <br>
 		<% else %>
-			<div style="background-color: beige; height:100px;">  <span style="float:left;"> <%= milestoneNumber %> <b> <%= milestone %> </b> </span>  <br>
+			<div style="background-color: beige; height:150px;">  <span style="float:left;"> <%= milestoneNumber %> <b> <%= milestone %> </b> </span>  <br>
 		<% end %>
 		<%backgroundAlternater = -1 * backgroundAlternater%>
 		
 			
 
 		<% if @project.has_key? 'milestones' and @project['milestones'].has_key? milestone  #milestone is in progress or done %>
-			<% if  @project['milestones'][milestone].has_key? 'files'%>
-				<%= link_to "Milestone Files", {controller: 'project', action: 'milestone_files', id: @project['_id'], milestone: milestone  }%><br>
-			<% end %>
-			<%#= render partial: 'milestone_files', locals: {milestone: @project['milestones'][milestone]} %>
-			<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
-				Done : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'].split(" ")[0] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
-			<% else %>
-				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: false} %>
-			<% end %>
+				<% if  @project['milestones'][milestone].has_key? 'files'%>
+					<div style="margin:10px;">
+						<%= link_to "Milestone Files", {controller: 'project', action: 'milestone_files', id: @project['_id'], milestone: milestone  }%>
+					</div>
+				<% end %>
+	
+			
+
+				<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
+					<div style = "margin:10px;">
+					Completed : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'].split(" ")[0] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
+					</div>
+				<%# else %>
+
+					<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: true} %>
+				<% end %>
+
 			
 	
 		<% elsif prereqs.empty?  #milestone ready to be started as it has no prereqs%>

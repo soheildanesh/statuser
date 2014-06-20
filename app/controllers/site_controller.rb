@@ -80,11 +80,11 @@ class SiteController < ApplicationController
          
          if(current_user.nil?)
              flash[:notice] = "User not logged in"
-             render :action => 'index'
+             render controller: 'login_session', :action => 'new'
              return
          end
          role = current_user['role']
-         if true or not( role == 'admin' or role == 'project controller')
+         if  false and not( role == 'admin' or role == 'project controller')
              flash[:error] = "User not authorized"
              redirect_to action: 'index'
              return
@@ -132,13 +132,13 @@ class SiteController < ApplicationController
         
         if(current_user.nil?)
             flash[:notice] = "User not logged in"
-            render :action => 'index'
+            render controller: 'project' , :action => 'index'
             return
         end
         role = current_user['role']
-        if true or not( role == 'admin' or role == 'project controller' or role == 'project manager')
+        if  not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
             flash[:error] = "User not authorized"
-            redirect_to action: 'index'
+            render controller: 'project' , :action => 'index'
             return
         end
         
