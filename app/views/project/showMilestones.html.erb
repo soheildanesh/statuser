@@ -26,16 +26,18 @@
 						<%= link_to "Milestone Files", {controller: 'project', action: 'milestone_files', id: @project['_id'], milestone: milestone  }%>
 					</div>
 				<% end %>
-	
-			
-
+				
+				<%# milestone is done%>	
 				<% if @project['milestones'][milestone].has_key? 'done' and @project['milestones'][milestone]['done'] == 'true' #milestone's done'%>
-					<div style = "margin:10px;">
-					Completed : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'].split(" ")[0] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
-					</div>
-				<%# else %>
-
+					
 					<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: true} %>
+					
+					<div style = "margin:10px;">
+						Completed : <%= printReplaceEmpty @project['milestones'][milestone]['markedDoneAt'].split(" ")[0] %> by <%= linkToPerson @project['milestones'][milestone]['markedDoneBy'] %>
+					</div>
+				<%# milestone is in progress%>		
+				<% else %>
+					<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: false} %>
 				<% end %>
 
 			
@@ -51,9 +53,9 @@
 				<% end %>
 			<% end %>
 			<% if prerecsMet == true %> 
-				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: false} %>	
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: false} %> 
 			<% else #milestone has unmet prereqs'%>
-				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: true } %>	
+				<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: true } %>
 			<% end %>
 		<% else %>
 			<%= render partial: 'milestone_forms', locals: {id:  @project['_id'], milestone: milestone, filesOnly: true } %>	

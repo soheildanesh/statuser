@@ -1,8 +1,8 @@
-<%= milestone %>
+<%#= milestone %>
 <h2> Milestone Files </h2>
 <%if  milestone.has_key? 'files'%>
 	<% milestone['files'].each do |key, val|%>
-		<%=link_to val['fileName'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{val['fileName']}"%> uploaded by <%= linkToPerson val['uploadedBy'] %><br>
+		<%=link_to val['fileName'], "/uploads/#{@project['projId3s']}__#{@project['_id']}/#{val['fileName']}"%> uploaded by <%= linkToPerson val['uploadedBy']  %>, <%= val['uploadTime']%><br>
 		<hr>
 	<% end %>
 	<%#=link_to 'See Milestone Files' %>
