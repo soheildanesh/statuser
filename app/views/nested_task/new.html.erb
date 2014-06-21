@@ -1,0 +1,10 @@
+<div style="float:left; ">
+	<%= form_for :nested_task, url: {controller: 'nested_task', action: 'create'} do |f| %>
+	 	
+		<%f.text_field 'task name'%>
+	
+		<%= f.submit "Save" %>
+		
+	<% end %>
+
+</div>

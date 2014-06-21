@@ -3,7 +3,7 @@ class ChangeRequestController < ApplicationController
        @cr = Hash.new()
        @cr = params['change_request']
        @cr['createdAt'] = Time.now
-       @cr['createdBy'] = $current_user['_id']
+       @cr['createdBy'] = current_user['_id']
        
        @cr['parent__wo__id'] = params['woId']
 

@@ -1,8 +1,7 @@
 Tasks:<br>
-
-<% for i in 1 .. @todolist['tasks'].size %>
-	<hr>
-	<%= @todolist['tasks']["#{i}"]%> <br>
-
-
+<% if @todolist.has_key? 'tasks'%>
+	<% for i in 1 .. @todolist['tasks'].size %>
+		<hr>
+		<%= @todolist['tasks']["#{i}"]%> <br>
+	<% end %>
 <% end %>

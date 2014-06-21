@@ -7,10 +7,12 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_user
   def current_user
-    if($current_user.nil?)
-      $current_user = $person_collection.find({:email => session[:current_user_email] }).to_a[0]
-    end
-    return $current_user
+      
+      current_user = nil
+      if(not session[:current_user_id].nil?)
+          current_user = $person_collection.find({'_id' => session[:current_user_id] }).to_a[0]
+      end
+      return current_user
   end
   
   helper_method :registerEvent

@@ -1,5 +1,9 @@
 <div style="float:left; ">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'create'} do |f| %>
+	
+		Todo List Name<br>
+		<%= f.text_field "todolist name", class: 'textField' %><br><br><br>
+		<hr>
 	 	
 		Tasks: <br>
 		<% for i in 1 .. 10 %>

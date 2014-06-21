@@ -608,7 +608,7 @@ class ProjectController < ApplicationController
         @project = Hash.new()
         @project = params['project']
         @project['createdAt'] = Time.now
-        @project['createdBy'] = $current_user['_id']
+        @project['createdBy'] = current_user['_id']
         
         
         
