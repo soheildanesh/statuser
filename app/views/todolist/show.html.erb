@@ -1,7 +1,48 @@
-Tasks:<br>
-<% if @todolist.has_key? 'tasks'%>
-	<% for i in 1 .. @todolist['tasks'].size %>
-		<hr>
-		<%= @todolist['tasks']["#{i}"]%> <br>
+<div style="float:left; ">
+	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, html: {id: "todolistForm"} do |f| %>
+	
+		<%if @todolist.has_key? "todolist name"%>
+			Todo List Name<br>
+			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %><br><br><br>   
+			<hr>
+			<br><br>
+		<% end %>
+		
+
+		
+		<% if @todolist.has_key? 'tasks'%>
+			Tasks: <br>
+			<% for i in 0 .. @todolist['tasks'].size-1 %>
+				<hr>
+				<%#=  @todolist['tasks']["#{i}"]%> <br>
+				<%= f.text_field "[tasks][#{i}]", value: @todolist['tasks']["#{i}"] ,class: 'textField task' %><br><br>
+			<% end %>
+		<% end %>
+		
+		<%#= f.text_field "[tasks][0]", class: 'textField task' %><br><br>
+	 	
+
+		<%# for i in 1 .. 10 %>
+			<%#= f.text_field "[tasks][#{i}]", class: 'textField' %><br><br>
+		<%# end %>
+		
+	
+		<%= f.submit "Add More Tasks" %>
+		
+	<% end %>
+
+</div>
+
+
+
+
+<% if false%>
+	Tasks:<br>
+
+	<% if @todolist.has_key? 'tasks'%>
+		<% for i in 0 .. @todolist['tasks'].size-1 %>
+			<hr>
+			<%=  @todolist['tasks']["#{i}"]%> <br>
+		<% end %>
 	<% end %>
 <% end %>
