@@ -61,6 +61,7 @@ Statuser::Application.routes.draw do
             get :showMilestones
             get :editSprintOrder
             patch :updateOrder
+            get :showPlan
         end
     end
     

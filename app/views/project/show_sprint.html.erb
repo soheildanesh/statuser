@@ -1,4 +1,4 @@
-<%#= @project%>
+<%= @project%>
 
 <div style="width:400px;">
 	
@@ -13,6 +13,8 @@
 		<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> <br><br>
 		
 		<%= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%>  
+		|
+		<%= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
 		
 		<% role = current_user['role']%>
 		<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>

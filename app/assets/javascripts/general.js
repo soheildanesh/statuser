@@ -112,7 +112,7 @@ $( document ).ready(
 
 $( document ).ready(
 	function() {
-	console.log($(".itemTypeInput").height())
+	console.log($(".itemTypeInput").height());
 	$(".itemTypeInput").tokenInput("/item_type",
 	{tokenLimit: 1});
 });

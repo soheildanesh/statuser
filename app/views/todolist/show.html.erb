@@ -1,7 +1,7 @@
 <div style="float:left; ">
-	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, html: {id: "todolistForm"} do |f| %>
+	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm"} do |f| %>
 	
-		<%if @todolist.has_key? "todolist name"%>
+		<%if @todolist.has_key? "todolist name" and not @todolist["todolist name"].empty?%>
 			Todo List Name<br>
 			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %><br><br><br>   
 			<hr>
@@ -13,11 +13,27 @@
 		<% if @todolist.has_key? 'tasks'%>
 			Tasks: <br>
 			<% for i in 0 .. @todolist['tasks'].size-1 %>
-				<hr>
+				
 				<%#=  @todolist['tasks']["#{i}"]%> <br>
-				<%= f.text_field "[tasks][#{i}]", value: @todolist['tasks']["#{i}"] ,class: 'textField task' %><br><br>
+				
+				<%if @todolist['tasks'].has_key? "#{i}"  %>
+					<%= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['description'] ,class: 'textField task' %><br><br>
+				<% end %>
+				
+				
+				<%# man hours %>
+				<%#= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['manHoursEstimate'] ,class: '' %><br><br>
+
+				<%#= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['manHoursActual'] ,class: '' %><br><br>
+
+				
+				<%# due date %>
+				
+				<%# status %>
 			<% end %>
 		<% end %>
+		
+		<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][description]", "" ,class: 'textField task' %><br><br>
 		
 		<%#= f.text_field "[tasks][0]", class: 'textField task' %><br><br>
 	 	

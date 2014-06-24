@@ -6,12 +6,27 @@ class ProjectController < ApplicationController
     def clearGon
         gon.clear()
     end
+    
+    def showPlan
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        @startDate = Date.new( @project['startDate(1i)'].to_i, @project['startDate(2i)'].to_i, @project['startDate(3i)'].to_i)
+        @endDate = Date.new( @project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
+        
+    end
 
 
     #sprint
     def milestone_files
         @milestone = params['milestone']
-        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id'])})       
+        puts("@project = #{@project} @milestone = #{@milestone}")
+             #@milestone = @project['']
+    end
+    def __milestone_files
+        @milestone = params['milestone']
+      
+       
         puts("@project = #{@project} @milestone = #{@milestone}")
         #@milestone = @project['']
     end
@@ -398,9 +413,7 @@ class ProjectController < ApplicationController
         
         @project['milestones'] = @project['milestones'].merge (params['project']['milestones']) do 
             |key, v1, v2|
-            puts"we hea with key = #{key}, v1 = #{v1}, v2 = #{v2}"
-            puts("v1.class = #{v1.class}")
-            puts("v2.class = #{v2.class}")
+
             if(v1.is_a? Hash and v2.is_a? Hash)
                 v1.merge v2
             else
