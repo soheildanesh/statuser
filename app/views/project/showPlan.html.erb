@@ -11,7 +11,7 @@
 			<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
 			<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
 		<% else %>
-			<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>***
+			<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
 		<% end %>
 	<% end %><br><br>
 	

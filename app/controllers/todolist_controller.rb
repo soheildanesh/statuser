@@ -21,6 +21,11 @@ class TodolistController < ApplicationController
         
         
         
+        #calculate total estimated hours
+        
+        
+        
+        
         #oldtodolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
         
         #numTasks = oldtodolist['numTasks']

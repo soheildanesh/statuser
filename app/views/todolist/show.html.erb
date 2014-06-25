@@ -1,5 +1,9 @@
-<div style="float:left; ">
-	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm"} do |f| %>
+<%if false%>
+	<%= @todolist %> <br>
+<% end %>
+
+<div style="float:left; width:600px;">
+	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
 		<%if @todolist.has_key? "todolist name" and not @todolist["todolist name"].empty?%>
 			Todo List Name<br>
@@ -11,25 +15,25 @@
 
 		
 		<% if @todolist.has_key? 'tasks'%>
-			Tasks: <br>
+			Task  
+			<span style = "position:relative; left:370px;"> Estimated Man Hours</span> 
+			<span style = "position:relative; left:390px;"> Status</span> <br><br>
 			<% for i in 0 .. @todolist['tasks'].size-1 %>
 				
-				<%#=  @todolist['tasks']["#{i}"]%> <br>
-				
 				<%if @todolist['tasks'].has_key? "#{i}"  %>
-					<%= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['description'] ,class: 'textField task' %><br><br>
+					<%= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['description'] ,class: 'textField task' %>
+					
+					
+					<div style="position:relative; right:500px; float:right;">
+					<%= text_field_tag "[todolist][tasks][#{i}][estimated man hours]", @todolist['tasks']["#{i}"]['estimated man hours'] ,class: 'manHoursInput' %>
+					</div>
+					
+					<div style="position:relative; right:295px; float:right;">
+						<%= select("[todolist][tasks][#{i}]", "status", 						options_for_select([["In Progress", "In Progress"], ["Finished", "Finished"]], @todolist['tasks']["#{i}"]['status']),  {include_blank: 'Not Started'}) %>
+					</div>
+					<br><br>			
 				<% end %>
 				
-				
-				<%# man hours %>
-				<%#= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['manHoursEstimate'] ,class: '' %><br><br>
-
-				<%#= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['manHoursActual'] ,class: '' %><br><br>
-
-				
-				<%# due date %>
-				
-				<%# status %>
 			<% end %>
 		<% end %>
 		
@@ -43,7 +47,7 @@
 		<%# end %>
 		
 	
-		<%= f.submit "Add More Tasks" %>
+		<%= f.submit "Update" %>
 		
 	<% end %>
 
