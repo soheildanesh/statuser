@@ -674,8 +674,8 @@ class ProjectController < ApplicationController
     
     
     def edit
-        
-        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -774,8 +774,8 @@ class ProjectController < ApplicationController
     end
     
     def update
-        
-        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
