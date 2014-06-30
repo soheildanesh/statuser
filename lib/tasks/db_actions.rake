@@ -17,7 +17,7 @@ namespace :db_actions do
             projectType = $projectType_collection.find_one({'projectTypeName' => Regexp.new(project['projType'], "i")})
             if not projectType.nil?
                # then the project's projectType field indeeds holds the name not the id of the project tyoe
-               project['projectType'] = projectType['_id']
+               project['projType'] = projectType['_id']
                $project_collection.save project
             end
         end
