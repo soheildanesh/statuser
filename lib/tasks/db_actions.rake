@@ -8,13 +8,13 @@ namespace :db_actions do
     
     
     #for some mysterious reason projects added by hortencia have Modification for projType instead of its bson ID
-    task :replaceProjTypeNameWithIDInProjects => :enviornment do
+    task :replaceProjTypeNameWithIDInProjects => :environment do
         
         projects = $project_collection.find()
         
         for project in projects
             #see if project['projType'] is a bson id (as it should be) if not change it into one
-            projectType = $projectType_collection.find_one({'projectTypeName' => project['projType'], "i")})
+            projectType = $projectType_collection.find_one({'projectTypeName' => Regexp.new(project['projType'], "i")})
             if not projectType.nil?
                # then the project's projectType field indeeds holds the name not the id of the project tyoe
                project['projectType'] = projectType['_id']
