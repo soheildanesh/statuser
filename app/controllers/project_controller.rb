@@ -611,10 +611,6 @@ class ProjectController < ApplicationController
             return
         end
         
-        
-        byebug
-        
-        
         if( params['project'].nil? )
             return nil
         end
