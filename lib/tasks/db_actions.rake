@@ -31,6 +31,7 @@ namespace :db_actions do
         
         for project in projects
            project['projType'] =  project['projType'].to_s
+           $project_collection.save project
         end
 
     end
