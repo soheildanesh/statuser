@@ -611,6 +611,10 @@ class ProjectController < ApplicationController
             return
         end
         
+        
+        byebug
+        
+        
         if( params['project'].nil? )
             return nil
         end
@@ -643,6 +647,9 @@ class ProjectController < ApplicationController
         if(not okToCreate)
             flash[:error] = "Project could not be created because not all ( #{missingKey}) fields required for a new project were entered."
         end
+        
+        #check if dates are valid TODO
+        
 
         if(okToCreate)
           #make sure the project name is unique
@@ -655,10 +662,6 @@ class ProjectController < ApplicationController
               okToCreate = false
               flash[:error] = "Poject could not be created becuse project's name already exists in the databse, please enter a unique project name"
           end
-        end
-
-        if(okToCreate)
-          flash[:error] = ""
         end
 
         if(okToCreate)

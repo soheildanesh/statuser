@@ -6,6 +6,24 @@ include Mongo
 #rake my_namespace:my_task1
 namespace :db_actions do
     
+    
+    #for some mysterious reason projects added by hortencia have Modification for projType instead of its bson ID
+    task :replaceProjTypeNameWithIDInProjects => :enviornment do
+        
+        projects = $project_collection.find()
+        
+        for project in projects
+            #see if project['projType'] is a bson id (as it should be) if not change it into one
+            projectType = $projectType_collection.find_one({'projectTypeName' => project['projType'], "i")})
+            if not projectType.nil?
+               # then the project's projectType field indeeds holds the name not the id of the project tyoe
+               project['projectType'] = projectType['_id']
+               $project_collection.save project
+            end
+        end
+    
+    end
+    
     @client = MongoClient.new('0.0.0.0', 27017) 
     #todo think of creating different db's to minimize write lock waiting
     $testDb = @client['test']
