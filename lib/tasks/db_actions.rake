@@ -7,6 +7,7 @@ include Mongo
 namespace :db_actions do
     
     
+    #one time tasks###############################
     #for some mysterious reason projects added by hortencia have Modification for projType instead of its bson ID
     task :replaceProjTypeNameWithIDInProjects => :environment do
         
@@ -23,6 +24,18 @@ namespace :db_actions do
         end
     
     end
+    
+    
+    task :projectTypeId_to_s => :environment do
+        projects = $project_collection.find()
+        
+        for project in projects
+           project['projType'] =  project['projType'].to_s
+        end
+
+    end
+    
+    #one time tasks###############################
     
     @client = MongoClient.new('0.0.0.0', 27017) 
     #todo think of creating different db's to minimize write lock waiting
