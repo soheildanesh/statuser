@@ -2,6 +2,12 @@
 	<%= @todolist %> <br>
 <% end %>
 
+<br>
+iiii
+<%= @addNewTaskField %>
+<%= false %>
+<br>
+
 <div style="float:left; width:600px;">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
@@ -37,7 +43,9 @@
 			<% end %>
 		<% end %>
 		
-		<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][description]", "" ,class: 'textField task' %><br><br>
+		<%if @addNewTaskField %>
+			<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][description]", "" ,class: 'textField task' %><br><br>
+		<% end %>
 		
 		<%#= f.text_field "[tasks][0]", class: 'textField task' %><br><br>
 	 	

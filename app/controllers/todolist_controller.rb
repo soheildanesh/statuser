@@ -10,14 +10,23 @@ class TodolistController < ApplicationController
         newtodolist = params['todolist']
         newtodolist['_id'] = BSON::ObjectId(params['id'])
         
-        #tasks = Array.new
-        #for task in newtodolist['tasks']
-        #    if not task['description'].nil? and not task['description'].empty?
-        #       tasks << task 
-        #    end
-        #end
+        tasks = newtodolist['tasks']
+        puts("last task description = ")
+        puts(tasks["#{tasks.size-1}"]["description"])
+        
+        if tasks["#{tasks.size-1}"]["description"].empty?
+            puts('we hea')
+            @addNewTaskField = false
+        else
+            puts('we there')
+            @addNewTaskField = true
+        end
         
         $todolist_collection.save(newtodolist)
+        
+        @todolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
+        
+        render 'show'
         
         
         
@@ -46,7 +55,7 @@ class TodolistController < ApplicationController
         #else
         #    #no new task was added
         #end
-        redirect_to action: 'show', id: newtodolist['_id']
+        #redirect_to action: 'show', id: newtodolist['_id'], addNewTaskField: @addNewTaskField
      
     end
     

@@ -659,6 +659,16 @@ class ProjectController < ApplicationController
               flash[:error] = "Poject could not be created becuse project's name already exists in the databse, please enter a unique project name"
           end
         end
+        
+        #validate Date TODO
+        if(false and okToCreate)
+           #check to see if dates are valid
+           begin
+              Date.parse("31-02-2010")
+           rescue ArgumentError
+              # handle invalid date
+           end 
+        end
 
         if(okToCreate)
           #@project['3sId'] = id3s
