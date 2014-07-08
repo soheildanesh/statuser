@@ -1,6 +1,20 @@
+
+#DAILY todo list to be more exact, each todolist has a date attr that is its day.
 class TodolistController < ApplicationController
+    def calcTotalEstimatedManHours todolist
+        tasks = todolist['tasks']
+        
+        totalEstManHours = 0
+        tasks.each {|taskNum, taskAttrs| 
+            totalEstManHours = totalEstManHours + taskAttrs['estimated man hours'].to_i
+            }
+        return totalEstManHours
+    end
+    
     def new
         @projId = params['projId']
+        
+        #date is the day for this todo list, ie the day this is supposed to be done in 
         @date = params['date']
     end
     
@@ -10,42 +24,15 @@ class TodolistController < ApplicationController
         newtodolist = params['todolist']
         newtodolist['_id'] = BSON::ObjectId(params['id'])
         
-        #tasks = Array.new
-        #for task in newtodolist['tasks']
-        #    if not task['description'].nil? and not task['description'].empty?
-        #       tasks << task 
-        #    end
-        #end
+        totalEstManHours = calcTotalEstimatedManHours newtodolist
+        newtodolist['totalEstManHours'] = totalEstManHours
         
         $todolist_collection.save(newtodolist)
         
-        
-        
         #calculate total estimated hours
+
         
-        
-        
-        
-        #oldtodolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
-        
-        #numTasks = oldtodolist['numTasks']
-        
-        
-        
-        #see if a new task was added or just old tasks edited
-        #newTask = newtodolist['tasks'][numTasks] #work it out old task at index 0,new task at index 1, numTasks = 1,
-        #byebug
-        #if not newTask.nil?
-        #    if not newTask.empty?
-        #        oldtodolist['tasks'] = oldtodolist['tasks'].slice(0, numtasks + 1 )
-        #        oldtodolist['numTasks'] = oldtodolist['numTasks'] + 1
-        #        $todolist_collection.save(oldtodolist)
-        #    else
-        #        #no new task was added
-        #    end
-        #else
-        #    #no new task was added
-        #end
+
         redirect_to action: 'show', id: newtodolist['_id']
      
     end
@@ -69,6 +56,8 @@ class TodolistController < ApplicationController
                 todolist['projectId'] = @project['_id']
                 todolist['date'] = date
                 
+                totalEstManHours = calcTotalEstimatedManHours newtodolist
+                todolist['totalEstManHours'] = totalEstManHours
                 
                 id = $todolist_collection.insert(todolist)
                 

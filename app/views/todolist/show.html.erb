@@ -2,6 +2,10 @@
 	<%= @todolist %> <br>
 <% end %>
 
+<%if @todolist.has_key? 'totalEstManHours'%>
+	Total Estimated Man Hours : <%= @todolist['totalEstManHours']%> <br><br>
+<% end %>
+
 <div style="float:left; width:600px;">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
