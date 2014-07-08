@@ -1,18 +1,21 @@
-<%= @project %>
+<%if true %>
+	<%= @project %> <br> <br>
+<% end %>
 
 <% (@startDate .. @endDate ).each do |date| %>
 	<%= date %> 
 	<%if date.saturday? or date.sunday?	%>
 		<%= Weekend! %>
 	<%else%>
-	<%=  @project['plan'][date.to_s]%>
-		<% if true and @project.has_key? 'plan' and @project['plan'].has_key? date.to_s and @project['plan'][date.to_s].has_key? "todolist_id" %>
+
+			<% if true and @project.has_key? 'plan' and @project['plan'].has_key? date.to_s and @project['plan'][date.to_s].has_key? "todolist_id" %>
 		
-			<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
-			<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
-		<% else %>
-			<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
-		<% end %>
-	<% end %><br><br>
+				<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
+				<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
+			<% else %>
+				<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
+			<% end %>
+		<% end %><br><br>
+
 	
 <% end %>

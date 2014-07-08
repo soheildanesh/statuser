@@ -643,6 +643,9 @@ class ProjectController < ApplicationController
         if(not okToCreate)
             flash[:error] = "Project could not be created because not all ( #{missingKey}) fields required for a new project were entered."
         end
+        
+        #check if dates are valid TODO
+        
 
         if(okToCreate)
           #make sure the project name is unique
@@ -658,10 +661,6 @@ class ProjectController < ApplicationController
         end
 
         if(okToCreate)
-          flash[:error] = ""
-        end
-
-        if(okToCreate)
           #@project['3sId'] = id3s
 
           projectId = $project_collection.insert(@project)
@@ -674,8 +673,8 @@ class ProjectController < ApplicationController
     
     
     def edit
-        
-        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -774,8 +773,8 @@ class ProjectController < ApplicationController
     end
     
     def update
-        
-        if true or not( role == 'admin' or role == 'project manager' or role == 'project controller')
+        role = current_user['role']
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
