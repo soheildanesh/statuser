@@ -1,0 +1,53 @@
+<p>
+	<%= link_to "Back to Plan", controller: 'project', action: 'showPlan', id: @project['_id']%> | 
+	<%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s %>
+
+</p>
+
+
+<%if @endDate < Date.today %>
+	The deadline for this project has passed, please contact and administrator.
+<% else %>
+
+	<h2> Choose New Day For Task</h2>
+
+	<div style="width:1000px; float:left;">
+
+	<%= form_for :taskToReschedule, url: {controller: "project", action: "rescheduleTaskAssignToNewDay" , id: @project['_id']}, method: "PATCH" , class: "nifty_form" do |f| %>
+
+		<%= f.text_field '[originalDay]', value: @originalDay, :style => "display:none" %>
+		<%= f.text_field '[taskNum]', value: @taskNum, :style => "display:none" %>
+
+
+		<% (@startDate .. @endDate ).each do |date| %>
+			<% if date < Date.today%>
+				<% next %>
+			<% end %> 
+			
+			<div style="float:left; width: 1000px;">	
+				<hr>
+				<% if @project.has_key? 'plan' and @project['plan'].has_key? date.to_s and @project['plan'][date.to_s].has_key? "todolist_id" %>
+		
+					<%= radio_button_tag('[taskToReschedule][newDay]', date.to_s) %>
+					<b> <%= Date::DAYNAMES[date.wday] %> , <%= date %>  </b>
+	
+					<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
+					<% todolist = $todolist_collection.find({ :_id => todolistId }).to_a[0]%>
+				
+					<%= render partial: '/todolist/show_no_update', locals:{ todolist: todolist, addNewTaskField: false }%>
+
+
+				<% else %>
+					<%= radio_button_tag('[taskToReschedule][newDay]', date.to_s) %>
+					<b> <%= Date::DAYNAMES[date.wday] %> , <%= date %>  </b><br>
+					No tasks assigned for this day.
+				<% end %>
+				<br><br>
+			</div>
+		<% end %>
+	
+		<%= f.submit 'Reschedule' %>
+	<% end %>
+	</div>
+
+<% end %>

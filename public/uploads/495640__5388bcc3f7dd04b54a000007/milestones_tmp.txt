@@ -1,0 +1,48 @@
+
+milestones = 
+[["Pre-Bid Conference Complete, Bid Invitation Received"],
+["Bid Walk Complete, Pre-Bid Conference Complete"],
+["Bid Complete, Bid Walk Complete"],
+["Bid Review Complete, Bid Complete"],
+["SAP Submitted, Bid Review Complete"],
+["SAP Approved, SAP Submitted"],
+["Initial Bid POR Submitted, SAP Approved"],
+["Initial Bid PO Received, Initial Bid POR Submitted"],
+["NTP Received, Initial Bid PO Received"],
+["Pre-Construction Visit Complete", "Initial Bid PO Received", "NTP Received"],
+["Cell Site Verification Complete, Pre-Construction Visit Complete"],
+["Material Order Submitted", "Cell Site Verification Complete"],
+["Material Received", "Material Order Submitted"],
+["Equipment Pickup Complete", "Initial Bid PO Received", "NTP Received""],
+
+["Equipment Inventory Complete", "Equipment Pickup Complete"],
+["Construction Start, Equipment Inventory Complete", "Material Received"],
+
+["Change Request Submitted, "Construction Start"],
+["Change Request Approved, "Change Request Submitted"],
+["Change Request PO Received, "Change Request Approved"],
+["Ground Level Construction Complete", "Construction Start"],
+["Tower Level Construction Complete" , "Construction Start"],
+["Commissioning & Integration Schedule Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+["Commissioning & Integration Complete", "Commissioning & Integration Schedule Complete"],
+["Sprint-Provided Punchlist Received", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+["Punchlist Clean-up Complete", "Sprint-Provided Punchlist Received"],
+
+["Return of Unused Equipment Complete", "Ground Level Construction Complete", "Tower Level Construction Complete"],
+
+
+["Construction Documents Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+["Construction Documents Submitted", "Construction Documents Complete"],
+["Construction & Final Acceptance Checklist Complete", "Punchlist Clean-up Complete", "Return of Unused Equipment Complete"],
+
+
+["Construction Complete", "Construction Documents Submitted", "Construction & Final Acceptance Checklist Complete"],
+
+
+["Final Acceptance Documents Complete", "Construction Complete"],
+["Acceptance Request Submitted", "Final Acceptance Documents Complete"],
+["Final Acceptance", "Acceptance Request Submitted"]]

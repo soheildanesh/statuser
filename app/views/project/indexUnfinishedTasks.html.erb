@@ -1,0 +1,36 @@
+<%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%><br><br>
+
+<%#= @unfinishedTasks %>
+
+Task  
+<span style = "position:relative; left:390px;"> Estimated MH</span> 
+<span style = "position:relative; left:420px;"> Actual MH</span>
+
+<% @unfinishedTasks.each do |day, tasks| %>
+	<hr>
+	<%= "#{day}:" %><br>
+	<% tasks.each do |taskNum, taskAtts| %>
+		<div style="width:800px; float:left;" >
+			<div style="width:450px; float:left;">
+				<%= taskAtts['description']%>
+			</div>
+			<div style="width:30px; float:left;">
+			 	<%=taskAtts['estimated man hours'] %>
+			</div>
+		
+			<div style="width:30px; float:left;">
+	
+				<%if taskAtts.has_key? 'actual man hours'%> 
+		
+					, <%= taskAtts['actual man hours']%>
+				<% end %>
+			
+			</div>		
+			<div style="width:100px; float:right ;">
+				<%= link_to 'reschedule', action: 'rescheduleTaskChooseNewDay', originalDay: day, taskNum: taskNum, id: @project['_id'] %>
+			</div>
+			
+		</div>
+		<br>
+	<% end %>
+<% end %>

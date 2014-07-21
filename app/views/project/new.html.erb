@@ -1,4 +1,4 @@
-<% if(current_user["customerMode"]['customerId'] == "" or current_user["customerMode"]['customerId'] == "All Customers")%>
+<% if(get_current_user["customerMode"]['customerId'] == "" or get_current_user["customerMode"]['customerId'] == "All Customers")%>
 	Please choose a specific customer mode in dashboard
 <%else %>
 
@@ -18,7 +18,7 @@
 			<%= f.text_field :customerId, "class" => "required customerInput textField" %>
 		</p>
 		<% end %>
-		<%= f.text_field :customerId, value: current_user['customerMode']['customerId'],:style => "display:none" %>
+		<%= f.text_field :customerId, value:get_current_user['customerMode']['customerId'],:style => "display:none" %>
 	
 
 		<p>

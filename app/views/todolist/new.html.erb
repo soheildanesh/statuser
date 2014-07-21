@@ -1,4 +1,4 @@
-<div style="float:left; ">
+<div style="float:left; width:600px;">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'create'}, html: {id: "todolistForm"} do |f| %>
 	
 	    
@@ -11,9 +11,14 @@
 		<hr>
 		<br><br>
 		
-		Tasks: <br>
+		Tasks: 			<span style = "position:relative; left: 370px;"> Estimated Man Hours: </span> <br>
 		
-		<%= f.text_field "[tasks][0][description]", class: 'textField task' %><br><br>
+		<%= f.text_field "[tasks][0][description]", class: 'textField task' %>
+		
+		<div style="position:relative; right:100px; float:right;">
+
+			<%= f.text_field "[tasks][0][estimated man hours]", class: 'manHoursInput' %>
+		</div>
 	 	
 
 		<%# for i in 1 .. 10 %>

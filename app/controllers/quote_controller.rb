@@ -29,27 +29,27 @@ class QuoteController < ApplicationController
         $wo_collection.save(@wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: @wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "Quote submitted for work order ID: #{@wo['workOrderId']}"
+        registerEvent eventUrl ,get_current_user['_id'], "Quote submitted for work order ID: #{@wo['workOrderId']}"
         
         redirect_to controller: 'work_order', action: 'show', id: @wo['_id']
     end
     
     def index
-         if(current_user.nil?)
-             flash[:notice] = "Have to be admin user for this"
+         if( get_current_user.nil?)
+             not get_current_user[:notice] = "Have to be admin user for this"
              render '/login_session/new'
              return
-         elsif(current_user['role'] == 'admin')
+         elsif( get_current_user['role'] == 'admin')
              @quotes = $quote_collection.find().sort( :_id => :desc ).to_a
          end        
     end
     
     def updateAcceptanceStatus
-        if(current_user.nil?)
-            flash[:notice] = "Have to be admin user for this"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "Have to be admin user for this"
             render '/login_session/new'
             return
-        elsif(current_user['role'] == 'admin')
+        elsif( get_current_user['role'] == 'admin')
              
             #get old quote
             quote = $quote_collection.find({:_id => BSON::ObjectId(params['id'])}).to_a[0]
@@ -71,7 +71,7 @@ class QuoteController < ApplicationController
             $quote_collection.save(updatedQuote)
             
             eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-            registerEvent eventUrl , current_user['_id'], "Quote #{params['status']} for work order ID: #{wo['workOrderId']} "
+            registerEvent eventUrl ,get_current_user['_id'], "Quote #{params['status']} for work order ID: #{wo['workOrderId']} "
         end
         
         redirect_to controller: 'work_order', action: 'show', id: quote['woId'] 

@@ -1,12 +1,12 @@
 class ProjectTypeController < ApplicationController
   
     def destroy
-        if(current_user.nil?)
-            flash[:notice] = "log in to  delete"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "log in to  delete"
             redirect_to controller:'login_session', action:'new'
             return
-        elsif(current_user['role'] != 'admin')
-            flash[:notice] = "only an admin can delete"
+        elsif( get_current_user['role'] != 'admin')
+            not get_current_user[:notice] = "only an admin can delete"
             redirect_to controller:'login_session', action:'new'
             return
         else
@@ -22,8 +22,8 @@ class ProjectTypeController < ApplicationController
   
     def index
         
-        if(current_user.nil?)
-            flash[:notice] = "User not logged in"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
@@ -49,14 +49,14 @@ class ProjectTypeController < ApplicationController
   
     def create
 
-        if(current_user.nil?)
-            flash[:notice] = "User not logged in"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if false and not( role == 'admin' or role == 'project controller')
-            flash[:error] = "User not authorized"
+            not get_current_user[:error] = "User not authorized"
             redirect_to action: 'index'
             return
         end
@@ -67,10 +67,10 @@ class ProjectTypeController < ApplicationController
         existing_projectType = ($projectType_collection.find({:projectTypeName => params["project_type"]["projectTypeName"]}).to_a)[0]
 
         if(!existing_projectType.nil?)
-            flash[:notice] = "A projectType with this name exists already"
+            not get_current_user[:notice] = "A projectType with this name exists already"
         else    
             params["project_type"]['createdAt'] = Time.now                
-            params["project_type"]['createdBy'] = current_user['_id']
+            params["project_type"]['createdBy'] =get_current_user['_id']
             
             $projectType_collection.insert(params["project_type"])
             #ensure the insert happened

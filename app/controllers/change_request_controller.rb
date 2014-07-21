@@ -3,7 +3,7 @@ class ChangeRequestController < ApplicationController
        @cr = Hash.new()
        @cr = params['change_request']
        @cr['createdAt'] = Time.now
-       @cr['createdBy'] = current_user['_id']
+       @cr['createdBy'] = get_current_user['_id']
        
        @cr['parent__wo__id'] = params['woId']
 
@@ -13,7 +13,7 @@ class ChangeRequestController < ApplicationController
        $wo_collection.save(@wo)
        
        eventUrl = {controller: 'change_request', action: 'show', id: crid}
-       registerEvent eventUrl , current_user['_id'], "Change Request Created"
+       registerEvent eventUrl , get_current_user['_id'], "Change Request Created"
        redirect_to action: 'show', id: crid
    end 
    
@@ -42,7 +42,7 @@ class ChangeRequestController < ApplicationController
        grant = params['change_request']['pm3sGrant']
 
        grant['created_at'] = Time.now
-       grant['created_by'] = current_user['_id']
+       grant['created_by'] = get_current_user['_id']
 
        cr['pm3sGrant'] = grant
 

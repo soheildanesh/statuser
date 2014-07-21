@@ -5,14 +5,14 @@ class ApplicationController < ActionController::Base
   
   include ApplicationHelper
   
-  helper_method :current_user
-  def current_user
+  helper_method :get_current_user
+  def get_current_user
       
-      current_user = nil
+      cu = nil
       if(not session[:current_user_id].nil?)
-          current_user = $person_collection.find({'_id' => session[:current_user_id] }).to_a[0]
+          cu = $person_collection.find({'_id' => session[:current_user_id] }).to_a[0]
       end
-      return current_user
+      return cu
   end
   
   helper_method :registerEvent

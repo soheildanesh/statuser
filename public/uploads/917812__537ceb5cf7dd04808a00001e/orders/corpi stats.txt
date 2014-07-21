@@ -1,0 +1,37 @@
+Hulth Stats:
+***
+avgTextLength = 740.4153333333334
+***
+maxNumKeyterms = 31
+minNumKeyterms = 2
+***
+avgNumKeyterms = 9.826
+avgKeytermLength = 2.326547231270358
+***
+=> nil
+
+
+ACM stats
+***
+avgTextLength = 817.1808191808192
+***
+maxNumKeyterms = 10
+minNumKeyterms = 1
+***
+avgNumKeyterms = 4.402597402597403
+avgKeytermLength = 1.8761061946902655
+***
+=> nil
+
+
+News stats:
+***
+avgTextLength = 185.95908477487424
+***
+maxNumKeyterms = 5
+minNumKeyterms = 1
+***
+avgNumKeyterms = 2.4867256637168142
+avgKeytermLength = 1.5693950177935942
+***
+

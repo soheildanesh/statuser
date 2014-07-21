@@ -62,6 +62,9 @@ Statuser::Application.routes.draw do
             get :editSprintOrder
             patch :updateOrder
             get :showPlan
+            get :indexUnfinishedTasks
+            get :rescheduleTaskChooseNewDay
+            patch :rescheduleTaskAssignToNewDay
         end
     end
     

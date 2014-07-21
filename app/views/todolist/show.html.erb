@@ -1,16 +1,28 @@
+
 <%if false%>
 	<%= @todolist %> <br>
 <% end %>
-
+<% if @todolist.has_key? 'projectId'%>
+	<%= link_to 'Back to project', controller: 'project', action: 'show', id: @todolist['projectId']%>
+<% end %>
 <br>
-iiii
-<%= @addNewTaskField %>
-<%= false %>
 <br>
 
 <div style="float:left; width:600px;">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
+
+		<%= text_field_tag "todolist[projectId]", "#{@todolist["projectId"]}", style:"display:none;" %>
+		
+		<%= text_field_tag "todolist[createdAt]", "#{@todolist["createdAt"]}", style:"display:none;" %>
+		
+		<% if not @todolist["todolist name"].nil?  %>
+			Todo List Name: <br>
+			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %>
+		<% end %>
+		
+		
+		
 		<%if @todolist.has_key? "todolist name" and not @todolist["todolist name"].empty?%>
 			Todo List Name<br>
 			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %><br><br><br>   
@@ -18,14 +30,25 @@ iiii
 			<br><br>
 		<% end %>
 		
+		<br><br>
+		<div>
+			Total Man Hours = <%= @todolist['total estimated man hours']%> <br>
+	        Finished Man Hours  = <%= @todolist['finished estimated man hours']  %> <br>
+	        Remaining Man Hours = <%= @todolist['estimated man hours left'] %> <br>
+		</div>
+		<br>
+		
 
 		
 		<% if @todolist.has_key? 'tasks'%>
+
 			Task  
-			<span style = "position:relative; left:370px;"> Estimated Man Hours</span> 
-			<span style = "position:relative; left:390px;"> Status</span> <br><br>
+			<span style = "position:relative; left:390px;"> Estimated MH</span> 
+			<span style = "position:relative; left:420px;"> Actual MH</span> 
+			
+			<span style = "position:relative; left:475px;"> Status</span> <br><br>
 			<% for i in 0 .. @todolist['tasks'].size-1 %>
-				
+
 				<%if @todolist['tasks'].has_key? "#{i}"  %>
 					<%= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['description'] ,class: 'textField task' %>
 					
@@ -34,26 +57,30 @@ iiii
 					<%= text_field_tag "[todolist][tasks][#{i}][estimated man hours]", @todolist['tasks']["#{i}"]['estimated man hours'] ,class: 'manHoursInput' %>
 					</div>
 					
-					<div style="position:relative; right:295px; float:right;">
+					<div style="position:relative; right:350px; float:right;">
+					<%= text_field_tag "[todolist][tasks][#{i}][actual man hours]", @todolist['tasks']["#{i}"]['actual man hours'] ,class: 'manHoursInput' %>
+					</div>
+					
+					
+					<div style="position:relative; right:150px; float:right;">
 						<%= select("[todolist][tasks][#{i}]", "status", 						options_for_select([["In Progress", "In Progress"], ["Finished", "Finished"]], @todolist['tasks']["#{i}"]['status']),  {include_blank: 'Not Started'}) %>
 					</div>
 					<br><br>			
 				<% end %>
-				
 			<% end %>
 		<% end %>
 		
-		<%if @addNewTaskField %>
-			<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][description]", "" ,class: 'textField task' %><br><br>
-		<% end %>
-		
-		<%#= f.text_field "[tasks][0]", class: 'textField task' %><br><br>
-	 	
+		<%if not @addNewTaskField.nil? and @addNewTaskField %>
+			<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][description]", "" ,class: 'textField task' %>
 
-		<%# for i in 1 .. 10 %>
-			<%#= f.text_field "[tasks][#{i}]", class: 'textField' %><br><br>
-		<%# end %>
-		
+			<div style="position:relative; right:500px; float:right;">
+			<%= text_field_tag "[todolist][tasks][#{@todolist['tasks'].size}][estimated man hours]", "" ,class: 'manHoursInput' %>
+			</div>
+			
+
+
+			<br><br>
+		<% end %>		
 	
 		<%= f.submit "Update" , data: { submissionMethod: 'update button'}%>
 		

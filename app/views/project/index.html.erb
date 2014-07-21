@@ -1,5 +1,5 @@
 <div style='width:1440px;'>
-	<% if true or current_user['role'] == 'admin'%>
+	<% if true or get_current_user['role'] == 'admin'%>
 		<%= link_to 'Add Project', {controller: 'project', action: 'new'}, {style: "color:blue;"} %>  	<%#= link_to 'Search Projects', {controller: 'project', action: 'newSearch', id:'dummy'}, {style: "color:blue;"} %>  <%# TODO put back in for erricson mode = link_to 'Search Work Orders', {controller: 'work_order', action: 'newSearch', id:'dummy'}, {style: "color:blue;"} %> 
 	<% end %>
 

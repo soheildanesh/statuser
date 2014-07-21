@@ -16,11 +16,11 @@ class SiteController < ApplicationController
         
 
     def destroy
-        if(current_user.nil?)
+        if( get_current_user.nil?)
             redirect_to controller:'login_session', action:'new'
             return
-        elsif(current_user['role'] != 'admin')
-            flash[:error] = 'User not authorized'
+        elsif( get_current_user['role'] != 'admin')
+            not get_current_user[:error] = 'User not authorized'
             redirect_to controller:'login_session', action:'new'
             return
         else
@@ -78,14 +78,14 @@ class SiteController < ApplicationController
        
      def create
          
-         if(current_user.nil?)
-             flash[:notice] = "User not logged in"
+         if( get_current_user.nil?)
+             not get_current_user[:notice] = "User not logged in"
              render controller: 'login_session', :action => 'new'
              return
          end
-         role = current_user['role']
+         role =get_current_user['role']
          if  false and not( role == 'admin' or role == 'project controller')
-             flash[:error] = "User not authorized"
+             not get_current_user[:error] = "User not authorized"
              redirect_to action: 'index'
              return
          end
@@ -99,7 +99,7 @@ class SiteController < ApplicationController
 
         #TODO check to see if the people listed in the crew exist in the db
         if(!existing_site.nil?)
-            flash.now[:notice] = "Site with this ID exists already"
+            not get_current_user.now[:notice] = "Site with this ID exists already"
         else
             
             #produce an incremented id
@@ -113,7 +113,7 @@ class SiteController < ApplicationController
             
             params[:site][:time] = Time.now
             
-            params[:site][:person_id] = current_user['_id']
+            params[:site][:person_id] =get_current_user['_id']
             
             $site_collection.insert(params[:site])
             
@@ -130,33 +130,33 @@ class SiteController < ApplicationController
   
     def index
         
-        if(current_user.nil?)
-            flash[:notice] = "User not logged in"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "User not logged in"
             render controller: 'project' , :action => 'index'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if  not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
-            flash[:error] = "User not authorized"
+            not get_current_user[:error] = "User not authorized"
             render controller: 'project' , :action => 'index'
             return
         end
         
-        if(current_user.nil?)
-            flash[:notice] = "LOGin to see the LOG!"
+        if( get_current_user.nil?)
+            not get_current_user[:notice] = "LOGin to see the LOG!"
             render '/login_session/new'
             return
         else
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
-                puts("current_user['customerMode']['customerId'] = #{current_user['customerMode']['customerId']}")
-                @allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString, "i"), "customerId" => current_user['customerMode']['customerId'] })
-            elsif(current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
+                puts("current_user['customerMode']['customerId'] = #{get_current_user['customerMode']['customerId']}")
+                @allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString, "i"), "customerId" =>get_current_user['customerMode']['customerId'] })
+            elsif( get_current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
                 @allSites = $site_collection.find().to_a.reverse
             else
-                s1 = $site_collection.find({"projMan" => current_user['_id'].to_s}).to_a.reverse
-                s2 = $site_collection.find({constMan: current_user['email']}).to_a.reverse
-                s3 = $site_collection.find({copInCharge: current_user['email']}).to_a.reverse
+                s1 = $site_collection.find({"projMan" =>get_current_user['_id'].to_s}).to_a.reverse
+                s2 = $site_collection.find({constMan:get_current_user['email']}).to_a.reverse
+                s3 = $site_collection.find({copInCharge:get_current_user['email']}).to_a.reverse
                 puts("****")
                 puts(s1)
                 puts(s2)

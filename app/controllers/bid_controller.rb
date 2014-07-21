@@ -8,11 +8,11 @@ class BidController < ApplicationController
     end
     
     def index
-        if(current_user.nil?)
-            flash[:notice] = "Have to be admin user for this"
+        if(get_current_user.nil?)
+            not get_current_user[:notice] = "Have to be admin user for this"
             render '/login_session/new'
             return
-        elsif(current_user['role'] == 'admin')
+        elsif(get_current_user['role'] == 'admin')
             @bids = $bid_collection.find().sort( :_id => :desc ).to_a
         end
     end 

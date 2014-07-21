@@ -1,3 +1,5 @@
-<% flash.each do |key, value| %>
-   <div class="alert alert-<%= key %>"><%= value %></div>
+<% if false and  not get_current_user.nil?%>
+	<% not get_current_user.each do |key, value| %>
+	   <div class="alert alert-<%= key %>"><%= value %></div> *****
+	<% end %>
 <% end %>

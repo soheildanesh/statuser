@@ -1,12 +1,12 @@
 class ItemTypeController < ApplicationController
 
   def destroy
-      if(current_user.nil?)
-          flash[:notice] = "log in to delete"
+      if(get_current_user.nil?)
+          not get_current_user[:notice] = "log in to delete"
           redirect_to controller:'login_session', action:'new'
           return
-      elsif(current_user['role'] != 'admin')
-          flash[:notice] = "only an admin can delete"
+      elsif(get_current_user['role'] != 'admin')
+          not get_current_user[:notice] = "only an admin can delete"
           redirect_to controller:'login_session', action:'new'
           return
       else
@@ -41,14 +41,14 @@ class ItemTypeController < ApplicationController
 
   def create
       
-      if(current_user.nil?)
-          flash[:notice] = "User not logged in"
+      if(get_current_user.nil?)
+          not get_current_user[:notice] = "User not logged in"
           render :action => 'index'
           return
       end
-      role = current_user['role']
+      role = get_current_user['role']
       if false and not( role == 'admin' or role == 'project controller')
-          flash[:error] = "User not authorized"
+          not get_current_user[:error] = "User not authorized"
           redirect_to action: 'index'
           return
       end
@@ -58,10 +58,10 @@ class ItemTypeController < ApplicationController
       existing_itemType = ($itemType_collection.find({:itemTypeName => params["item_type"]["itemTypeName"]}).to_a)[0]
 
       if(!existing_itemType .nil?)
-          flash[:notice] = "An item type with this name exists already"
+          not get_current_user[:notice] = "An item type with this name exists already"
       else    
           params["item_type"]['createdAt'] = Time.now                
-          params["item_type"]['createdBy'] = current_user['_id']
+          params["item_type"]['createdBy'] = get_current_user['_id']
 
           $itemType_collection.insert(params["item_type"])
           #ensure the insert happened

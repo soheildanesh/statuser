@@ -16,7 +16,7 @@
 		|
 		<%= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
 		
-		<% role = current_user['role']%>
+		<% role =get_current_user['role']%>
 		<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>
 			| <%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
 		<% end %>

@@ -18,12 +18,12 @@ class LogEntryController < ApplicationController
     
     def destroy
         tobeDeleted = $log_entry_collection.find({_id: params['id'].to_i}).to_a[0]
-        if(current_user['role'] == 'admin' or tobeDeleted['person_id'] == current_user['_id'])
+        if(get_current_user['role'] == 'admin' or tobeDeleted['person_id'] == get_current_user['_id'])
             $log_entry_collection.remove({_id: params['id'].to_i})
             redirect_to controller:'log_entry', action:'index'
             return
         else
-            flash[:notice] = "you dont have permission to delete this entry, contact and admin"
+            not get_current_user[:notice] = "you dont have permission to delete this entry, contact and admin"
             redirect_to controller:'log_entry', action:'index'
             return
         end
@@ -82,11 +82,11 @@ class LogEntryController < ApplicationController
     
     def index
         @whoseEntries = ""
-        if(current_user.nil?)
-            flash[:notice] = "LOGin to see the LOG!"
+        if(get_current_user.nil?)
+            not get_current_user[:notice] = "LOGin to see the LOG!"
             render '/login_session/new'
             return
-        elsif(current_user['role'] == 'admin')
+        elsif(get_current_user['role'] == 'admin')
             if(!params[:id].nil? )
                 @log_entries = $log_entry_collection.find({'doer' => params[:id].to_i }).sort( :_id => :desc ).to_a
                 @whoseEntries = $person_collection.find("_id" => params[:id].to_i).to_a[0]["email"]
@@ -94,8 +94,8 @@ class LogEntryController < ApplicationController
                 @log_entries = $log_entry_collection.find().sort( :_id => :desc ).to_a
             end
         else
-            @log_entries = $log_entry_collection.find({:person_id => current_user['_id']}).sort( :_id => :desc ).to_a
-            @whoseEntries = current_user['email']
+            @log_entries = $log_entry_collection.find({:person_id => get_current_user['_id']}).sort( :_id => :desc ).to_a
+            @whoseEntries = get_current_user['email']
         end  
 
         respond_to do |format|
@@ -122,8 +122,8 @@ class LogEntryController < ApplicationController
     end
   
     def create
-        params[:log_entry][:person] = current_user['email']
-        params[:log_entry][:person_id] = current_user['_id']
+        params[:log_entry][:person] = get_current_user['email']
+        params[:log_entry][:person_id] = get_current_user['_id']
         
         #increment the id of the last entry and use it for this one
         last_entry = $log_entry_collection.find().sort( :_id => :desc ).to_a
@@ -154,7 +154,7 @@ class LogEntryController < ApplicationController
         #end
         existingSite = $site_collection.find({:siteId => params[:log_entry][:siteId]}).to_a[0]
         if(existingSite.nil?)
-            flash[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
+            not get_current_user[:error] = "The site id you entered does not match an existing site, let someone with admin rights know!"
             render :js => "alert('The site id you entered does not match an existing site, let someone with admin rights know! (id entered = #{ params[:log_entry][:siteId] })');"
             return
         end
@@ -177,7 +177,7 @@ class LogEntryController < ApplicationController
     #    if(params[:log_entry].has_key? "changeRequestNumber")
     #        existingCr = $log_entry_collection.find({:changeRequestNumber => params[:log_entry][:changeRequestNumber]}).to_a[0]
     #        if(!existingCr.nil?)
-    #            flash[:note] = "the change request number you entered exists in the data base already, enter a new cr number"
+    #            not get_current_user[:note] = "the change request number you entered exists in the data base already, enter a new cr number"
     #            redirect_to '/log_entry'
     #            return
     #        end
@@ -188,13 +188,13 @@ class LogEntryController < ApplicationController
         if(params[:log_entry]["type"] == "site activity report")
             if(!isStringNumbersOnly?(params[:log_entry]["vehicleStartMilage"]) or
                 !isStringNumbersOnly?(params[:log_entry]["vehicleEndMilage"]))
-                flash.now[:notice] = "make sure vehicle start and end milages are numbers only"
+                not get_current_user.now[:notice] = "make sure vehicle start and end milages are numbers only"
                 render :js => "alert('make sure vehicle start and end milages are numbers only');"
                 return
             end
             
             if(!isStringNumbersOnly?(params[:log_entry]["siteDelay"]))
-                flash.now[:notice] = "make sure site delay in hours is numbers only"
+                not get_current_user.now[:notice] = "make sure site delay in hours is numbers only"
                 render :js => "alert('make sure site delay in hours is numbers only');"
 
             end

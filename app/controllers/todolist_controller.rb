@@ -1,4 +1,5 @@
 class TodolistController < ApplicationController
+        
     def new
         @projId = params['projId']
         @date = params['date']
@@ -9,78 +10,68 @@ class TodolistController < ApplicationController
         #@existingList =  $todolist_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         newtodolist = params['todolist']
         newtodolist['_id'] = BSON::ObjectId(params['id'])
-        
         tasks = newtodolist['tasks']
-        puts("last task description = ")
-        puts(tasks["#{tasks.size-1}"]["description"])
         
         if tasks["#{tasks.size-1}"]["description"].empty?
-            puts('we hea')
             @addNewTaskField = false
         else
-            puts('we there')
             @addNewTaskField = true
         end
         
+        
+        calcManHourStats! newtodolist        
+        
         $todolist_collection.save(newtodolist)
         
-        @todolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
+        @todolist = newtodolist
+        
         
         render 'show'
+    end
+    
+    def calcManHourStats! newtodolist
         
+        tasks = newtodolist['tasks']
+        puts("tasks = #{tasks}")
+        @totalEstimatedManHours = 0.0
+        @totalEstManHoursForFinishedTasks = 0.0
+        tasks.each do |taskNum, taskAtts|
+
+            @totalEstimatedManHours = @totalEstimatedManHours + taskAtts['estimated man hours'].to_i
+            
+            if(taskAtts["status"] == "Finished")
+                @totalEstManHoursForFinishedTasks = @totalEstManHoursForFinishedTasks + taskAtts['estimated man hours'].to_i
+            end
+        end
         
-        
-        #calculate total estimated hours
-        
-        
-        
-        
-        #oldtodolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
-        
-        #numTasks = oldtodolist['numTasks']
-        
-        
-        
-        #see if a new task was added or just old tasks edited
-        #newTask = newtodolist['tasks'][numTasks] #work it out old task at index 0,new task at index 1, numTasks = 1,
-        #byebug
-        #if not newTask.nil?
-        #    if not newTask.empty?
-        #        oldtodolist['tasks'] = oldtodolist['tasks'].slice(0, numtasks + 1 )
-        #        oldtodolist['numTasks'] = oldtodolist['numTasks'] + 1
-        #        $todolist_collection.save(oldtodolist)
-        #    else
-        #        #no new task was added
-        #    end
-        #else
-        #    #no new task was added
-        #end
-        #redirect_to action: 'show', id: newtodolist['_id'], addNewTaskField: @addNewTaskField
-     
+        newtodolist['total estimated man hours'] = @totalEstimatedManHours
+        newtodolist['finished estimated man hours'] = @totalEstManHoursForFinishedTasks
+        newtodolist['estimated man hours left'] = @totalEstimatedManHours - @totalEstManHoursForFinishedTasks
+        return newtodolist
     end
     
     
     #because each time the focus changes to a new text box the form is submitted, we are guaranteed to have only one new task on each form submission
     def create
-        todolist = params['todolist']
+        @todolist = params['todolist']
         
         
         
-        firstTask = todolist['tasks']['0']
+        firstTask = @todolist['tasks']['0']
         if not firstTask.nil?
             if not firstTask.empty?
+                @addNewTaskField = true
                 
-                
-                @project =  @project = $project_collection.find({:_id => BSON::ObjectId(params['projectId']) } ).to_a[0]
+                @project = $project_collection.find({:_id => BSON::ObjectId(params['projectId']) } ).to_a[0]
                 
                 date = params['date']
 
-                todolist['projectId'] = @project['_id']
-                todolist['date'] = date
+                @todolist['projectId'] = @project['_id'].to_s
+                @todolist['createdAt'] = date
                 
+                calcManHourStats! @todolist
                 
-                id = $todolist_collection.insert(todolist)
-                
+                id = $todolist_collection.insert(@todolist)
                 
                 
                 if not @project.has_key? 'plan'
@@ -93,19 +84,32 @@ class TodolistController < ApplicationController
                 @project['plan'][date]['todolist_id'] = id 
                 $project_collection.save(@project)
                 
-                    
-                
-                redirect_to action: 'show', id: id
+                render 'show'
+                #redirect_to action: 'show', id: id
                 
             end
         end
         
+        #this is the case where nothing was added to the todo list?
         return
         
     end
     
     def show
         @todolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
+        
+        tasks = @todolist['tasks']
+        puts("tasks = #{tasks}")
+        @totalEstimatedManHours = 0.0
+        @totalEstManHoursForFinishedTasks = 0.0
+        tasks.each do |taskNum, taskAtts|
+            puts('***')
+            puts(taskAtts)
+            @totalEstimatedManHours = @totalEstimatedManHours + taskAtts['estimated man hours'].to_i
+            if(taskAtts["status"] == "Finished")
+                @totalEstManHoursForFinishedTasks = @totalEstManHoursForFinishedTasks + taskAtts['estimated man hours'].to_i
+            end
+        end
     end
         
     def index

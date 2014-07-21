@@ -3,8 +3,8 @@ module ApplicationHelper
     #make sure user is logged in
     
     def ensureUserLoggedIn
-        if(current_user.nil?)
-            flash[:notice] = "User not logged in"
+        if(get_current_user.nil?)
+            not get_current_user[:notice] = "User not logged in"
             render controller: 'login_session', action: 'new'
             return
         end
@@ -30,10 +30,10 @@ module ApplicationHelper
     
     
     def getCustomerMode
-        if( current_user['customerMode']['customerId'] == "All Customers")
-            return current_user['customerMode']['customerId']
+        if(get_current_user['customerMode']['customerId'] == "All Customers")
+            return get_current_user['customerMode']['customerId']
         else
-            return $customer_collection.find_one( :_id => BSON::ObjectId(current_user['customerMode']['customerId']))["customerName"]
+            return $customer_collection.find_one( :_id => BSON::ObjectId(get_current_user['customerMode']['customerId']))["customerName"]
         end
     end
     
@@ -114,7 +114,7 @@ module ApplicationHelper
         for email in emails
             email.downcase!
             if($person_collection.find({:email => email}).to_a[0].nil?)
-                flash.now[:error] = "the email '#{email}' does not exist in the database so your input was not accepted, contact an admin if necessary"
+                not get_current_user.now[:error] = "the email '#{email}' does not exist in the database so your input was not accepted, contact an admin if necessary"
                 redirect_to '/log_entry'
                 return false
             end 
@@ -127,7 +127,7 @@ module ApplicationHelper
         #check to see if the site id is valid
         existingSite = $site_collection.find({:siteId => siteId}).to_a[0]
         if(existingSite.nil?)
-            flash.now[:error] = "The site id you entered does not match an existing site, let someone with admin rights know if a new site needs to be created"
+            not get_current_user.now[:error] = "The site id you entered does not match an existing site, let someone with admin rights know if a new site needs to be created"
             redirect_to '/log_entry'
             return false
         end

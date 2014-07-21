@@ -1,21 +1,47 @@
-<%if true %>
+
+<%if false %>
 	<%= @project %> <br> <br>
 <% end %>
+<%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%>|
+
+<%= link_to 'Unfinished Tasks', action: 'indexUnfinishedTasks', id: @project['_id'].to_s%>
+<br><br>
+
+
+<h2> Project Plan and Progress</h2>
+
+<div style="width:1000px; float:left;">
 
 <% (@startDate .. @endDate ).each do |date| %>
-	<%= date %> 
-	<%if date.saturday? or date.sunday?	%>
-		<%= Weekend! %>
-	<%else%>
 
-			<% if true and @project.has_key? 'plan' and @project['plan'].has_key? date.to_s and @project['plan'][date.to_s].has_key? "todolist_id" %>
-		
-				<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
-				<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
-			<% else %>
-				<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
-			<% end %>
-		<% end %><br><br>
+	<br>
+	
 
+	<b> <%= Date::DAYNAMES[date.wday] %> , <%= date %>  </b> <br>
+
+	<% if @project.has_key? 'plan' and @project['plan'].has_key? date.to_s and @project['plan'][date.to_s].has_key? "todolist_id" %>
+			
+		<% todolistId = @project['plan'][date.to_s]['todolist_id']%>
+		<% todolist = $todolist_collection.find({ :_id => todolistId }).to_a[0]%>
+			
+			
+		<%#= render partial: '/todolist/show_inline_no_update', locals:{ todolist: todolist, addNewTaskField: false }%>
+
+		Total Man Hours = <%= todolist['total estimated man hours']%> <br>
+    	Finished Man Hours  = <%= todolist['finished estimated man hours']  %> <br>
+    	Remaining Man Hours = <%= todolist['estimated man hours left'] %> <br>
+
+		<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
+
+	<% else %>
+		No Task Planned.<br>
+		<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
+	<% end %>
+	
+	<br><br>
+	
+	<hr>
+	
 	
 <% end %>
+</div>

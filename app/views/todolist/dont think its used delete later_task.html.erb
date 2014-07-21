@@ -1,0 +1,14 @@
+***************
+<%= text_field_tag "[todolist][tasks][#{i}][description]", @todolist['tasks']["#{i}"]['description'] ,class: 'textField task' %>
+
+
+<div style="position:relative; right:500px; float:right;">
+<%= text_field_tag "[todolist][tasks][#{i}][estimated man hours]", @todolist['tasks']["#{i}"]['estimated man hours'] ,class: 'manHoursInput' %>
+</div>
+
+
+
+
+<div style="position:relative; right:295px; float:right;">
+	<%= select("[todolist][tasks][#{i}]", "status", 						options_for_select([["In Progress", "In Progress"], ["Finished", "Finished"]], @todolist['tasks']["#{i}"]['status']),  {include_blank: 'Not Started'}) %>
+</div>

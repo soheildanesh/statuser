@@ -16,14 +16,14 @@ class WorkOrderController < ApplicationController
     
     def update
 
-        if(not current_user.nil?)
-            if(not current_user['role'] == 'admin')
-                flash[:notice] = "Have to be admin user for this"
+        if(not get_current_user.nil?)
+            if(not get_current_user['role'] == 'admin')
+                not get_current_user[:notice] = "Have to be admin user for this"
                 render '/login_session/new'
                 return
             end
        else
-           flash[:notice] = "Have to be logged in for this"
+           not get_current_user[:notice] = "Have to be logged in for this"
            render '/login_session/new'
            return
        end
@@ -50,12 +50,12 @@ class WorkOrderController < ApplicationController
     def destroy
         tobeDeleted = $wo_collection.find({_id: BSON::ObjectId(params['id'])}).to_a[0]
         projectId = tobeDeleted['projectId']
-        if(current_user['role'] == 'admin' or tobeDeleted['createdBy'] == current_user['_id'])
+        if( get_current_user['role'] == 'admin' or tobeDeleted['createdBy'] ==get_current_user['_id'])
             $wo_collection.remove({_id: BSON::ObjectId(params['id'])})
             redirect_to controller:'project', action:'show', id:projectId
             return
         else
-            flash[:error] = "you dont have permission to delete this entry, contact and admin"
+            not get_current_user[:error] = "you dont have permission to delete this entry, contact and admin"
             redirect_to controller:'project', action:'show', id:projectId
             return
         end
@@ -70,7 +70,7 @@ class WorkOrderController < ApplicationController
         woId = $wo_collection.insert(@wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: woId}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{@wo['workOrderId']} created"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{@wo['workOrderId']} created"
         
         #A regular work order belongs to a project, but a change request (which starts with an authorization request) is a special kind of work order that belongs to another work order hence skipping this part if has key parnetWoId
         if  @wo.has_key? 'parentWoId'
@@ -206,14 +206,14 @@ class WorkOrderController < ApplicationController
         woAcceptance = params['work_order']['woAcceptance']
 
         woAcceptance['created_at'] = Time.now
-        woAcceptance['created_by'] = current_user['_id']
+        woAcceptance['created_by'] =get_current_user['_id']
         
         wo['woAcceptance'] = woAcceptance
         
         $wo_collection.save(wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} #{woAcceptance['status']}"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{wo['workOrderId']} #{woAcceptance['status']}"
 
         redirect_to action: 'show', id: wo['_id'].to_s
 
@@ -224,14 +224,14 @@ class WorkOrderController < ApplicationController
         grant = params['work_order']['grant']
         
         grant['created_at'] = Time.now
-        grant['created_by'] = current_user['_id']
+        grant['created_by'] =get_current_user['_id']
         
         wo['grant'] = grant
         
         $wo_collection.save(wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} grant #{grant['status']}"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{wo['workOrderId']} grant #{grant['status']}"
         
         redirect_to action: 'show', id: wo['_id'].to_s
     end
@@ -257,14 +257,14 @@ class WorkOrderController < ApplicationController
 
         grcr = params['grcr']
         grcr['createdAt'] = Time.now
-        grcr['createdBy'] = current_user['_id']
+        grcr['createdBy'] =get_current_user['_id']
         
         wo['grcr'] = grcr
         
         $wo_collection.save(wo)
 
         eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} work completion #{grcr['acceptance_status']}"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{wo['workOrderId']} work completion #{grcr['acceptance_status']}"
         
         redirect_to action: 'show', id: wo['_id'].to_s
     end
@@ -273,14 +273,14 @@ class WorkOrderController < ApplicationController
         wo = $wo_collection.find({ :_id => BSON::ObjectId(params['woId']) }).to_a[0]
         workComplete = params['workComplete']
         workComplete['createdAt'] = Time.now
-        workComplete['createdBy'] = current_user['_id']
+        workComplete['createdBy'] =get_current_user['_id']
         
         wo['workComplete'] = workComplete
         
         $wo_collection.save(wo)
         
         eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} work completed"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{wo['workOrderId']} work completed"
         
         redirect_to action: 'show', id: wo['_id'].to_s
         
@@ -291,7 +291,7 @@ class WorkOrderController < ApplicationController
         cpo = params['cpo']
 
         cpo['createdAt'] = Time.now
-        cpo['createdBy'] = current_user['_id']
+        cpo['createdBy'] =get_current_user['_id']
         
         wo = $wo_collection.find({ :_id => BSON::ObjectId(params['woId']) }).to_a[0]
         #todo check and reject if wo already has cpo
@@ -301,7 +301,7 @@ class WorkOrderController < ApplicationController
         wo['cpo'] = cpo
         
         eventUrl = {controller: 'work_order', action: 'show', id: wo['_id']}
-        registerEvent eventUrl , current_user['_id'], "work order ID: #{wo['workOrderId']} cpo added"
+        registerEvent eventUrl ,get_current_user['_id'], "work order ID: #{wo['workOrderId']} cpo added"
 
         $wo_collection.save(wo)
         

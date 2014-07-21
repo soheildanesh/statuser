@@ -1,12 +1,12 @@
 class FeedbackController < ApplicationController
   
     def destroy
-        if(current_user.nil?)
-            flash[:notice] = "log in to delete"
+        if(get_current_user.nil?)
+            not get_current_user[:notice] = "log in to delete"
             redirect_to controller:'login_session', action:'new'
             return
-        elsif(current_user['role'] != 'admin')
-            flash[:notice] = "only an admin can delete"
+        elsif(get_current_user['role'] != 'admin')
+            not get_current_user[:notice] = "only an admin can delete"
             redirect_to controller:'login_session', action:'new'
             return
         else
@@ -34,13 +34,13 @@ class FeedbackController < ApplicationController
   
     def create
         
-        if(current_user.nil?)
-            flash[:notice] = "log in to create"
+        if(get_current_user.nil?)
+            not get_current_user[:notice] = "log in to create"
             render :controller => 'feedback', :action => 'new'
             return        
         else   
             params["feedback"]['createdAt'] = Time.now                
-            params["feedback"]['createdBy'] = current_user['_id']
+            params["feedback"]['createdBy'] = get_current_user['_id']
             
             $feedback_collection.insert(params["feedback"])
             #ensure the insert happened
@@ -50,7 +50,7 @@ class FeedbackController < ApplicationController
             end
         end
         
-        flash[:notice] = "Thank you for your feedback!"
+        not get_current_user[:notice] = "Thank you for your feedback!"
         redirect_to controller:'project', action:'index'
     end
 end

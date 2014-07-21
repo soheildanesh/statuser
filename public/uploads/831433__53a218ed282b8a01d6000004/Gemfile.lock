@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (3.1.2)
+      columnize (~> 0.8)
+      debugger-linecache (~> 1.2)
+    columnize (0.8.9)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
+    debugger-linecache (1.2.0)
+    fast-stemmer (1.0.2)
+    lemmatizer (0.1.1)
+    safe_yaml (1.0.3)
+    stopwords (0.2)
+    stopwords-filter (0.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  byebug
+  crack
+  fast-stemmer
+  lemmatizer
+  stopwords
+  stopwords-filter

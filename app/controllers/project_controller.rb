@@ -14,14 +14,99 @@ class ProjectController < ApplicationController
         @endDate = Date.new( @project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
         
     end
+    
+    
+    
+    ######
+    def indexUnfinishedTasks
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        
+        if not @project.has_key? 'plan'
+            flash[:notice] = 'project has no plan!'
+            redirect_to action: 'show', id: params['id']
+            return 
+        end
+        
+        @unfinishedTasks = Hash.new
+        
+        @project['plan'].each do |day, todolisIdHash|
+            
+            if Date.parse(day) >= Date.today
+                next 
+            end
+            
+            todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
+            
+            tasks = todolist['tasks']
+            
+            tasks.each do |taskNum, taskAtts|
+                status = taskAtts['status']
+                if status.nil? or status.empty? or status == "In Progress"
+                   
+                   if not @unfinishedTasks.has_key? day.to_s
+                       @unfinishedTasks[day.to_s] = Hash.new
+                   end
+                   @unfinishedTasks[day.to_s][@unfinishedTasks[day.to_s].size.to_s] = taskAtts
+                   
+                end
+            end
+        end
+        
+    end
+    
+    def rescheduleTaskChooseNewDay
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        
+        @startDate = Date.new( @project['startDate(1i)'].to_i, @project['startDate(2i)'].to_i, @project['startDate(3i)'].to_i)
+        @endDate = Date.new( @project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
+        
+        @originalDay = params['originalDay']
+        @taskNum = params['taskNum']
+        
+    end
+    
+    def rescheduleTaskAssignToNewDay
+        @params = params
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        @originalDay = params['taskToReschedule']['originalDay']
+        @taskNum = params['taskToReschedule']['taskNum']
+        @newDay = params['taskToReschedule']['newDay']
+        
+        #get task from original day
+        @originalTodolistId = @project['plan']["#{@originalDay}"]["todolist_id"]
+        @originalTodolist = $todolist_collection.find({ :_id => @originalTodolistId }).to_a[0]
+        
+        @task = @originalTodolist['tasks'][@taskNum.to_s]
+        
+        
+        #assign to new day
+        if not @project.has_key? 'plan'
+            @project['plan'] = Hash.new
+        end
+        if @project['plan'].has_key? @newDay.to_s
+            newDayTodoListid = @project['plan'][@newDay.to_s]['todolist_id']
+            newDayTodoList = $todolist_collection.find({ :_id => newTodoListid }).to_a[0]
+            numExsitingNewdayTasks = newDayTodoList['tasks'].size
+            newDayTodoList['tasks'][numExsitingNewdayTasks] = @task
+            $todolist_collection.save (newDayTodoList)
+            id = newDayTodoList['_id']
+        else
+           @project['plan'][@newDay.to_s] = Hash.new
+           todolist = { projectId:  @project['_id'].to_s, createdAt: Time.now, createdBy: get_current_user['_id'], tasks: {"0" => @task}}
+           id = $todolist_collection.insert(todolist)
+        end
+
+        
+        redirect_to controller: 'todolist', action: 'show', id: id
+        
+    end
 
 
     #sprint
     def milestone_files
         @milestone = params['milestone']
-        @project = $project_collection.find({:_id => BSON::ObjectId(params['id'])})       
-        puts("@project = #{@project} @milestone = #{@milestone}")
-             #@milestone = @project['']
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id'])}).to_a[0]
     end
     def __milestone_files
         @milestone = params['milestone']
@@ -33,7 +118,7 @@ class ProjectController < ApplicationController
     
     def createSprintOrder
         
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -115,7 +200,7 @@ class ProjectController < ApplicationController
         end
         
         params['order']['createdAt'] = Time.now
-        params['order']['createdBy'] = current_user['_id']
+        params['order']['createdBy'] =get_current_user['_id']
         
         
         @project['orders']["#{ordCount}"] = params['order']
@@ -227,7 +312,7 @@ class ProjectController < ApplicationController
     
     def indexSprintOrders
         
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -235,7 +320,7 @@ class ProjectController < ApplicationController
         end
         
         
-        role = current_user['role']
+        role =get_current_user['role']
         if role == 'admin' or role == 'project controller' or role == 'project manager' 
             @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         else
@@ -350,7 +435,7 @@ class ProjectController < ApplicationController
             end
             
             
-            @project['orders']["#{@orderId3sn}"]["poLinesSubmittedBy"] = current_user['_id']
+            @project['orders']["#{@orderId3sn}"]["poLinesSubmittedBy"] =get_current_user['_id']
             @project['orders']["#{@orderId3sn}"]["poLinesSubmittedAt"] = Time.now
 
             @project['orders']["#{@orderId3sn}"]["poNumber"] = params['poNumber']
@@ -380,12 +465,12 @@ class ProjectController < ApplicationController
     #sprint
     def updateMilestone
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -428,12 +513,12 @@ class ProjectController < ApplicationController
     
     def uploadMilestoneFile
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render controller: 'login_session', action: 'new'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -473,7 +558,7 @@ class ProjectController < ApplicationController
                     @project['milestones'][milestone]["files"] = Hash.new
                 end
                 numExistingMsFiles = @project['milestones'][milestone]["files"].length
-                @project['milestones'][milestone]["files"][(numExistingMsFiles+1).to_s] = {fileName: uploadedFile.original_filename , uploadTime: Time.now, uploadedBy: current_user['_id'] }
+                @project['milestones'][milestone]["files"][(numExistingMsFiles+1).to_s] = {fileName: uploadedFile.original_filename , uploadTime: Time.now, uploadedBy:get_current_user['_id'] }
             end
             flash[:notice] = "File uploaded"
         else
@@ -487,12 +572,12 @@ class ProjectController < ApplicationController
     
     def showMilestones
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project controller' or role == 'project manager' or role == 'project manager admin')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -548,12 +633,12 @@ class ProjectController < ApplicationController
     
     def new
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render controller: 'login_session', action: 'new'
             return
         end
-        role = current_user['role']
+        role =get_current_user['role']
         if false and  not( role == 'admin' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -586,13 +671,13 @@ class ProjectController < ApplicationController
             #nothing to do yet
         end
          
-        render "show_#{@projectCustomerName}"
+        render "show_#{@projectCustomerName.downcase}"
          
     end
     
     def destroy
         tobeDeleted = $project_collection.find({_id: params['id'].to_i}).to_a[0]
-        if(current_user['role'] == 'admin' )#or tobeDeleted['createdBy'] == current_user['_id'])
+        if(get_current_user['role'] == 'admin' )#or tobeDeleted['createdBy'] ==get_current_user['_id'])
             $project_collection.remove({_id: BSON::ObjectId(params['id'])})
             redirect_to controller:'project', action:'index'
             return
@@ -621,7 +706,7 @@ class ProjectController < ApplicationController
         @project = Hash.new()
         @project = params['project']
         @project['createdAt'] = Time.now
-        @project['createdBy'] = current_user['_id']
+        @project['createdBy'] =get_current_user['_id']
         
         
         
@@ -683,7 +768,7 @@ class ProjectController < ApplicationController
     
     
     def edit
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -727,8 +812,8 @@ class ProjectController < ApplicationController
         end
         
         
-        if(not current_user.nil?)
-             if(not current_user['role'] == 'admin')
+        if(not get_current_user.nil?)
+             if(not get_current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
                  render '/login_session/new'
                  return
@@ -743,7 +828,7 @@ class ProjectController < ApplicationController
         @orderId3sn = params["orderId3sn"]
         
         params['order']['createdAt'] = Time.now
-        params['order']['createdBy'] = current_user['_id']
+        params['order']['createdBy'] =get_current_user['_id']
         
         @project['orders']["#{@orderId3sn}"] = params['order']
         
@@ -783,7 +868,7 @@ class ProjectController < ApplicationController
     end
     
     def update
-        role = current_user['role']
+        role =get_current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -791,8 +876,8 @@ class ProjectController < ApplicationController
         end
         
         
-        if(not current_user.nil?)
-             if(not current_user['role'] == 'admin')
+        if(not get_current_user.nil?)
+             if(not get_current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
                  render '/login_session/new'
                  return
@@ -822,46 +907,46 @@ class ProjectController < ApplicationController
      end
      def index
          
-        if(current_user['customerMode']['customerId'] == "All Customers")
+        if(get_current_user['customerMode']['customerId'] == "All Customers")
               @customerInMode = "All Customers"
          else
-              @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(current_user['customerMode']['customerId']) } )['customerName']
+              @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(get_current_user['customerMode']['customerId']) } )['customerName']
          end
-         if(current_user.nil?)
+         if( get_current_user.nil?)
              flash[:notice] = "Have to be admin user for this"
              render '/login_session/new'
              return
-         elsif(current_user['role'] == 'admin')
-             if(not current_user.has_key? 'customerMode')
-                 current_user['customerMode'] = Hash.new
-                 current_user['customerMode']['customerId'] = "All Customers"
-                 $person_collection.save(current_user)
+         elsif( get_current_user['role'] == 'admin')
+             if(not get_current_user.has_key? 'customerMode')
+                get_current_user['customerMode'] = Hash.new
+                get_current_user['customerMode']['customerId'] = "All Customers"
+                 $person_collection.save( get_current_user)
              end
 
-             if(current_user['customerMode']['customerId'] == "All Customers")
+             if( get_current_user['customerMode']['customerId'] == "All Customers")
                  @projects = $project_collection.find().sort( :_id => :desc ).to_a
              else
-                 @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] }).sort( :_id => :desc ).to_a
+                 @projects = $project_collection.find({"customerId" =>get_current_user['customerMode']['customerId'] }).sort( :_id => :desc ).to_a
              end
-         elsif(current_user['role'].include? 'project')
-             if(current_user['role'] == 'project manager')
-                 if(current_user['customerMode']['customerId'] == "All Customers")
-                     @projects = $project_collection.find({"projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+         elsif( get_current_user['role'].include? 'project')
+             if( get_current_user['role'] == 'project manager')
+                 if( get_current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find({"projManager" =>get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  else
-                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projManager" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                     @projects = $project_collection.find({"customerId" =>get_current_user['customerMode']['customerId'] , "projManager" =>get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  end
-             elsif(current_user['role'] == 'project controller')
-                 if(current_user['customerMode']['customerId'] == "All Customers")
-                     @projects = $project_collection.find({"projController" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+             elsif( get_current_user['role'] == 'project controller')
+                 if( get_current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find({"projController" =>get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  else
-                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , "projController" => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                     @projects = $project_collection.find({"customerId" =>get_current_user['customerMode']['customerId'] , "projController" =>get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  end
              else
                  #the above two roles were added early, starting with project manager admin and later on roles the role will match the key in the project
-                 if(current_user['customerMode']['customerId'] == "All Customers")
-                     @projects = $project_collection.find({current_user['role'] => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                 if( get_current_user['customerMode']['customerId'] == "All Customers")
+                     @projects = $project_collection.find( { get_current_user['role'] =>get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  else
-                     @projects = $project_collection.find({"customerId" => current_user['customerMode']['customerId'] , current_user['role'] => current_user['_id'].to_s }).sort( :_id => :desc ).to_a
+                     @projects = $project_collection.find({"customerId" =>get_current_user['customerMode']['customerId'] , get_current_user['role'] => get_current_user['_id'].to_s }).sort( :_id => :desc ).to_a
                  end
              end
          end

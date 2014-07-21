@@ -1,16 +1,16 @@
 class SearchController < ApplicationController
     
     def index
-        if(current_user.nil? or current_user['role'] != 'admin')
-            flash[:notice] = "LOGin, as admin, to see the LOG!"
+        if( get_current_user.nil? or get_current_user['role'] != 'admin')
+            not get_current_user[:notice] = "LOGin, as admin, to see the LOG!"
             render '/login_session/new'
             return
         end
     end
     
     def create
-        if(current_user.nil? or current_user['role'] != 'admin')
-            flash[:notice] = "LOGin, as admin, to see the LOG!"
+        if( get_current_user.nil? or get_current_user['role'] != 'admin')
+            not get_current_user[:notice] = "LOGin, as admin, to see the LOG!"
             render '/login_session/new'
             return
         end

@@ -1,0 +1,17 @@
+source 'https://rubygems.org'
+
+#gem  'rubygems'
+#gem  'rexml/document'
+#gem  'open-uri'
+gem  'crack'
+gem  'lemmatizer' #https://github.com/yohasebe/lemmatizer
+gem  'stopwords'
+gem 'stopwords-filter' #http://rubydoc.info/gems/stopwords-filter/0.2.1/frames
+gem  'byebug'
+#gem  './graph-rank/lib/graph-rank.rb'
+#gem  './sdk_ruby/alchemyapi.rb'
+gem  'fast-stemmer'
+
+
+#debugger-linecache (1.2.0)
+#debugger-ruby_core_source (1.3.2)

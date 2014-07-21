@@ -25,7 +25,7 @@ $( document ).on("keyup change", function() {
 	
 	var empty = false;
    	$.each( $('.required'), function(index, field) {
-		console.log("index = "+index+" value = "+ field.value + " value.length = "+field.value.length );
+		//console.log("index = "+index+" value = "+ field.value + " value.length = "+field.value.length );
         if (field.value.length == 0 ) {
             empty = true;
         }
@@ -65,9 +65,6 @@ $(document).on("click", '.showCrs', function(){
 
 $( document ).ready(
 	function() {
-		
-		//alert(gon.bidItemTypes.length);
-		console.log("we heas");
 		
 		if(gon.bidItemTypes != undefined && gon.bidItemTypes != null)
 		{

@@ -9,12 +9,12 @@ class PersonController < ApplicationController
     
     def edit
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -33,31 +33,40 @@ class PersonController < ApplicationController
   
     def changeMode
         #prolly have to check person's authorization here later on
-        if(params['person']["customerMode"]['customerId'] == "")
-            current_user['customerMode']['customerId'] =  "All Customers"
+        cu = get_current_user
+        
+        if not cu.nil?
+            if(params['person']["customerMode"]['customerId'] == "")
+                cu['customerMode']['customerId'] =  "All Customers"
+            else
+                puts("get_current_user['customerMode'] before = #{get_current_user['customerMode']}")
+                cu["customerMode"]['customerId'] = params['person']["customerMode"]['customerId']
+            end
+            $person_collection.save(cu)
+            puts("get_current_user['customerMode']  after = #{get_current_user['customerMode']}")
+
         else
-            current_user['customerMode'] = params['person']["customerMode"]
+            flash[:error] = "Need to log in!"
         end
-        $person_collection.save(current_user)
         redirect_to controller: 'list', action: 'index'
     end
     
     def update
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
         end
         
-        if(not current_user.nil?)
-             if(not current_user['role'] == 'admin')
+        if(not get_current_user.nil?)
+             if(not get_current_user['role'] == 'admin')
                  flash[:notice] = "Have to be admin user for this"
                  render '/login_session/new'
                  return
@@ -88,12 +97,12 @@ class PersonController < ApplicationController
     
     def destroy
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -109,12 +118,12 @@ class PersonController < ApplicationController
     
     def show
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render :action => 'index'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to controller: 'project', action: 'index'
@@ -130,19 +139,19 @@ class PersonController < ApplicationController
     end
   
     def index
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render  controller: 'login_session', :action => 'new'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if false and not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to controller: 'project', action: 'index'
             return
         end
         
-        if(!current_user.nil? and current_user['role'] != 'admin')
+        if(!get_current_user.nil? and get_current_user['role'] != 'admin')
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
                 @persons = $person_collection.find({'email' => Regexp.new(searchString, "i")})
@@ -170,12 +179,12 @@ class PersonController < ApplicationController
   
     def create
         
-        if(current_user.nil?)
+        if(get_current_user.nil?)
             flash[:notice] = "User not logged in"
             render  controller: 'login_session', :action => 'new'
             return
         end
-        role = current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' )
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
