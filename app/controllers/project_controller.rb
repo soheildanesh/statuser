@@ -86,15 +86,24 @@ class ProjectController < ApplicationController
         end
         if @project['plan'].has_key? @newDay.to_s
             newDayTodoListid = @project['plan'][@newDay.to_s]['todolist_id']
-            newDayTodoList = $todolist_collection.find({ :_id => newTodoListid }).to_a[0]
+            newDayTodoList = $todolist_collection.find({ :_id => BSON::ObjectId(newDayTodoListid.to_s) }).to_a[0]
+#            newDayTodoList = $todolist_collection.find({ :_id => newDayTodoListid.to_s }).to_a[0]
+            byebug
             numExsitingNewdayTasks = newDayTodoList['tasks'].size
-            newDayTodoList['tasks'][numExsitingNewdayTasks] = @task
+            newDayTodoList['tasks'][numExsitingNewdayTasks.to_s] = @task
+            TodolistController.calcManHourStats! newDayTodoList
             $todolist_collection.save (newDayTodoList)
             id = newDayTodoList['_id']
         else
+           
+           newDayTodoList = { 'projectId' =>  @project['_id'].to_s, 'createdAt' => Time.now, 'createdBy' => get_current_user['_id'], 'tasks' => {"0" => @task}}
+           TodolistController.calcManHourStats! newDayTodoList
+           id = $todolist_collection.insert(newDayTodoList)
            @project['plan'][@newDay.to_s] = Hash.new
-           todolist = { projectId:  @project['_id'].to_s, createdAt: Time.now, createdBy: get_current_user['_id'], tasks: {"0" => @task}}
-           id = $todolist_collection.insert(todolist)
+           @project['plan'][@newDay.to_s] = {"todolist_id" => id}
+           $project_collection.save @project
+           
+           
         end
 
         

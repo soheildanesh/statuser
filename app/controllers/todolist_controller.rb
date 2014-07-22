@@ -19,7 +19,7 @@ class TodolistController < ApplicationController
         end
         
         
-        calcManHourStats! newtodolist        
+        TodolistController.calcManHourStats! newtodolist        
         
         $todolist_collection.save(newtodolist)
         
@@ -29,30 +29,31 @@ class TodolistController < ApplicationController
         render 'show'
     end
     
-    def calcManHourStats! newtodolist
+    def self.calcManHourStats! newtodolist
         
         tasks = newtodolist['tasks']
         puts("tasks = #{tasks}")
-        @totalEstimatedManHours = 0.0
-        @totalEstManHoursForFinishedTasks = 0.0
+        totalEstimatedManHours = 0.0
+        totalEstManHoursForFinishedTasks = 0.0
         tasks.each do |taskNum, taskAtts|
 
-            @totalEstimatedManHours = @totalEstimatedManHours + taskAtts['estimated man hours'].to_i
+            totalEstimatedManHours = totalEstimatedManHours + taskAtts['estimated man hours'].to_i
             
             if(taskAtts["status"] == "Finished")
-                @totalEstManHoursForFinishedTasks = @totalEstManHoursForFinishedTasks + taskAtts['estimated man hours'].to_i
+                totalEstManHoursForFinishedTasks = totalEstManHoursForFinishedTasks + taskAtts['estimated man hours'].to_i
             end
         end
         
-        newtodolist['total estimated man hours'] = @totalEstimatedManHours
-        newtodolist['finished estimated man hours'] = @totalEstManHoursForFinishedTasks
-        newtodolist['estimated man hours left'] = @totalEstimatedManHours - @totalEstManHoursForFinishedTasks
+        newtodolist['total estimated man hours'] = totalEstimatedManHours
+        newtodolist['finished estimated man hours'] = totalEstManHoursForFinishedTasks
+        newtodolist['estimated man hours left'] = totalEstimatedManHours - totalEstManHoursForFinishedTasks
         return newtodolist
     end
     
     
     #because each time the focus changes to a new text box the form is submitted, we are guaranteed to have only one new task on each form submission
     def create
+        puts(' in TodolistController.create')
         @todolist = params['todolist']
         
         
@@ -69,7 +70,7 @@ class TodolistController < ApplicationController
                 @todolist['projectId'] = @project['_id'].to_s
                 @todolist['createdAt'] = date
                 
-                calcManHourStats! @todolist
+                TodolistController.calcManHourStats! @todolist
                 
                 id = $todolist_collection.insert(@todolist)
                 
@@ -103,8 +104,6 @@ class TodolistController < ApplicationController
         @totalEstimatedManHours = 0.0
         @totalEstManHoursForFinishedTasks = 0.0
         tasks.each do |taskNum, taskAtts|
-            puts('***')
-            puts(taskAtts)
             @totalEstimatedManHours = @totalEstimatedManHours + taskAtts['estimated man hours'].to_i
             if(taskAtts["status"] == "Finished")
                 @totalEstManHoursForFinishedTasks = @totalEstManHoursForFinishedTasks + taskAtts['estimated man hours'].to_i
