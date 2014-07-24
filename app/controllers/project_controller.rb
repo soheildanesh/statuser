@@ -42,16 +42,18 @@ class ProjectController < ApplicationController
             
             tasks.each do |taskNum, taskAtts|
                 status = taskAtts['status']
-                if status.nil? or status.empty? or status == "In Progress"
-                   
-                   if not @unfinishedTasks.has_key? day.to_s
-                       @unfinishedTasks[day.to_s] = Hash.new
-                   end
-                   @unfinishedTasks[day.to_s][@unfinishedTasks[day.to_s].size.to_s] = taskAtts
-                   
+                if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
+                    if not @unfinishedTasks.has_key? day.to_s
+                        @unfinishedTasks[day.to_s] = Hash.new
+                    end
+                    @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
                 end
             end
         end
+        
+        #TODO store unfinished tasks list in the project along with the day it was calculated. Next time we want to find all unfinished tasks we don't have to start from the first day of the project, rather from the day the list of unfinished tasks was last calculated. Basically a cache. Note that this means things have to be deleted from the cached version of the unfinished tasks lis. This would be on top of marking the original task as reassigned for recrods and for a cacehe independent mechanism.  
+        #@project['unifishedTasksCache'] = @unfinishedTasks
+        #@project['unifishedTasksCache']['dayOfLastUpdate'] = Date.today
         
     end
     
@@ -63,7 +65,6 @@ class ProjectController < ApplicationController
         
         @originalDay = params['originalDay']
         @taskNum = params['taskNum']
-        
     end
     
     def rescheduleTaskAssignToNewDay
@@ -87,28 +88,26 @@ class ProjectController < ApplicationController
         if @project['plan'].has_key? @newDay.to_s
             newDayTodoListid = @project['plan'][@newDay.to_s]['todolist_id']
             newDayTodoList = $todolist_collection.find({ :_id => BSON::ObjectId(newDayTodoListid.to_s) }).to_a[0]
-#            newDayTodoList = $todolist_collection.find({ :_id => newDayTodoListid.to_s }).to_a[0]
-            byebug
+#           newDayTodoList = $todolist_collection.find({ :_id => newDayTodoListid.to_s }).to_a[0]
             numExsitingNewdayTasks = newDayTodoList['tasks'].size
             newDayTodoList['tasks'][numExsitingNewdayTasks.to_s] = @task
             TodolistController.calcManHourStats! newDayTodoList
             $todolist_collection.save (newDayTodoList)
             id = newDayTodoList['_id']
         else
-           
            newDayTodoList = { 'projectId' =>  @project['_id'].to_s, 'createdAt' => Time.now, 'createdBy' => get_current_user['_id'], 'tasks' => {"0" => @task}}
            TodolistController.calcManHourStats! newDayTodoList
            id = $todolist_collection.insert(newDayTodoList)
            @project['plan'][@newDay.to_s] = Hash.new
            @project['plan'][@newDay.to_s] = {"todolist_id" => id}
            $project_collection.save @project
-           
-           
         end
-
+        
+        #mark the original task that it was reassigned so it doesn't keep showing up in unfinished tasks list
+        @originalTodolist['tasks'][@taskNum.to_s]['reassignedtoNewDay'] = @newDay.to_s
+        $todolist_collection.save @originalTodolist
         
         redirect_to controller: 'todolist', action: 'show', id: id
-        
     end
 
 

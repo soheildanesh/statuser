@@ -1,8 +1,9 @@
 
-<%if false%>
+<%if true%>
 	<%= @todolist %> <br>
 <% end %>
 <% if @todolist.has_key? 'projectId'%>
+	<%= link_to 'Back to Plan', controller: 'project', action: 'showPlan', id: @todolist['projectId']%> |
 	<%= link_to 'Back to project', controller: 'project', action: 'show', id: @todolist['projectId']%>
 <% end %>
 <br>

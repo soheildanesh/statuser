@@ -2,7 +2,7 @@
 <%if false %>
 	<%= @project %> <br> <br>
 <% end %>
-<%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%>|
+<%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%> |
 
 <%= link_to 'Unfinished Tasks', action: 'indexUnfinishedTasks', id: @project['_id'].to_s%>
 <br><br>
