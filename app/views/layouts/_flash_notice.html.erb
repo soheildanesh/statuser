@@ -1,7 +1,3 @@
-<% if false and  not get_current_user.nil?%>
-	<% not get_current_user.each do |key, value| %>
-	   <div class="alert alert-<%= key %>"><%= value %></div>
-	<% end %>
-<% end %>
 
-<%= flash[:error]%>
+<span style="color:red;"> <%= flash[:error]%> </span>
+<span style="color:purple;"> <%= flash[:notice] %> </span>

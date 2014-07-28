@@ -26,15 +26,19 @@
 			
 			
 		<%#= render partial: '/todolist/show_inline_no_update', locals:{ todolist: todolist, addNewTaskField: false }%>
-		Progress Estimation: <br>
-		Total Man Hours = <%= todolist['total estimated man hours']%> <br>
-    	Finished Man Hours  = <%= todolist['finished estimated man hours']  %> <br>
-    	Remaining Man Hours = <%= todolist['estimated man hours left'] %> <br>
+		
+		<p>
+			Total Est. Man Hours = <%= todolist['total estimated man hours']%> <br>
+	    	Actual Man Hours Spent  = <%= todolist['actual man hours']  %> <br>
+	    	Est. Remaining Man Hours = <%= todolist['estimated man hours left'] %> <br>
+		</p>
 
 		<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>
 
 	<% else %>
-		No Task Planned.<br>
+		<p>
+			No Task Planned.<br>
+		</p>
 		<%= link_to 'Daily Tasks', controller: 'todolist', action: 'new', projId: @project['_id'], date: date%>
 	<% end %>
 	

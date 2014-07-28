@@ -1,14 +1,14 @@
-<% if( get_current_user["customerMode"]['customerId'] == "" or get_current_user["customerMode"]['customerId'] == "All Customers")%>
-	Please choose a specific customer mode in dashboard
-<%else %>
 
-	<h2> New <%= ( get_current_user.capitalize %> Site Form:</h2>
+
 
 	<%= form_for :site, url: '/site' do |f| %>
 
-		<%= f.text_field :customerId, value:get_current_user["customerMode"]['customerId'], style:'display:none;'%>
+		<p>
+			<%= f.label :customerId, "3SN Customer ID" %><br>
+			<%= f.text_field :customerId, "class" => "required customerInput textField" %>
+		</p>
 	
-		<%= f.label :customerSiteId, "#{( get_current_user.capitalize} Site ID" %><br>
+		<%= f.label :customerSiteId, "Customer Site ID" %><br>
 		<%= f.text_field :customerSiteId, "class" => "textField"%><br><br>
 	
 		<%= f.label :siteName, "Site Name" %><br>
@@ -56,5 +56,3 @@
 	
 	
 	<% end %>
-
-<% end %>

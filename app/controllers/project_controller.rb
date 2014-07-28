@@ -42,7 +42,7 @@ class ProjectController < ApplicationController
             
             tasks.each do |taskNum, taskAtts|
                 status = taskAtts['status']
-                if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
+                if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ) and (not taskAtts['description'].empty?))
                     if not @unfinishedTasks.has_key? day.to_s
                         @unfinishedTasks[day.to_s] = Hash.new
                     end
@@ -808,7 +808,7 @@ class ProjectController < ApplicationController
          @endDate = Date.new(@project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
          
          @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
-         render "edit_#{@projectCustomerName}"
+         render "edit_sprint"
     end
     
     def updateOrder

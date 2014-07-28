@@ -8,14 +8,18 @@
 <% end %>
 <br>
 <br>
-
+<p>
+	<b> <%= Date::DAYNAMES[@date.wday] %> , <%= @date.to_s.split(' ')[0] %>  </b> <br>
+</p>
 <div style="float:left; width:600px;">
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
 
 		<%= text_field_tag "todolist[projectId]", "#{@todolist["projectId"]}", style:"display:none;" %>
-		
 		<%= text_field_tag "todolist[createdAt]", "#{@todolist["createdAt"]}", style:"display:none;" %>
+		<%= text_field_tag "todolist[createdBy]", "#{@todolist["createdBy"]}", style:"display:none;" %>
+		<%= text_field_tag "todolist[date]", "#{@todolist['date']}", style:"display:none;" %>
+		
 		
 		<% if not @todolist["todolist name"].nil?  %>
 			Todo List Name: <br>

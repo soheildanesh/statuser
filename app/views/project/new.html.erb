@@ -2,7 +2,7 @@
 	Please choose a specific customer mode in dashboard
 <%else %>
 
-	<h2> New <%= getCustomerMode.capitalize %> Project:</h2>
+	<h2> New Project:</h2>
 
 	<%= form_for :project, url: '/project' do |f| %>
 	
@@ -12,17 +12,14 @@
 			<br>
 		</p>
 	
-		<% if false #now that we have customerMode, the project customer id is simpley that of whaterver mode the current user is int%>
+
 		<p>
 			<%= f.label :customerId, "3SN Customer ID" %><br>
 			<%= f.text_field :customerId, "class" => "required customerInput textField" %>
 		</p>
-		<% end %>
-		<%= f.text_field :customerId, value:get_current_user['customerMode']['customerId'],:style => "display:none" %>
-	
 
 		<p>
-			<%= f.label :customerSiteId, "Sprint Site ID" %><br>
+			<%= f.label :customerSiteId, "Site ID" %><br>
 			<%= f.text_field :customerSiteId, "class" => "required textField siteidInput" %>
 		</p>
 

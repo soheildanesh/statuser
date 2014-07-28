@@ -18,6 +18,10 @@ class TodolistController < ApplicationController
             @addNewTaskField = true
         end
         
+        timeMonthDay = newtodolist['date'].split ' '
+        splitDate = timeMonthDay[0].split '-'
+        @date = Time.new(splitDate[0], splitDate[1], splitDate[2])
+        
         
         TodolistController.calcManHourStats! newtodolist        
         
@@ -55,6 +59,8 @@ class TodolistController < ApplicationController
     def create
         puts(' in TodolistController.create')
         @todolist = params['todolist']
+        @todolist['date'] = params['date']
+        
         
         
         
@@ -68,7 +74,12 @@ class TodolistController < ApplicationController
                 date = params['date']
 
                 @todolist['projectId'] = @project['_id'].to_s
-                @todolist['createdAt'] = date
+                @todolist['createdAt'] = Time.now
+                @todolist['createdBy'] = get_current_user['_id'] 
+                
+                splitDate = params['date'].split '-'
+                @todolist['date'] = Time.new(splitDate[0], splitDate[1], splitDate[2])
+                
                 
                 TodolistController.calcManHourStats! @todolist
                 
@@ -98,6 +109,13 @@ class TodolistController < ApplicationController
     
     def show
         @todolist = $todolist_collection.find({ :_id => BSON::ObjectId(params['id']) }).to_a[0]
+        
+        splitDate = @todolist['date'].split'-'
+        put("splitDate = #{splitDate}")
+        @date = Time.new(splitDate[0], splitDate[1], splitDate[2])
+        
+        @createdAt = @todolist['createdAt']
+        @createdBy = @todolist['createdBy']
         
         tasks = @todolist['tasks']
         puts("tasks = #{tasks}")
