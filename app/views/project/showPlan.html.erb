@@ -1,5 +1,5 @@
 
-<%if false %>
+<%if true %>
 	<%= @project %> <br> <br>
 <% end %>
 <%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%> |
@@ -26,7 +26,7 @@
 			
 			
 		<%#= render partial: '/todolist/show_inline_no_update', locals:{ todolist: todolist, addNewTaskField: false }%>
-
+		Progress Estimation: <br>
 		Total Man Hours = <%= todolist['total estimated man hours']%> <br>
     	Finished Man Hours  = <%= todolist['finished estimated man hours']  %> <br>
     	Remaining Man Hours = <%= todolist['estimated man hours left'] %> <br>

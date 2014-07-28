@@ -679,8 +679,8 @@ class ProjectController < ApplicationController
             #nothing to do yet
         end
          
-        render "show_#{@projectCustomerName.downcase}"
-         
+        #render "show_#{@projectCustomerName.downcase}"  #using show sprint for all customer for now, might abandon the scheme of the cusotmer mode. july/26
+        render "show_sprint" 
     end
     
     def destroy
@@ -915,7 +915,7 @@ class ProjectController < ApplicationController
      end
      def index
          
-        if(get_current_user['customerMode']['customerId'] == "All Customers")
+         if(get_current_user['customerMode']['customerId'] == "All Customers")
               @customerInMode = "All Customers"
          else
               @customerInMode = $customer_collection.find_one( {:_id => BSON::ObjectId(get_current_user['customerMode']['customerId']) } )['customerName']
@@ -958,6 +958,53 @@ class ProjectController < ApplicationController
                  end
              end
          end
+         
+         @unfinishedTasks = Hash.new
+         totalUnfinishedManHoursEstimate = 0
+         totalFinishedManHoursEstimate = 0
+         actualManHours = 0
+         for project in @projects
+             
+            if not project.has_key? 'plan' 
+                next
+            end
+            project['plan'].each do |day, todolisIdHash|
+
+                if Date.parse(day) >= Date.today
+                    next 
+                end
+
+                todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
+
+                tasks = todolist['tasks']
+            
+                tasks.each do |taskNum, taskAtts|
+                    status = taskAtts['status']
+                    if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
+                        if not @unfinishedTasks.has_key? day.to_s
+                            @unfinishedTasks[day.to_s] = Hash.new
+                        end
+                        @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
+                        totalUnfinishedManHoursEstimate = totalUnfinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                    end
+                    totalFinishedManHoursEstimate = totalFinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                    actualManHours = actualManHours + taskAtts['actual man hours'].to_i
+                end
+                
+            end
+            
+            project['unfinishedTaskCache'] = @unfinishedTasks
+            project["total unfinished hours estimate"] = totalUnfinishedManHoursEstimate
+            project['total finished hours estimate'] = totalFinishedManHoursEstimate
+            project['total actual man hours'] = actualManHours
+            $project_collection.save(project)
+ 
+         end
+         
+         
+        
+             
+        
      
          render "index"
     end

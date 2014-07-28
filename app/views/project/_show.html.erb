@@ -11,7 +11,10 @@
 			<b> Name </b>
 		</div>
 		
-		
+		<div class='wSmall'>
+			<b> Estimated Progress </b>
+		</div>
+
 		<div class='wSmall' style="_background-color:#CEF6CE;">
 			<b> Program </b>
 		</div>
@@ -27,6 +30,8 @@
 		<div class='wSmall'>
 			<b> Operator Id </b>
 		</div>	
+			
+
 	</div>
 	
 	<div style="width:2000px; float:left;">
@@ -43,6 +48,13 @@
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
 			<%=  printReplaceEmpty project['projName'] %> 
 		</div>
+		
+
+		<% if not project["total unfinished hours estimate"].nil? and not project["total finished hours estimate"].nil? %>
+			<div class='wSmall'>
+				<%=  printReplaceEmpty project["total actual man hours"].to_s %> / <%=  printReplaceEmpty (project["total unfinished hours estimate"] + project["total finished hours estimate"]).to_s %>
+			</div>
+		<% end %>
 		
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
@@ -68,6 +80,7 @@
 		<div class='wSmall'>
 			<%= link_to 'Delete', {action: 'destroy', id: project['_id']}, {method: :delete, data: { confirm: "Are you sure?" }} %>
 		</div>
+		
 	</div>
 	<br>
 	<br>

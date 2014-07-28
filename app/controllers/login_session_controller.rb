@@ -12,11 +12,11 @@ class LoginSessionController < ApplicationController
    get_current_user = $person_collection.find({:email => email, :password => password}).to_a[0]
     
     if(get_current_user.nil?)
-      not get_current_user[:error] = "user not found!"
+      flash[:error] = "user not found!"
       redirect_to "/login_session/new"
     else
         if not get_current_user.nil? and not get_current_user.has_key? 'customerMode'
-           get_current_user['customerMode'] = {'customerId'=>"All Customers"}
+            get_current_user['customerMode'] = {'customerId'=>"All Customers"}
             $person_collection.save( get_current_user)
         end
         
