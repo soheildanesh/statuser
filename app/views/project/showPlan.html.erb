@@ -1,5 +1,5 @@
 
-<%if true %>
+<%if false %>
 	<%= @project %> <br> <br>
 <% end %>
 <%= link_to 'Back to project', action: 'show', id: @project['_id'].to_s%> |
@@ -28,9 +28,10 @@
 		<%#= render partial: '/todolist/show_inline_no_update', locals:{ todolist: todolist, addNewTaskField: false }%>
 		
 		<p>
-			Total Est. Man Hours = <%= todolist['total estimated man hours']%> <br>
-	    	Actual Man Hours Spent  = <%= todolist['actual man hours']  %> <br>
-	    	Est. Remaining Man Hours = <%= todolist['estimated man hours left'] %> <br>
+			Efficiency = <%= todolist['finished estimated man hours'] %>  / <%= todolist['total actual man hours']  %> <br>
+			Unfinished Work MH Est. = <%= todolist['estimated man hours left'] %> <br>
+			
+			Total Work MH Est. = <%= todolist['total estimated man hours']%> <br>
 		</p>
 
 		<%= link_to 'Daily Tasks', controller: 'todolist', action: 'show', id: todolistId %>

@@ -275,6 +275,16 @@ $( document ).ready(
 );
 
 
+$( document ).ready(
+	function() {
+	$(".crewInput").tokenInput("/person");
+});
+
+
+//note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
+$( document ).on( "focus", ".personInput", function() {
+  	$(".crewInput").tokenInput("/person");
+});
 
 
 	

@@ -1,5 +1,13 @@
 Statuser::Application.routes.draw do
   
+    resources :tasklist_generator do
+        member do
+            patch :uploadSpreadSheet
+            get :update
+        end
+    end
+    
+    
     resources :feedback
     
     resources :log_entry do

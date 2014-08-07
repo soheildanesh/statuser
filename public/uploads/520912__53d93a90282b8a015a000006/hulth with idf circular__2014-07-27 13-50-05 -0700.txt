@@ -1,0 +1,12 @@
+@maxNforGrams = 5notDoingStemming = falsestemOneLevelOnly = true@extractingTermsNotWords = true
+@noLoopingEdgeToItself = true
+@skipMakingCoocMatrix = true
+@advanceCombine = true
+@numTopKeywords = 20
+@rankBeforeCombine = measuresWeight
+@maxNforGrams = 5
+@notDoingStemming = false
+@filterText = false
+@removePuncsInCleanNotEliminatePuncs = false
+@doingKpMiner = true
+@medianIdf = 5.521460917862246

@@ -45,8 +45,13 @@ gem 'actionmailer'
 # gem 'capistrano', group: :development
 
 # Use debugger
-#gem 'byebug', "group" => [:development, :test] #giving error on amazon server, for now commenting out
+gem 'byebug', "group" => [:development, :test] #giving error on amazon server, for now commenting out
 
 gem 'thin'
 
 gem 'gon'
+
+gem 'rubyzip', '< 1.0.0'
+#gem 'rubyzip', :require => 'zip/zip'
+gem 'roo'
+#gem "simple-spreadsheet"

@@ -80,7 +80,6 @@ class ProjectController < ApplicationController
         
         @task = @originalTodolist['tasks'][@taskNum.to_s]
         
-        
         #assign to new day
         if not @project.has_key? 'plan'
             @project['plan'] = Hash.new
@@ -95,12 +94,14 @@ class ProjectController < ApplicationController
             $todolist_collection.save (newDayTodoList)
             id = newDayTodoList['_id']
         else
-           newDayTodoList = { 'projectId' =>  @project['_id'].to_s, 'createdAt' => Time.now, 'createdBy' => get_current_user['_id'], 'tasks' => {"0" => @task}}
-           TodolistController.calcManHourStats! newDayTodoList
-           id = $todolist_collection.insert(newDayTodoList)
-           @project['plan'][@newDay.to_s] = Hash.new
-           @project['plan'][@newDay.to_s] = {"todolist_id" => id}
-           $project_collection.save @project
+            splitDate = @newDay.to_s.split'-'
+            @date = Time.new(splitDate[0], splitDate[1], splitDate[2])
+            newDayTodoList = { 'projectId' =>  @project['_id'].to_s, 'createdAt' => Time.now, 'createdBy' => get_current_user['_id'], 'tasks' => {"0" => @task}, 'date' => @date}
+            TodolistController.calcManHourStats! newDayTodoList
+            id = $todolist_collection.insert(newDayTodoList)
+            @project['plan'][@newDay.to_s] = Hash.new
+            @project['plan'][@newDay.to_s] = {"todolist_id" => id}
+            $project_collection.save @project
         end
         
         #mark the original task that it was reassigned so it doesn't keep showing up in unfinished tasks list
@@ -965,11 +966,18 @@ class ProjectController < ApplicationController
              end
          end
          
-         @unfinishedTasks = Hash.new
-         totalUnfinishedManHoursEstimate = 0
-         totalFinishedManHoursEstimate = 0
-         actualManHours = 0
+         
+
+         
          for project in @projects
+            
+            @unfinishedTasks = Hash.new
+            totalUnfinishedManHoursEstimate = 0
+            totalFinishedManHoursEstimate = 0
+            totalFutureManHoursEstimate = 0
+            actualManHours = 0
+
+            isfuture = false
              
             if not project.has_key? 'plan' 
                 next
@@ -977,24 +985,40 @@ class ProjectController < ApplicationController
             project['plan'].each do |day, todolisIdHash|
 
                 if Date.parse(day) >= Date.today
-                    next 
+                    isfuture = true
+                    #next 
+                else
+                    isfuture = false
                 end
+                
+                if isfuture
+                    todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
 
-                todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
-
-                tasks = todolist['tasks']
+                    tasks = todolist['tasks']
             
-                tasks.each do |taskNum, taskAtts|
-                    status = taskAtts['status']
-                    if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
-                        if not @unfinishedTasks.has_key? day.to_s
-                            @unfinishedTasks[day.to_s] = Hash.new
-                        end
-                        @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
-                        totalUnfinishedManHoursEstimate = totalUnfinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                    tasks.each do |taskNum, taskAtts|
+                        totalFutureManHoursEstimate = totalFutureManHoursEstimate + taskAtts['estimated man hours'].to_i
                     end
-                    totalFinishedManHoursEstimate = totalFinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
-                    actualManHours = actualManHours + taskAtts['actual man hours'].to_i
+                
+                else
+
+                    todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
+
+                    tasks = todolist['tasks']
+            
+                    tasks.each do |taskNum, taskAtts|
+                        status = taskAtts['status']
+                        if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
+                            if not @unfinishedTasks.has_key? day.to_s
+                                @unfinishedTasks[day.to_s] = Hash.new
+                            end
+                            @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
+                            totalUnfinishedManHoursEstimate = totalUnfinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                        elsif
+                            totalFinishedManHoursEstimate = totalFinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                        end
+                        actualManHours = actualManHours + taskAtts['actual man hours'].to_i
+                    end
                 end
                 
             end
@@ -1003,6 +1027,7 @@ class ProjectController < ApplicationController
             project["total unfinished hours estimate"] = totalUnfinishedManHoursEstimate
             project['total finished hours estimate'] = totalFinishedManHoursEstimate
             project['total actual man hours'] = actualManHours
+            project['total future man hours estimate'] = totalFutureManHoursEstimate
             $project_collection.save(project)
  
          end

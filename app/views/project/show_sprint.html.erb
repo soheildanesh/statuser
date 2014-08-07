@@ -1,4 +1,4 @@
-<%= @project%>
+<%#= @project%>
 
 <div style="width:400px;">
 	
@@ -14,6 +14,8 @@
 		<%= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%>  
 		|
 		<%= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
+		|
+		<%= link_to "Upload Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%>  
 		
 		<% role =get_current_user['role']%>
 		<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>

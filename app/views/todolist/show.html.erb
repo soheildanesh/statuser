@@ -1,7 +1,9 @@
 
-<%if true%>
+<%if false%>
 	<%= @todolist %> <br>
 <% end %>
+
+<% if true%>
 <% if @todolist.has_key? 'projectId'%>
 	<%= link_to 'Back to Plan', controller: 'project', action: 'showPlan', id: @todolist['projectId']%> |
 	<%= link_to 'Back to project', controller: 'project', action: 'show', id: @todolist['projectId']%>
@@ -15,10 +17,13 @@
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'update', id: @todolist['_id'] }, method: :patch, html: {id: "todolistForm", style: "width:1000px;"} do |f| %>
 	
 
+		<%# we need these as opposed to getting these from the todolist saved in the backend. Basically we put all the todolist infos here in the view and use all that to make a new todolist in todolist#update. TODO for future: make it so that these are read from the controller (i.e. todolist#update) as this causes a bit of avoidable data transfer%>
 		<%= text_field_tag "todolist[projectId]", "#{@todolist["projectId"]}", style:"display:none;" %>
 		<%= text_field_tag "todolist[createdAt]", "#{@todolist["createdAt"]}", style:"display:none;" %>
 		<%= text_field_tag "todolist[createdBy]", "#{@todolist["createdBy"]}", style:"display:none;" %>
 		<%= text_field_tag "todolist[date]", "#{@todolist['date']}", style:"display:none;" %>
+		<%= text_field_tag "todolist[crew]", "#{@todolist['crew']}", style:"display:none;" %>
+		
 		
 		
 		<% if not @todolist["todolist name"].nil?  %>
@@ -30,17 +35,28 @@
 		
 		<%if @todolist.has_key? "todolist name" and not @todolist["todolist name"].empty?%>
 			Todo List Name<br>
-			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %><br><br><br>   
-			<hr>
+			<%= text_field_tag "todolist[todolistName]", @todolist["todolist name"] ,class: 'textField' %>
+
 			<br><br>
 		<% end %>
+		<% if @todolist.has_key? 'crew'%>
+		
+			<br> Crew:<br>
+			<% for personId in @todolist['crew'].split(",")%>
+				<%= getPersonEmail personId %> <br>
+			<% end%>
+			<%#= @todolist['crew']%>
+		<% end %>
+		
+		<hr>
 		
 		<br><br>
-		<div>
+		<div style="display:none;">
 			Progress Estimation (Man Hours):<br>
 			Total = <%= @todolist['total estimated man hours']%> <br>
 	        Finished = <%= @todolist['finished estimated man hours']  %> <br>
 	        Remaining = <%= @todolist['estimated man hours left'] %> <br>
+			
 		</div>
 		<br>
 		
@@ -106,4 +122,5 @@
 			<%=  @todolist['tasks']["#{i}"]%> <br>
 		<% end %>
 	<% end %>
+<% end %>
 <% end %>

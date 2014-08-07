@@ -1,15 +1,27 @@
 <div style="float:left; width:600px;">
+	<b> <%= Date::DAYNAMES[@date.wday] %> , <%= @date.to_s.split(' ')[0] %>  </b>
 	<%= form_for :todolist, url: {controller: 'todolist', action: 'create'}, html: {id: "todolistForm"} do |f| %>
 	
 	    
 		<%= text_field_tag "projectId",  @projId, style:"display:none;"  %><br>
 		
 		<%= text_field_tag "date",  @date, style:"display:none;"  %><br>
-	
-		Todo List Name<br>
-		<%= f.text_field "todolist name", class: 'textField' %><br><br><br>
+		
+		Todo List Name (optional)<br>
+		<%= f.text_field "todolist name", class: 'textField' %><br>
+		
+		<p>
+			<div id="crew">
+				<%= f.label :crew, "crew" %><br>
+				<%= f.text_field '[crew]', "class" => "crewInput required textField", style: 'width:100px; display:none;', size:10%>
+			</div>
+		</p>
 		<hr>
 		<br><br>
+
+		
+
+	
 		
 		Tasks: <span style = "position:relative; left: 370px;"> Estimated Man Hours: </span> <br>
 		
@@ -19,6 +31,8 @@
 
 			<%= f.text_field "[tasks][0][estimated man hours]", class: 'manHoursInput' %>
 		</div>
+		
+		
 	 	
 
 		<%# for i in 1 .. 10 %>

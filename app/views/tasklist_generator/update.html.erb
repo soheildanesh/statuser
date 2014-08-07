@@ -1,0 +1,95 @@
+
+<% if false%>
+project = 
+	<%= @project%> <br><br>
+
+tasks = <%= @tasks%>
+<% end %>
+
+ 
+
+
+
+<%#= form_tag(controller: "tasklist_generator", action: "update", method: "patch") do %>
+<%= form_tag({controller: "tasklist_generator", action: "update", id: @project['_id'].to_s }, {method: :patch}) do %>
+
+	Choose Action:<br>
+	<%= select_tag("actionSelect", options_for_select([['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
+
+
+	
+	<p>
+		Assign Selected Tasks to (Year/Month/Day)
+		<%= text_field_tag 'dueDate'%>
+		<%#= date_select 'dueDate', 'date' %>
+	</p>
+	
+	<div style="float:left; width:2000px; height_:100px;">
+		<div style="float:left; width:700px;">
+			Task
+		</div>
+
+		<div style="float:left; width:200px;">
+			Due Date
+		</div>
+	</div>
+	<hr>
+	
+
+
+
+	<% i = 0%>
+	<% for task in @tasks %>
+		
+		<% if task.has_key? 'isDone' and task['isDone'] = true%>
+			<div style="float:left; width:2000px; height_:100px; background-color:green;">
+		<% else %>
+			<div style="float:left; width:2000px; height_:100px;">
+		<% end %>
+			<%#= task%>
+			<div style="float:left; width:700px;">
+				<%= check_box_tag "[tasks][#{i}]" %>
+				<%= task["task"] %> 
+			</div>
+		
+			<div style="float:left; width:200px;">
+				<% if task.has_key? 'dueDate'%>
+					<%= task['dueDate']%>
+				<% end %>
+			</div>
+			
+			<div style="float:left; width:200px;">
+				<%= form_for "[tasks][#{i}]", url:{conroller:'project', action:'uploadMilestoneFile', id: id}, method: "PATCH", style: "float:left;" do |f| %>
+					<%= f.file_field "[milestones][#{milestone}]" %>
+					<%= f.submit "Upload"%>
+				<% end %>	
+			</div>
+
+			
+		</div>
+
+		<hr>
+		<% i = i+1%>
+	<% end %>
+	
+	
+	
+	<%= submit_tag "submit"%>
+
+<% end %>
+<br>
+
+
+
+<% if false%>
+	---------
+	<%for r in @s.first_row.to_i .. @s.last_row.to_i %>
+		<%#= @s.row(r)%>
+		<% if @s.row(r)[0].downcase.include? 'antenna install'%>
+			<% #TBD (Antenna Install) <br> TODO put antenna JCR form as an html form maybe %>
+			<%= @s.row(r) %> <br>
+		<% else %>
+			<%= @s.row(r) %> <br>
+		<% end %>
+	<% end %>
+<% end %>

@@ -1,8 +1,8 @@
 
 
-<div style="width:1600px;">
+<div style="width:3500px;">
 	<hr style="margin:0px;">
-	<div style="width:1600px; _background-color:#CEF6CE;">
+	<div style="width:3500px; _background-color:#CEF6CE;">
 		<div class='wSmall'>
 			<b> 3SN Project Id </b>
 		</div>
@@ -10,10 +10,20 @@
 		<div class='wSmall'>
 			<b> Name </b>
 		</div>
+
+		<div class='wSmall'>
+			<b> Efficiency So Far  </b>
+		</div>
 		
 		<div class='wSmall'>
-			<b> Estimated Progress </b>
+			<b> Past Due Estimate (MH) </b>
 		</div>
+		
+		<div class='wSmall'>
+			<b> To Be Done Estimate (MH)  </b>
+		</div>
+
+
 
 		<div class='wSmall' style="_background-color:#CEF6CE;">
 			<b> Program </b>
@@ -34,7 +44,7 @@
 
 	</div>
 	
-	<div style="width:2000px; float:left;">
+	<div style="width:2500px; float:left;">
 		<!-- this if is for showing id only if name is not presenting, right now opting for just showing both so this is not really used april 14 2014, soheil-->
 		<% if project['projId3s'].nil? or project['projId3s'].empty? %>
 			<% linkText = project['_id'].to_s %>
@@ -49,18 +59,32 @@
 			<%=  printReplaceEmpty project['projName'] %> 
 		</div>
 		
+		
+		<%#--------Efficiency and Timliness stats--------%>
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			<%=  project["total finished hours estimate"].to_s %> / <%=  printReplaceEmpty project["total actual man hours"].to_s %> 
+		</div>
+		
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			<%= project["total unfinished hours estimate"].to_s %>
+		</div>
+		
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			<%= project['total future man hours estimate'].to_s %>
+		</div>
 
-		<% if not project["total unfinished hours estimate"].nil? and not project["total finished hours estimate"].nil? %>
+		<%#----------------%>
+		
+
+		<% if false and  not project["total unfinished hours estimate"].nil? and not project["total finished hours estimate"].nil? %>
 			<div class='wSmall'>
-				<%=  printReplaceEmpty project["total actual man hours"].to_s %> / <%=  printReplaceEmpty (project["total unfinished hours estimate"] + project["total finished hours estimate"]).to_s %>
+				<%=  printReplaceEmpty project["total actual man hours"].to_s %> / <%=  printReplaceEmpty (project["total unfinished hours estimate"] + project["total finished hours estimate"]).to_s %> / <%= project["total unfinished hours estimate"].to_s %>
 			</div>
 		<% end %>
 		
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
 			<%=  printReplaceEmpty getProgramName project['program'] %> 
-			
-			
 		</div>
 		
 		<div class='wSmall' >

@@ -62,7 +62,7 @@
 		
 			<span style = "position:relative; left:475px;"> Status</span> <br><br>
 			<% for i in 0 .. todolist['tasks'].size-1 %>
-				<%if todolist['tasks'].has_key? "#{i}"  %>
+				<%if todolist['tasks'].has_key? "#{i}"  and not todolist['tasks']["#{i}"]['description'].empty? %>
 					<%= text_field_tag "[todolist][tasks][#{i}][description]", todolist['tasks']["#{i}"]['description'] ,class: 'textField task', disabled: 'disabled' %>
 				
 				
