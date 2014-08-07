@@ -3,7 +3,8 @@ Statuser::Application.routes.draw do
     resources :tasklist_generator do
         member do
             patch :uploadSpreadSheet
-            get :update
+            patch :update
+            get :showTaskFiles
         end
     end
     

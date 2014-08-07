@@ -1,5 +1,5 @@
 
-<% if false%>
+<% if true%>
 project = 
 	<%= @project%> <br><br>
 
@@ -11,7 +11,7 @@ tasks = <%= @tasks%>
 
 
 <%#= form_tag(controller: "tasklist_generator", action: "update", method: "patch") do %>
-<%= form_tag({controller: "tasklist_generator", action: "update", id: @project['_id'].to_s }, {method: :patch}) do %>
+<%= form_tag({controller: "tasklist_generator", action: "update", id: @project['_id'].to_s },  {multipart: true, method: :patch})  do %>
 
 	Choose Action:<br>
 	<%= select_tag("actionSelect", options_for_select([['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
@@ -35,10 +35,7 @@ tasks = <%= @tasks%>
 	</div>
 	<hr>
 	
-
-
-
-	<% i = 0%>
+	<% i = 0 %> 
 	<% for task in @tasks %>
 		
 		<% if task.has_key? 'isDone' and task['isDone'] = true%>
@@ -47,23 +44,34 @@ tasks = <%= @tasks%>
 			<div style="float:left; width:2000px; height_:100px;">
 		<% end %>
 			<%#= task%>
-			<div style="float:left; width:700px;">
+			<div style="float:left; width:500px;">
 				<%= check_box_tag "[tasks][#{i}]" %>
-				<%= task["task"] %> 
+				<%= task['task'] %> 
+				<%#= task[(i+1).to_s] %> 
 			</div>
 		
 			<div style="float:left; width:200px;">
 				<% if task.has_key? 'dueDate'%>
 					<%= task['dueDate']%>
+				<% else %>
+					<%= " _ "%>
 				<% end %>
 			</div>
 			
 			<div style="float:left; width:200px;">
-				<%= form_for "[tasks][#{i}]", url:{conroller:'project', action:'uploadMilestoneFile', id: id}, method: "PATCH", style: "float:left;" do |f| %>
-					<%= f.file_field "[milestones][#{milestone}]" %>
-					<%= f.submit "Upload"%>
-				<% end %>	
+			
+				<%= file_field_tag "[taskFiles][#{i}]" %>
+			
 			</div>
+			
+			<% if task.has_key? 'files'%>
+				<div style="float:left; width:200px;">
+			
+					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: i, projectId: @project['_id']} %>
+			
+				</div>
+			<% end %>
+
 
 			
 		</div>

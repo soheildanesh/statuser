@@ -969,6 +969,8 @@ class ProjectController < ApplicationController
          
 
          
+         
+         
          for project in @projects
             
             @unfinishedTasks = Hash.new
