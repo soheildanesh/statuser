@@ -966,79 +966,104 @@ class ProjectController < ApplicationController
              end
          end
          
-         
-
-         
-         
-         
          for project in @projects
-            
-            @unfinishedTasks = Hash.new
-            totalUnfinishedManHoursEstimate = 0
-            totalFinishedManHoursEstimate = 0
-            totalFutureManHoursEstimate = 0
-            actualManHours = 0
-
-            isfuture = false
-             
-            if not project.has_key? 'plan' 
+            if( not project.has_key? 'tasks') 
                 next
             end
-            project['plan'].each do |day, todolisIdHash|
-
-                if Date.parse(day) >= Date.today
-                    isfuture = true
-                    #next 
-                else
-                    isfuture = false
-                end
-                
-                if isfuture
-                    todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
-
-                    tasks = todolist['tasks']
+            tasks = project['tasks']
             
-                    tasks.each do |taskNum, taskAtts|
-                        totalFutureManHoursEstimate = totalFutureManHoursEstimate + taskAtts['estimated man hours'].to_i
+            numDoneTasks = 0
+            numTasks = 0
+            
+            for task in tasks
+                numTasks = numTasks + 1
+                if task.has_key? 'isDone' and task['isDone'] == true
+                    numDoneTasks = numDoneTasks + 1
+                end
+            end
+
+            project['numTasks'] = numTasks
+            project['numDoneTasks'] = numDoneTasks
+            
+            startTime = Time.new(project['startDate(1i)'],project['startDate(2i)'],project['startDate(3i)'])
+            endTime = Time.new(project['endDate(1i)'],project['endDate(2i)'],project['endDate(3i)'])
+            
+            puts("startTime = #{startTime}")
+            puts("endTime = #{endTime}")
+            puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
+            project['total days'] = Integer((endTime - startTime) / 3600 / 24)
+            project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
+            
+            $project_collection.save(project)
+         end
+         
+         if false #this is for the feature where we wrote the daily tasks, mostly implemented in todolist_controller
+             for project in @projects
+            
+                @unfinishedTasks = Hash.new
+                totalUnfinishedManHoursEstimate = 0
+                totalFinishedManHoursEstimate = 0
+                totalFutureManHoursEstimate = 0
+                actualManHours = 0
+
+                isfuture = false
+             
+                if not project.has_key? 'plan' 
+                    next
+                end
+                project['plan'].each do |day, todolisIdHash|
+
+                    if Date.parse(day) >= Date.today
+                        isfuture = true
+                        #next 
+                    else
+                        isfuture = false
                     end
                 
-                else
+                    if isfuture
+                        todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
 
-                    todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
-
-                    tasks = todolist['tasks']
+                        tasks = todolist['tasks']
             
-                    tasks.each do |taskNum, taskAtts|
-                        status = taskAtts['status']
-                        if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
-                            if not @unfinishedTasks.has_key? day.to_s
-                                @unfinishedTasks[day.to_s] = Hash.new
-                            end
-                            @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
-                            totalUnfinishedManHoursEstimate = totalUnfinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
-                        elsif
-                            totalFinishedManHoursEstimate = totalFinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                        tasks.each do |taskNum, taskAtts|
+                            totalFutureManHoursEstimate = totalFutureManHoursEstimate + taskAtts['estimated man hours'].to_i
                         end
-                        actualManHours = actualManHours + taskAtts['actual man hours'].to_i
+                
+                    else
+
+                        todolist = $todolist_collection.find({:_id => todolisIdHash['todolist_id'] } ).to_a[0]
+
+                        tasks = todolist['tasks']
+            
+                        tasks.each do |taskNum, taskAtts|
+                            status = taskAtts['status']
+                            if ((status.nil? or status.empty? or status == "In Progress") and (not taskAtts.has_key? 'reassignedtoNewDay' ))
+                                if not @unfinishedTasks.has_key? day.to_s
+                                    @unfinishedTasks[day.to_s] = Hash.new
+                                end
+                                @unfinishedTasks[day.to_s][taskNum] = taskAtts #notice taskNum in the unfinished tasks for that day is the same as the task's number in its original day. This is necessary when deleting from unfinished task list (ie marking the original task as reassigned, we need the original task number)
+                                totalUnfinishedManHoursEstimate = totalUnfinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                            elsif
+                                totalFinishedManHoursEstimate = totalFinishedManHoursEstimate + taskAtts['estimated man hours'].to_i
+                            end
+                            actualManHours = actualManHours + taskAtts['actual man hours'].to_i
+                        end
                     end
+                
                 end
                 
+                project['unfinishedTaskCache'] = @unfinishedTasks
+                project["total unfinished hours estimate"] = totalUnfinishedManHoursEstimate
+                project['total finished hours estimate'] = totalFinishedManHoursEstimate
+                project['total actual man hours'] = actualManHours
+                project['total future man hours estimate'] = totalFutureManHoursEstimate
             end
             
-            project['unfinishedTaskCache'] = @unfinishedTasks
-            project["total unfinished hours estimate"] = totalUnfinishedManHoursEstimate
-            project['total finished hours estimate'] = totalFinishedManHoursEstimate
-            project['total actual man hours'] = actualManHours
-            project['total future man hours estimate'] = totalFutureManHoursEstimate
+            
             $project_collection.save(project)
  
          end
          
-         
-        
-             
-        
-     
          render "index"
     end
     

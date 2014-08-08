@@ -6,6 +6,9 @@ project =
 tasks = <%= @tasks%>
 <% end %>
 
+<p>
+	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%>
+
  
 
 
@@ -37,6 +40,7 @@ tasks = <%= @tasks%>
 	
 	<% i = 0 %> 
 	<% for task in @tasks %>
+		
 		
 		<% if task.has_key? 'isDone' and task['isDone'] = true%>
 			<div style="float:left; width:2000px; height_:100px; background-color:green;">
@@ -75,6 +79,8 @@ tasks = <%= @tasks%>
 
 			
 		</div>
+		
+		<%= text_field_tag "[taskComments][#{i}]", task['comment'], style:"width:300px;" %>
 
 		<hr>
 		<% i = i+1%>

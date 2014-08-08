@@ -94,6 +94,15 @@ class TasklistGeneratorController < ApplicationController
                 
         end
         
+        taskComments = params['taskComments']
+        if not taskComments.nil?
+           
+           taskComments.each do |taskNum, comment|
+               @tasks[taskNum.to_i]['comment'] = comment
+           end 
+        end
+        
+        
         $project_collection.save(@project)
         
     end
