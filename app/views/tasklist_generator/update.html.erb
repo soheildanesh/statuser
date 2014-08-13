@@ -61,12 +61,20 @@ tasks = <%= @tasks%>
 	
 	<% i = 0 %> 
 	<% for task in @tasks %>
-		
-		
-		<% if task.has_key? 'isDone' and task['isDone'] = true%>
-			<div style="float:left; width:2000px; height_:100px; background-color:green;">
+		<% if task.has_key? 'isDone' and task['isDone'] == true %>
+			<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
+				<div style="float:left; width:2000px; height_:100px; background-color:orange;">	
+			<% else %>
+				<div style="float:left; width:2000px; height_:100px; background-color:green;">
+			<% end %>
 		<% else %>
-			<div style="float:left; width:2000px; height_:100px;">
+			<% if task.has_key? 'dueDate' and task['dueDate'] < Time.now %>
+				<div style="float:left; width:2000px; height_:100px; background-color:red;">
+			<% elsif task.has_key? 'start date' and task['start date'] < Time.now %>
+				<div style="float:left; width:2000px; height_:100px; background-color:yellow;">
+			<% else %>
+				<div style="float:left; width:2000px; height_:100px;">
+			<% end %>
 		<% end %>
 			<%#= task%>
 			<div style="float:left; width:400px;">
