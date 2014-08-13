@@ -22,24 +22,26 @@
 			<%= f.label :customerSiteId, "Customer Site ID" %><br>
 			<%= f.text_field :customerSiteId, "class" => "required textField siteidInput" %>
 		</p>
+		
+		<p>
+			<%= f.label :program, "3SN Program" %><br>
+			<%= f.text_field :program, "class" => "required programInput textField"%>
+		</p>
+		
+		<p>
+			<%= f.label :projType, "Project Type" %><br>
+			<%= f.text_field :projType, "class" => "required projTypeInput textField"%>
+		</p>
+
 
 	
 		<% if false %>
-			<p>
-				<%= f.label :program, "3SN Program" %><br>
-				<%= f.text_field :program, "class" => "required programInput textField"%>
-			</p>
-	
 			<p>
 				<%= f.label :projName, "3SN Project Name" %><br>
 				<%= f.text_field :projName, "class" => "required textField"%>
 			</p>
 	
 	
-			<p>
-				<%= f.label :projType, "Project Type" %><br>
-				<%= f.text_field :projType, "class" => "required projTypeInput textField"%>
-			</p>
 	
 			<p>
 				<%= f.label :operatorId, "3SN Operator ID" %><br>
@@ -51,14 +53,14 @@
 			<div id="projManager">
 				<%= f.label :projManager, "3SN Project Manager" %><br>
 				<%#= f.text_field :projManager%>
-				<%= f.text_field :projManager, "class" => "personInput required textField", style: 'width:100px; display:none;', size:10%>
+				<%= f.text_field :projManager, "class" => "personInput required textField"%>
 			</div>
 		</p>
 		
 		<p>
 			<div id="projManagerAdmin">
 				<%= f.label :projManager, "3SN Project Manager Admin" %><br>
-				<%= f.text_field "project manager admin", "class" => "personInput required textField", style: 'width:100px; display:none;', size:10%>
+				<%= f.text_field "project manager admin", "class" => "personInput required textField"%>
 			</div>
 		</p>
 		

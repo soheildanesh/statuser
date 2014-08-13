@@ -980,7 +980,7 @@ class ProjectController < ApplicationController
                 if task.has_key? 'isDone' and task['isDone'] == true
                     numDoneTasks = numDoneTasks + 1
                     
-                    if task.has_key? 'value estimate'
+                    if task.has_key? 'value estimate' and task['value estimate'] != nil
                         earnedValue = earnedValue + task['value estimate']
                     end
                 end
@@ -999,6 +999,13 @@ class ProjectController < ApplicationController
             puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
             project['total days'] = Integer((endTime - startTime) / 3600 / 24)
             project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
+            
+            if project['days so far'] > project['total days']
+                project['percent time passed'] = 100.0
+            else
+                project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+            end
+            
             project['earned value'] = earnedValue
             
             $project_collection.save(project)

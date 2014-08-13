@@ -122,6 +122,24 @@ $( document ).on( "focus", ".itemTypeInput", function() {
 });
 
 
+$( document ).on( "focus", ".projTypeInput",
+	function() {
+	
+		if(gon.projType != undefined && gon.projType != null)
+		{				
+		  	$(".projTypeInput").tokenInput("/project_type",
+			{prePopulate: gon.projType,
+			tokenLimit: 1});
+		}
+		else
+		{
+			$(".projTypeInput").tokenInput("/project_type",
+			{tokenLimit: 1});
+		}
+
+});
+
+
 
 $( document ).ready(
 	function() {
@@ -137,10 +155,7 @@ $( document ).ready(
 			$(".projTypeInput").tokenInput("/project_type",
 			{tokenLimit: 1});
 		}
-		
-		
-//	$(".projectTypeInput").tokenInput("/project_type",
-//	{tokenLimit: 1});
+
 });
 
 

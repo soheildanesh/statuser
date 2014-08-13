@@ -13,8 +13,13 @@
 
 		
 		<div class='wSmall'>
-			<b> Earned Value </b>
+			<b> % Earned Value </b>
 		</div>
+		
+		<div class='wSmall'>
+			<b> % Time Passed </b>
+		</div>
+
 		
 		<div class='wSmall' style="_background-color:#CEF6CE;">
 			<b> Program </b>
@@ -47,15 +52,20 @@
 		</div>
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
-			<%= printReplaceEmpty project["numDoneTasks"].to_s %> / <%=  printReplaceEmpty project["numTasks"].to_s %> 
+			
+			<%= printReplaceEmpty project["customerSiteId"].to_s %>
+			<%#= printReplaceEmpty project["numDoneTasks"].to_s %>  <%#=  printReplaceEmpty project["numTasks"].to_s %> 
 		</div>
 
 		
 		
 		<%#--------Efficiency and Timliness stats--------%>
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
-			<%= printReplaceEmpty ((project['earned value'].to_f * 1000).to_i.to_f / 10.0).to_s  %>%
-			<%#= printReplaceEmpty project["earned value"].to_s %> 
+			<%= printReplaceEmpty ((project['earned value'].to_f * 1000).to_i.to_f / 10.0).to_s  %>
+		</div>
+		
+		<div class='wSmall'  style="__background-color:#CEF6CE;">
+			<%= printReplaceEmpty (project['percent time passed']).to_s  %>
 		</div>
 		
 		<%#--------Efficiency and Timliness stats for the old system with daily todolist--------%>
