@@ -974,12 +974,18 @@ class ProjectController < ApplicationController
             
             numDoneTasks = 0
             numTasks = 0
-            
+            earnedValue = 0.0
             for task in tasks
                 numTasks = numTasks + 1
                 if task.has_key? 'isDone' and task['isDone'] == true
                     numDoneTasks = numDoneTasks + 1
+                    
+                    if task.has_key? 'value estimate'
+                        earnedValue = earnedValue + task['value estimate']
+                    end
                 end
+                
+                
             end
 
             project['numTasks'] = numTasks
@@ -993,6 +999,7 @@ class ProjectController < ApplicationController
             puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
             project['total days'] = Integer((endTime - startTime) / 3600 / 24)
             project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
+            project['earned value'] = earnedValue
             
             $project_collection.save(project)
          end

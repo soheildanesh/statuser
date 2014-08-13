@@ -18,7 +18,7 @@ class TasklistGeneratorController < ApplicationController
                     
                 end
             end
-           @tasks << { 'task number' => r.to_s, 'task' => @s.row(r)[0] } 
+           @tasks << { 'task number' => r.to_s,  'dirver id' => @s.row(r)[1], 'task' => @s.row(r)[2], 'value estimate' => @s.row(r)[3]  } 
         end
         
         if not @project.has_key? 'tasks'
@@ -32,6 +32,45 @@ class TasklistGeneratorController < ApplicationController
         render 'update'
     end
     
+    def sortByTime
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['projectId'].to_s) } ).to_a[0]
+        @tasks = @project['tasks']
+        if params.has_key? 'sort by start time' and params['sort by start time'] == 'true'
+            
+            tasksWithNoStartDate = Array.new
+            tasksWithStartDate = Array.new
+            for task in @tasks
+                if not task.has_key? 'start date'
+                    tasksWithNoStartDate << task
+                else
+                    tasksWithStartDate << task
+                end 
+            end
+            tasksWithStartDate.sort!{|x,y| 
+                Time.new(x["start date"].to_s.split('-')[0], x["start date"].to_s.split('-')[1], x["start date"].to_s.split('-')[2].split()[0]) <=> Time.new(y["start date"].to_s.split('-')[0], y["start date"].to_s.split('-')[1], y["start date"].to_s.split('-')[2].split()[0])}
+                
+            @tasks = tasksWithStartDate.concat tasksWithNoStartDate
+            
+        elsif params.has_key? 'sort by due date' and params['sort by due date'] == 'true'
+            
+            tasksWithNoDueDate = Array.new
+            tasksWithDueDate = Array.new
+            for task in @tasks
+                if not task.has_key? 'dueDate'
+                    tasksWithNoDueDate << task
+                else
+                    tasksWithDueDate << task
+                end 
+            end
+            tasksWithDueDate.sort!{|x,y| 
+                Time.new(x["dueDate"].to_s.split('-')[0], x["dueDate"].to_s.split('-')[1], x["dueDate"].to_s.split('-')[2].split()[0]) <=> Time.new(y["dueDate"].to_s.split('-')[0], y["dueDate"].to_s.split('-')[1], y["dueDate"].to_s.split('-')[2].split()[0])}
+                
+            @tasks = tasksWithDueDate.concat tasksWithNoDueDate
+            
+        end
+        
+        render 'update'
+    end
     
     
     def update
@@ -47,10 +86,19 @@ class TasklistGeneratorController < ApplicationController
         if not selectedTasks.nil?
             selectedTasks.each do |taskNum, theNumberOne|
             
-                if action == 'set due date' and params.has_key? 'dueDate'
-                    @tasks[taskNum.to_i]['dueDate'] = params['dueDate']
+                if action == 'set due date' and params.has_key? 'due date'
+                    duedateHash = params['due date']
+                    @tasks[taskNum.to_i]['dueDate'] = Time.new(duedateHash["date(1i)"], duedateHash["date(2i)"], duedateHash["date(3i)"])
                     @tasks[taskNum.to_i]['dueDate set by'] = get_current_user['_id']
                     @tasks[taskNum.to_i]['dueDate set at'] = Time.now
+                end
+                
+                if action == 'set start date' and params.has_key? 'start date'
+                    startDateHash = params['start date']
+                    @tasks[taskNum.to_i]['start date'] = Time.new(startDateHash["date(1i)"], startDateHash["date(2i)"], startDateHash["date(3i)"])
+                    @tasks[taskNum.to_i]['start date set by'] = get_current_user['_id']
+                    @tasks[taskNum.to_i]['start date set at'] = Time.now
+                    
                 end
             
                 if action == 'mark done'

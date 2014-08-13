@@ -17,24 +17,45 @@ tasks = <%= @tasks%>
 <%= form_tag({controller: "tasklist_generator", action: "update", id: @project['_id'].to_s },  {multipart: true, method: :patch})  do %>
 
 	Choose Action:<br>
-	<%= select_tag("actionSelect", options_for_select([['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
+	<%= select_tag("actionSelect", options_for_select([['Set Start Date', 'set start date'], ['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
+
+
+
+	<p>
+		Start Date:
+		<%= date_select 'start date', 'date',selected: Date.today ,class: "required textField" %>
+		<%#= text_field_tag 'dueDate'%>
+		<%#= date_select 'dueDate', 'date' %>
+	</p>
 
 
 	
 	<p>
-		Assign Selected Tasks to (Year/Month/Day)
-		<%= text_field_tag 'dueDate'%>
+		Due Date:
+		<%= date_select 'due date', 'date' , selected: Date.today ,class: "required textField" %>
+		<%#= text_field_tag 'dueDate'%>
 		<%#= date_select 'dueDate', 'date' %>
 	</p>
 	
 	<div style="float:left; width:2000px; height_:100px;">
-		<div style="float:left; width:700px;">
+		<div style="float:left; width:400px;">
 			Task
 		</div>
-
-		<div style="float:left; width:200px;">
-			Due Date
+		
+		<div style="float:left; width:140px;">
+			<% #Start Date %>
+			<%= link_to 'Start Date', {action: 'sortByTime',  projectId: @project['_id'], 'sort by start time' => true} %>
 		</div>
+
+		<div style="float:left; width:400px;">
+			<%#Due Date %>
+			<%= link_to 'Due Date', {action: 'sortByTime',  projectId: @project['_id'], 'sort by due date' => true} %>
+		</div>
+		
+		<div style="float:left; width:200px;">
+			Value Estimate
+		</div>
+
 	</div>
 	<hr>
 	
@@ -48,36 +69,38 @@ tasks = <%= @tasks%>
 			<div style="float:left; width:2000px; height_:100px;">
 		<% end %>
 			<%#= task%>
-			<div style="float:left; width:500px;">
+			<div style="float:left; width:400px;">
 				<%= check_box_tag "[tasks][#{i}]" %>
 				<%= task['task'] %> 
 				<%#= task[(i+1).to_s] %> 
 			</div>
+			
+			<div style="float:left; width:140px;">
+				<% if task.has_key? 'start date'%>
+					<%= task['start date'].to_s.split()[0]%>
+				<% else %>
+					<%= " _ "%>
+				<% end %>
+			</div>
 		
 			<div style="float:left; width:200px;">
 				<% if task.has_key? 'dueDate'%>
-					<%= task['dueDate']%>
+					<%= task['dueDate'].to_s.split()[0]%>
 				<% else %>
 					<%= " _ "%>
 				<% end %>
 			</div>
 			
 			<div style="float:left; width:200px;">
-			
 				<%= file_field_tag "[taskFiles][#{i}]" %>
-			
+				<% if task.has_key? 'files'%>
+					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: i, projectId: @project['_id']} %>
+				<% end %>
 			</div>
 			
-			<% if task.has_key? 'files'%>
-				<div style="float:left; width:200px;">
-			
-					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: i, projectId: @project['_id']} %>
-			
-				</div>
-			<% end %>
-
-
-			
+			<div style="float:left; width:200px;">
+				<%= ((task['value estimate'].to_f * 1000).to_i.to_f / 10.0)  %>%
+			</div>
 		</div>
 		
 		<%= text_field_tag "[taskComments][#{i}]", task['comment'], style:"width:300px;" %>

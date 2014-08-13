@@ -8,7 +8,7 @@
 	
 		<p>
 			<%= f.label :projId3s, "3SN Project ID" %><br>
-			<%= f.text_field :projId3s, :value => @projId3s, "class" => "required textField", readonly: true%>
+			<%= f.text_field :projId3s, "class" => "required textField"%>
 			<br>
 		</p>
 	
@@ -19,32 +19,33 @@
 		</p>
 
 		<p>
-			<%= f.label :customerSiteId, "Site ID" %><br>
+			<%= f.label :customerSiteId, "Customer Site ID" %><br>
 			<%= f.text_field :customerSiteId, "class" => "required textField siteidInput" %>
 		</p>
 
 	
-		<p>
-			<%= f.label :program, "3SN Program" %><br>
-			<%= f.text_field :program, "class" => "required programInput textField"%>
-		</p>
+		<% if false %>
+			<p>
+				<%= f.label :program, "3SN Program" %><br>
+				<%= f.text_field :program, "class" => "required programInput textField"%>
+			</p>
+	
+			<p>
+				<%= f.label :projName, "3SN Project Name" %><br>
+				<%= f.text_field :projName, "class" => "required textField"%>
+			</p>
 	
 	
-		<p>
-			<%= f.label :projName, "3SN Project Name" %><br>
-			<%= f.text_field :projName, "class" => "required textField"%>
-		</p>
+			<p>
+				<%= f.label :projType, "Project Type" %><br>
+				<%= f.text_field :projType, "class" => "required projTypeInput textField"%>
+			</p>
 	
-	
-		<p>
-			<%= f.label :projType, "Project Type" %><br>
-			<%= f.text_field :projType, "class" => "required projTypeInput textField"%>
-		</p>
-	
-		<p>
-			<%= f.label :operatorId, "3SN Operator ID" %><br>
-			<%= f.text_field :operatorId, "class" => "required textField"%>
-		</p>
+			<p>
+				<%= f.label :operatorId, "3SN Operator ID" %><br>
+				<%= f.text_field :operatorId, "class" => "required textField"%>
+			</p>
+		<% end %>
 	
 		<p>
 			<div id="projManager">
@@ -83,7 +84,7 @@
 		</p>
 	
 		<%#= f.submit "Submit", class: 'disabledTillFilled' %>
-		<%= f.submit "Submit", class: 'disabledTillFilled' , disabled:"disabled"%>
+		<%= f.submit "Submit", class: '_disabledTillFilled' , _disabled:"_disabled"%>
 	
 	<%end%>
 	<br>

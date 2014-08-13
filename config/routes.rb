@@ -5,6 +5,7 @@ Statuser::Application.routes.draw do
             patch :uploadSpreadSheet
             patch :update
             get :showTaskFiles
+            get :sortByTime
         end
     end
     
