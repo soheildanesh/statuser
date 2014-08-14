@@ -1,5 +1,6 @@
+action = <%= @action%> <br>
 
-<% if true%>
+<% if false%>
 project = 
 	<%= @project%> <br><br>
 
@@ -18,24 +19,27 @@ tasks = <%= @tasks%>
 
 	Choose Action:<br>
 	<%= select_tag("actionSelect", options_for_select([['Set Start Date', 'set start date'], ['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
+	<br><br>
 
 
+	<div id="startDateSelector" style="display:none;" class="action">
+		<p>
+			Start Date:
+			<%= date_select 'start date', 'date',selected: Date.today ,class: "required textField" %>
+			<%#= text_field_tag 'dueDate'%>
+			<%#= date_select 'dueDate', 'date' %>
+		</p>
+	</div>
 
-	<p>
-		Start Date:
-		<%= date_select 'start date', 'date',selected: Date.today ,class: "required textField" %>
-		<%#= text_field_tag 'dueDate'%>
-		<%#= date_select 'dueDate', 'date' %>
-	</p>
 
-
-	
-	<p>
-		Due Date:
-		<%= date_select 'due date', 'date' , selected: Date.today ,class: "required textField" %>
-		<%#= text_field_tag 'dueDate'%>
-		<%#= date_select 'dueDate', 'date' %>
-	</p>
+	<div id="dueDateSelector" style="display:none;" class="action">
+		<p>
+			Due Date:
+			<%= date_select 'due date', 'date' , selected: Date.today ,class: "required textField" %>
+			<%#= text_field_tag 'dueDate'%>
+			<%#= date_select 'dueDate', 'date' %>
+		</p>
+	</div>
 	
 	<div style="float:left; width:2000px; height_:100px;">
 		<div style="float:left; width:400px;">

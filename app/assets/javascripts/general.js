@@ -1,4 +1,18 @@
 
+$(document).on("change", function(){
+	var selected = $("#actionSelect").val();
+	$(".action").hide();
+	if(selected == 'set due date'){
+		$("#dueDateSelector").show();
+	}
+	else if(selected == 'set start date'){
+		$("#startDateSelector").show();
+	}
+	else if(selected == 'mark done'){
+		
+	}
+});
+
 
 
 function calcTotal(orderLineNum){

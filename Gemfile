@@ -51,7 +51,7 @@ gem 'thin'
 
 gem 'gon'
 
-gem 'rubyzip', '< 1.0.0'
+#gem 'rubyzip', '< 1.0.0'
 #gem 'rubyzip', :require => 'zip/zip'
 gem 'roo'
 #gem "simple-spreadsheet"

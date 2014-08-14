@@ -81,7 +81,7 @@ class TasklistGeneratorController < ApplicationController
         
         selectedTasks = params['tasks']
         
-        action = params['actionSelect']
+        @action = params['actionSelect']
         
         if not selectedTasks.nil?
             selectedTasks.each do |taskNum, theNumberOne|
