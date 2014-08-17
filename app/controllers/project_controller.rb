@@ -972,38 +972,48 @@ class ProjectController < ApplicationController
             end
             tasks = project['tasks']
             
-            numDoneTasks = 0
-            numTasks = 0
             earnedValue = 0.0
+            
             for task in tasks
-                numTasks = numTasks + 1
-                if task.has_key? 'isDone' and task['isDone'] == true
-                    numDoneTasks = numDoneTasks + 1
-                    
-                    if task.has_key? 'value estimate' and task['value estimate'] != nil
-                        earnedValue = earnedValue + task['value estimate']
-                    end
+                if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty?
+                    earnedValue = earnedValue + Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])
                 end
-                
-                
             end
 
-            project['numTasks'] = numTasks
-            project['numDoneTasks'] = numDoneTasks
+            if false
+                numDoneTasks = 0
+                numTasks = 0
+                earnedValue = 0.0
+                for task in tasks
+                    numTasks = numTasks + 1
+                    if task.has_key? 'isDone' and task['isDone'] == true
+                        numDoneTasks = numDoneTasks + 1
+                    
+                        if task.has_key? 'value estimate' and task['value estimate'] != nil
+                            earnedValue = earnedValue + task['value estimate']
+                        end
+                    end
+                
+                
+                end
+
+                project['numTasks'] = numTasks
+                project['numDoneTasks'] = numDoneTasks
             
-            startTime = Time.new(project['startDate(1i)'],project['startDate(2i)'],project['startDate(3i)'])
-            endTime = Time.new(project['endDate(1i)'],project['endDate(2i)'],project['endDate(3i)'])
+                startTime = Time.new(project['startDate(1i)'],project['startDate(2i)'],project['startDate(3i)'])
+                endTime = Time.new(project['endDate(1i)'],project['endDate(2i)'],project['endDate(3i)'])
             
-            puts("startTime = #{startTime}")
-            puts("endTime = #{endTime}")
-            puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
-            project['total days'] = Integer((endTime - startTime) / 3600 / 24)
-            project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
+                puts("startTime = #{startTime}")
+                puts("endTime = #{endTime}")
+                puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
+                project['total days'] = Integer((endTime - startTime) / 3600 / 24)
+                project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
             
-            if project['days so far'] > project['total days']
-                project['percent time passed'] = 100.0
-            else
-                project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+                if project['days so far'] > project['total days']
+                    project['percent time passed'] = 100.0
+                else
+                    project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+                end
             end
             
             project['earned value'] = earnedValue

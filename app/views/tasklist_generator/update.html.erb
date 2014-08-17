@@ -115,7 +115,14 @@ tasks = <%= @tasks%>
 			</div>
 			
 			<div style="float:left; width:200px;">
-				<%= printReplaceEmpty( ((task['value percentage'].to_f * 1000).to_i.to_f / 10.0).to_s )  %> 
+				<% if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty? %>
+					<%= printReplaceEmpty( ( ( Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])  * 1000.0).to_i.to_f / 10.0).to_s)   %> 
+					
+				<% else %>
+					_
+				<% end %>
+				
+				/ <%= printReplaceEmpty( ((task['value percentage'].to_f * 1000).to_i.to_f / 10.0).to_s )  %> 
 			</div>
 			
 			
