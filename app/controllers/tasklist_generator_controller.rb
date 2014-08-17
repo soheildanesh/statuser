@@ -18,7 +18,8 @@ class TasklistGeneratorController < ApplicationController
                     
                 end
             end
-           @tasks << { 'task number' => r.to_s,  'dirver id' => @s.row(r)[1], 'task' => @s.row(r)[2], 'value estimate' => @s.row(r)[3]  } 
+           #@tasks << { 'task number' => r.to_s,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
+           @tasks << { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
         end
         
         if not @project.has_key? 'tasks'
@@ -81,7 +82,7 @@ class TasklistGeneratorController < ApplicationController
         
         selectedTasks = params['tasks']
         
-        @action = params['actionSelect']
+        action = params['actionSelect']
         
         if not selectedTasks.nil?
             selectedTasks.each do |taskNum, theNumberOne|
@@ -150,6 +151,12 @@ class TasklistGeneratorController < ApplicationController
            end 
         end
         
+        quantity_done = params['quantity_done']        
+        if not quantity_done.nil?
+            quantity_done.each do |taskNum, qdone|
+                @tasks[taskNum.to_i]['quantity_done'] = qdone
+            end 
+        end
         
         $project_collection.save(@project)
         

@@ -1,6 +1,5 @@
-action = <%= @action%> <br>
 
-<% if false%>
+<% if true%>
 project = 
 	<%= @project%> <br><br>
 
@@ -8,7 +7,11 @@ tasks = <%= @tasks%>
 <% end %>
 
 <p>
-	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%>
+	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%><br>
+	<%= link_to "Upload New Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%>  
+	
+</p>	
+
 
  
 
@@ -46,6 +49,19 @@ tasks = <%= @tasks%>
 			Task
 		</div>
 		
+		<div style="float:left; width:200px;">
+			Quantity
+		</div>
+		
+		<div style="float:left; width:200px;">
+			Quantity Done
+		</div>
+
+		
+		<div style="float:left; width:200px;">
+			Value Percentage
+		</div>
+		
 		<div style="float:left; width:140px;">
 			<% #Start Date %>
 			<%= link_to 'Start Date', {action: 'sortByTime',  projectId: @project['_id'], 'sort by start time' => true} %>
@@ -56,9 +72,7 @@ tasks = <%= @tasks%>
 			<%= link_to 'Due Date', {action: 'sortByTime',  projectId: @project['_id'], 'sort by due date' => true} %>
 		</div>
 		
-		<div style="float:left; width:200px;">
-			Value Estimate
-		</div>
+
 
 	</div>
 	<hr>
@@ -87,9 +101,27 @@ tasks = <%= @tasks%>
 				<%#= task[(i+1).to_s] %> 
 			</div>
 			
+			<div style="float:left; width:200px;">
+				<%= printReplaceEmpty task['quantity'].to_s  %> 
+			</div>
+			
+			<div style="float:left; width:200px;">
+				<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
+					<% q = task['quantity'].to_i %>
+					<%= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+				<% else %>
+					_ 
+				<% end %>
+			</div>
+			
+			<div style="float:left; width:200px;">
+				<%= printReplaceEmpty( ((task['value percentage'].to_f * 1000).to_i.to_f / 10.0).to_s )  %> 
+			</div>
+			
+			
 			<div style="float:left; width:140px;">
 				<% if task.has_key? 'start date'%>
-					<%= task['start date'].to_s.split()[0]%>
+					<%= task['start date'].to_s.split()[0]%> 
 				<% else %>
 					<%= " _ "%>
 				<% end %>
@@ -110,9 +142,7 @@ tasks = <%= @tasks%>
 				<% end %>
 			</div>
 			
-			<div style="float:left; width:200px;">
-				<%= ((task['value estimate'].to_f * 1000).to_i.to_f / 10.0)  %>%
-			</div>
+
 		</div>
 		
 		<%= text_field_tag "[taskComments][#{i}]", task['comment'], style:"width:300px;" %>
