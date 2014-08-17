@@ -5,6 +5,7 @@ class ProjectController < ApplicationController
     #clear js variable gon, see gon gem 
     def clearGon
         gon.clear()
+        gon = 'undefined'
     end
     
     def showPlan

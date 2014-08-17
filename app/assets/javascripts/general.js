@@ -80,7 +80,7 @@ $(document).on("click", '.showCrs', function(){
 $( document ).ready(
 	function() {
 		
-		if(gon.bidItemTypes != undefined && gon.bidItemTypes != null)
+		if('gon' in window && gon.bidItemTypes != undefined && gon.bidItemTypes != null)
 		{
 			for (var i = 0; i < gon.bidItemTypes.length; i++) {
 				if(gon.bidItemTypes[i] != null)
@@ -100,7 +100,7 @@ $( document ).ready(
 		}
 		
 		
-		if(gon.poItemTypes != undefined && gon.poItemTypes != null)
+		if('gon' in window && gon.poItemTypes != undefined && gon.poItemTypes != null)
 		{
 			for (var i = 0; i < gon.poItemTypes.length; i++) {
 				
@@ -139,7 +139,7 @@ $( document ).on( "focus", ".itemTypeInput", function() {
 $( document ).on( "focus", ".projTypeInput",
 	function() {
 	
-		if(gon.projType != undefined && gon.projType != null)
+		if('gon' in window && gon.projType != undefined && gon.projType != null)
 		{				
 		  	$(".projTypeInput").tokenInput("/project_type",
 			{prePopulate: gon.projType,
@@ -158,7 +158,7 @@ $( document ).on( "focus", ".projTypeInput",
 $( document ).ready(
 	function() {
 	
-		if(gon.projType != undefined && gon.projType != null)
+		if('gon' in window && gon.projType != undefined && gon.projType != null)
 		{				
 		  	$(".projTypeInput").tokenInput("/project_type",
 			{prePopulate: gon.projType,
@@ -183,16 +183,19 @@ $( document ).ready(
 	function() {
 		
 		
-		if(gon.customer != undefined && gon.customer != null)
-		{				
-		  	$(".customerInput").tokenInput("/customer",
-			{prePopulate: gon.customer,
-			tokenLimit: 1});
-		}
-		else
-		{
-			$(".customerInput").tokenInput("/customer",
-			{tokenLimit: 1});
+		if (gon != 'undefined'){
+		
+			if('gon' in window && gon.customer != undefined && gon.customer != null)
+			{				
+			  	$(".customerInput").tokenInput("/customer",
+				{prePopulate: gon.customer,
+				tokenLimit: 1});
+			}
+			else
+			{
+				$(".customerInput").tokenInput("/customer",
+				{tokenLimit: 1});
+			}
 		}
 
 });
@@ -201,7 +204,8 @@ $( document ).ready(
 //note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
 
 $( document ).on( "focus", ".customerInput", function() {
-  	if(gon.customer != undefined && gon.customer != null)
+	//without 'gon' in window, uncaught reference error causing no even the else to be run and allowing free style text instead of tokeninput
+  	if('gon' in window && gon.customer != undefined && gon.customer != null)
 	{				
 	  	$(".customerInput").tokenInput("/customer",
 		{prePopulate: gon.customer,
@@ -212,6 +216,7 @@ $( document ).on( "focus", ".customerInput", function() {
 		$(".customerInput").tokenInput("/customer",
 		{tokenLimit: 1});
 	}
+	
 });
 
 
@@ -219,7 +224,7 @@ $( document ).on( "focus", ".customerInput", function() {
 $( document ).ready(
 	function() {
 		
-		if(gon.program != undefined && gon.program != null)
+		if('gon' in window && gon.program != undefined && gon.program != null)
 		{				
 		  	$(".programInput").tokenInput("/program",
 			{prePopulate: gon.program,
@@ -237,7 +242,7 @@ $( document ).ready(
 //note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
 $( document ).on( "focus", ".programInput", function() {
 
-	if(gon.program != undefined && gon.program != null)
+	if('gon' in window && gon.program != undefined && gon.program != null)
 	{
 		program = gon.program
 		
@@ -255,7 +260,7 @@ $( document ).on( "focus", ".programInput", function() {
 $( document ).ready(
 	function() {
 		
-		if(gon.projManager != undefined && gon.projManager != null)
+		if('gon' in window && gon.projManager != undefined && gon.projManager != null)
 		{				
 		  	$(".projManager").tokenInput("/person",
 			{prePopulate: gon.projManager,
@@ -272,7 +277,7 @@ $( document ).ready(
 $( document ).ready(
 	function() {
 		
-		if(gon.projManagerAdmin != undefined && gon.projManagerAdmin != null)
+		if('gon' in window && gon.projManagerAdmin != undefined && gon.projManagerAdmin != null)
 		{				
 		  	$(".projManagerAdmin").tokenInput("/person",
 			{prePopulate: gon.projManagerAdmin,
@@ -291,7 +296,7 @@ $( document ).ready(
 $( document ).ready(
 	function() {
 		
-		if(gon.projManager != undefined && gon.projManager != null)
+		if('gon' in window && gon.projManager != undefined && gon.projManager != null)
 		{				
 		  	$(".projController").tokenInput("/person",
 			{prePopulate: gon.projController,
