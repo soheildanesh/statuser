@@ -662,23 +662,25 @@ class ProjectController < ApplicationController
         id = params['id']
         @project = $project_collection.find({:_id => BSON::ObjectId(id) } ).to_a[0]
         
-        @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
+        if false
+            @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
         
-        if( @projectCustomerName == "ericsson")
-            @wos = Array.new
-            @project.each do |key, value|
-                if(key.include? 'wo_id')
-                    wo = $wo_collection.find(:_id => value).to_a[0]
-                    if(not wo.nil?)
-                        @wos << wo
-                    end   
+            if( @projectCustomerName == "ericsson")
+                @wos = Array.new
+                @project.each do |key, value|
+                    if(key.include? 'wo_id')
+                        wo = $wo_collection.find(:_id => value).to_a[0]
+                        if(not wo.nil?)
+                            @wos << wo
+                        end   
+                    end
                 end
+                @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
             end
-            @wos.sort!{|x,y| y['createdAt'] <=> x['createdAt']}
-        end
         
-        if( @projectCustomerName  == "sprint")
-            #nothing to do yet
+            if( @projectCustomerName  == "sprint")
+                #nothing to do yet
+            end
         end
          
         #render "show_#{@projectCustomerName.downcase}"  #using show sprint for all customer for now, might abandon the scheme of the cusotmer mode. july/26
@@ -743,18 +745,19 @@ class ProjectController < ApplicationController
         
         #check if dates are valid TODO
         
+        if false
+            if(okToCreate)
+              #make sure the project name is unique
+              project = $project_collection.find({'projName' => @project['projName'] } ).to_a[0]
+              if(project.nil?)
 
-        if(okToCreate)
-          #make sure the project name is unique
-          project = $project_collection.find({'projName' => @project['projName'] } ).to_a[0]
-          if(project.nil?)
+              elsif(project.empty?)
 
-          elsif(project.empty?)
-
-          else
-              okToCreate = false
-              flash[:error] = "Poject could not be created becuse project's name already exists in the databse, please enter a unique project name"
-          end
+              else
+                  okToCreate = false
+                  flash[:error] = "Poject could not be created becuse project's name already exists in the databse, please enter a unique project name"
+              end
+            end
         end
         
         #validate Date TODO
