@@ -149,8 +149,10 @@ class SiteController < ApplicationController
         else
             if(params.has_key?("q")) #(initially at least) used by tokeninput.js plugin
                 searchString = ".*#{params['q']}.*"
-                puts("current_user['customerMode']['customerId'] = #{get_current_user['customerMode']['customerId']}")
-                @allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString, "i"), "customerId" =>get_current_user['customerMode']['customerId'] })
+
+                @allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString, "i") })
+                
+                #@allSites = $site_collection.find({'customerSiteId' => Regexp.new(searchString, "i"), "customerId" =>get_current_user['customerMode']['customerId'] }) #not doint customer mode any more
             elsif( get_current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
                 @allSites = $site_collection.find().to_a.reverse
             else

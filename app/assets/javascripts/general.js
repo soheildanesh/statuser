@@ -181,22 +181,18 @@ $( document ).ready(
 
 $( document ).ready(
 	function() {
-		
-		
-		if (gon != 'undefined'){
-		
-			if('gon' in window && gon.customer != undefined && gon.customer != null)
-			{				
-			  	$(".customerInput").tokenInput("/customer",
-				{prePopulate: gon.customer,
-				tokenLimit: 1});
-			}
-			else
-			{
-				$(".customerInput").tokenInput("/customer",
-				{tokenLimit: 1});
-			}
-		}
+				
+	if('gon' in window && gon.customer != undefined && gon.customer != null)
+	{				
+	  	$(".customerInput").tokenInput("/customer",
+		{prePopulate: gon.customer,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".customerInput").tokenInput("/customer",
+		{tokenLimit: 1});
+	}
 
 });
 
