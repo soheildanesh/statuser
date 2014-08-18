@@ -102,6 +102,12 @@ class TasklistGeneratorController < ApplicationController
                     @tasks[taskNum.to_i]['makred done by'] = get_current_user['_id']
                     @tasks[taskNum.to_i]['marked done at'] = Time.now
                 end
+                
+                 if action == 'undo mark done'
+                    @tasks[taskNum.to_i]['isDone'] = false
+                    @tasks[taskNum.to_i]['undo mark done by'] = get_current_user['_id']
+                    @tasks[taskNum.to_i]['undo mark done at'] = Time.now
+                 end
             end
         end
         

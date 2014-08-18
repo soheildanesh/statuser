@@ -21,7 +21,7 @@ tasks = <%= @tasks%>
 <%= form_tag({controller: "tasklist_generator", action: "update", id: @project['_id'].to_s },  {multipart: true, method: :patch})  do %>
 
 	Choose Action:<br>
-	<%= select_tag("actionSelect", options_for_select([['Set Start Date', 'set start date'], ['Set Due Date', 'set due date'], ['Mark Done', 'mark done']]), {include_blank: 'none'} ) %>
+	<%= select_tag("actionSelect", options_for_select([['Set Start Date', 'set start date'], ['Set Due Date', 'set due date'], ['Mark Done', 'mark done'], ['Undo Mark Done', 'undo mark done']]), {include_blank: 'none'} ) %>
 	<br><br>
 
 
