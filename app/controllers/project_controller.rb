@@ -783,7 +783,7 @@ class ProjectController < ApplicationController
     
     
     def edit
-        role =get_current_user['role']
+        role = get_current_user['role']
         if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
@@ -986,6 +986,21 @@ class ProjectController < ApplicationController
          end
          
          for project in @projects
+             
+            startTime = Time.new(project['startDate(1i)'].to_i ,project['startDate(2i)'].to_i ,project['startDate(3i)'].to_i )
+            endTime = Time.new(project['endDate(1i)'],project['endDate(2i)'],project['endDate(3i)'])
+        
+            puts("startTime = #{startTime}")
+            puts("endTime = #{endTime}")
+            puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
+            project['total days'] = Integer((endTime - startTime) / 3600 / 24)
+            project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
+            if project['days so far'] > project['total days']
+                project['percent time passed'] = 100.0
+            else
+                project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+            end 
+             
             if( not project.has_key? 'tasks') 
                 next
             end
@@ -1019,21 +1034,8 @@ class ProjectController < ApplicationController
                 project['numTasks'] = numTasks
                 project['numDoneTasks'] = numDoneTasks
             
-                startTime = Time.new(project['startDate(1i)'],project['startDate(2i)'],project['startDate(3i)'])
-                endTime = Time.new(project['endDate(1i)'],project['endDate(2i)'],project['endDate(3i)'])
-            
-                puts("startTime = #{startTime}")
-                puts("endTime = #{endTime}")
-                puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
-                project['total days'] = Integer((endTime - startTime) / 3600 / 24)
-                project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
-            
-                if project['days so far'] > project['total days']
-                    project['percent time passed'] = 100.0
-                else
-                    project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
-                end
             end
+
             
             project['earned value'] = earnedValue
             

@@ -10,7 +10,13 @@
 		
 			<%shadedBg = false;%>
 			<% for entry in @projects %>
-				
+				<br>
+				---------
+				<%= entry %>
+				<%= entry['startTime']%>
+				<%= entry['days so far'] %>
+				---------
+				<br>
 				<%if shadedBg%>
 					<div style="background-color:beige; padding:0px;">
 				<%end%>

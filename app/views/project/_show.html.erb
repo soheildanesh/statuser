@@ -65,7 +65,8 @@
 		</div>
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
-			<%= printReplaceEmpty (project['percent time passed']).to_s  %>
+			<%= printReplaceEmpty  (project['percent time passed'].to_i.to_f / 10.0).to_s  %>
+			<%#= printReplaceEmpty (project['percent time passed']).to_s  %>
 		</div>
 		
 		<%#--------Efficiency and Timliness stats for the old system with daily todolist--------%>
