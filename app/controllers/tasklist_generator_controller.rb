@@ -12,14 +12,9 @@ class TasklistGeneratorController < ApplicationController
         
         @tasks = Array.new
         for r in @s.first_row.to_i .. @s.last_row.to_i
-
-            if false #TODO put antenna JCR form as an html form maybe
-                if @s.row(r)[0].downcase.include? 'antenna install'
-                    
-                end
-            end
-           #@tasks << { 'task number' => r.to_s,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
-           @tasks << { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
+            if not @s.row(r)[0].to_s.empty?
+                @tasks << { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
+            end    
         end
         
         if not @project.has_key? 'tasks'
