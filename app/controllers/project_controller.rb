@@ -791,31 +791,44 @@ class ProjectController < ApplicationController
         end
         
         @project = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
-                  
-         program = $program_collection.find_one({:_id => BSON::ObjectId(@project['program'])})
-         gon.program = [{ 'name' => program['programName'], 'id'=> program['_id'].to_s }]
-         
-         projType = $projectType_collection.find_one({:_id => BSON::ObjectId(@project['projType'])})
-         gon.projType = [{ 'name' => projType['projectTypeName'], 'id'=> projType['_id'].to_s }]
-
-         customer = $customer_collection.find_one({:_id => BSON::ObjectId(@project['customerId'])})
-         gon.customer = [{ 'name' => customer['customerName'], 'id'=> customer['_id'].to_s }]
-         
-         projManager = $person_collection.find_one({:_id => @project['projManager'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
-         gon.projManager = [{ 'name' => projManager['name'], 'id'=> projManager['_id'].to_s }]
-         
-         projManagerAdmin = $person_collection.find_one({:_id => @project['project manager admin'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
-         gon.projManagerAdmin = [{ 'name' => projManagerAdmin['name'], 'id'=> projManagerAdmin['_id'].to_s }]
-         
-         projController = $person_collection.find_one({:_id => @project['projController'].to_i})
-         gon.projController = [{ 'name' => projController['name'], 'id'=> projController['_id'].to_s }]
-         
-         @startDate = Date.new(@project['startDate(1i)'].to_i, @project['startDate(2i)'].to_i, @project['startDate(3i)'].to_i)
-         
-         @endDate = Date.new(@project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
-         
-         @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
-         render "edit_sprint"
+        
+        if not (@project['program'].nil? or @project['program'].empty?)
+            program = $program_collection.find_one({:_id => BSON::ObjectId(@project['program'])})
+            gon.program = [{ 'name' => program['programName'], 'id'=> program['_id'].to_s }]
+        end
+        
+        if not (@project['projType'].nil? or @project['projType'].empty?)
+            projType = $projectType_collection.find_one({:_id => BSON::ObjectId(@project['projType'])})
+            gon.projType = [{ 'name' => projType['projectTypeName'], 'id'=> projType['_id'].to_s }]
+        end
+        
+        if not (@project['customerId'].nil? or @project['customerId'].empty?)
+            customer = $customer_collection.find_one({:_id => BSON::ObjectId(@project['customerId'])})
+            gon.customer = [{ 'name' => customer['customerName'], 'id'=> customer['_id'].to_s }]
+            @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
+        end
+        
+        if not (@project['projManager'].nil? or @project['projManager'].empty?)
+            projManager = $person_collection.find_one({:_id => @project['projManager'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
+            gon.projManager = [{ 'name' => projManager['name'], 'id'=> projManager['_id'].to_s }]
+        end
+        
+        if not (@project['project manager admin'].nil? or @project['project manager admin'].empty?)
+            projManagerAdmin = $person_collection.find_one({:_id => @project['project manager admin'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
+            gon.projManagerAdmin = [{ 'name' => projManagerAdmin['name'], 'id'=> projManagerAdmin['_id'].to_s }]
+        end
+        
+        if not (@project['projController'].nil? or @project['projController'].empty?)
+            projController = $person_collection.find_one({:_id => @project['projController'].to_i})
+            gon.projController = [{ 'name' => projController['name'], 'id'=> projController['_id'].to_s }]
+        end
+        
+        @startDate = Date.new(@project['startDate(1i)'].to_i, @project['startDate(2i)'].to_i, @project['startDate(3i)'].to_i)
+        
+        @endDate = Date.new(@project['endDate(1i)'].to_i, @project['endDate(2i)'].to_i, @project['endDate(3i)'].to_i)
+        
+        
+        render "edit_sprint"
     end
     
     def updateOrder

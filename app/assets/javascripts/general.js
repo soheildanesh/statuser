@@ -123,7 +123,7 @@ $( document ).ready(
 
 $( document ).ready(
 	function() {
-	console.log($(".itemTypeInput").height());
+	//console.log($(".itemTypeInput").height());
 	$(".itemTypeInput").tokenInput("/item_type",
 	{tokenLimit: 1});
 });
@@ -136,8 +136,28 @@ $( document ).on( "focus", ".itemTypeInput", function() {
 });
 
 
+
+function projTypeInputTokenInput() {
+	
+	if('gon' in window && gon.projType != undefined && gon.projType != null)
+	{				
+	  	$(".projTypeInput").tokenInput("/project_type",
+		{prePopulate: gon.projType,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".projTypeInput").tokenInput("/project_type",
+		{tokenLimit: 1});
+	}
+}
+
+http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links
+//$(document).on('page:load', projTypeInputTokenInput);
+
 $( document ).on( "focus", ".projTypeInput",
-	function() {
+	projTypeInputTokenInput
+	/*function() {
 	
 		if('gon' in window && gon.projType != undefined && gon.projType != null)
 		{				
@@ -150,14 +170,17 @@ $( document ).on( "focus", ".projTypeInput",
 			$(".projTypeInput").tokenInput("/project_type",
 			{tokenLimit: 1});
 		}
+	}*/
 
-});
+);
 
 
 
 $( document ).ready(
+	projTypeInputTokenInput
+	/*
 	function() {
-	
+		
 		if('gon' in window && gon.projType != undefined && gon.projType != null)
 		{				
 		  	$(".projTypeInput").tokenInput("/project_type",
@@ -169,17 +192,33 @@ $( document ).ready(
 			$(".projTypeInput").tokenInput("/project_type",
 			{tokenLimit: 1});
 		}
+	}*/
 
-});
-
-
-
+);
 
 
 
 
 
+function customerInputTokenInput() {
+	//without 'gon' in window, uncaught reference error causing no even the else to be run and allowing free style text instead of tokeninput
+  	if('gon' in window && gon.customer != undefined && gon.customer != null)
+	{				
+	  	$(".customerInput").tokenInput("/customer",
+		{prePopulate: gon.customer,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".customerInput").tokenInput("/customer",
+		{tokenLimit: 1});
+	}
+}
+
+$(document).on('page:load', customerInputTokenInput);
 $( document ).ready(
+	customerInputTokenInput
+	/*
 	function() {
 				
 	if('gon' in window && gon.customer != undefined && gon.customer != null)
@@ -193,13 +232,16 @@ $( document ).ready(
 		$(".customerInput").tokenInput("/customer",
 		{tokenLimit: 1});
 	}
+}*/
 
-});
+);
 
 
 //note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
 
-$( document ).on( "focus", ".customerInput", function() {
+$( document ).on( "focus", ".customerInput", 
+	customerInputTokenInput
+	/*function() {
 	//without 'gon' in window, uncaught reference error causing no even the else to be run and allowing free style text instead of tokeninput
   	if('gon' in window && gon.customer != undefined && gon.customer != null)
 	{				
@@ -212,13 +254,31 @@ $( document ).on( "focus", ".customerInput", function() {
 		$(".customerInput").tokenInput("/customer",
 		{tokenLimit: 1});
 	}
+	}*/
 	
-});
+);
 
 
+function programInputTokenInput() {
+		
+	if('gon' in window && gon.program != undefined && gon.program != null)
+	{				
+	  	$(".programInput").tokenInput("/program",
+		{prePopulate: gon.program,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".programInput").tokenInput("/program",
+		{tokenLimit: 1});
+	}	
+}
+
+$(document).on('page:load', programInputTokenInput);
 
 $( document ).ready(
-	function() {
+	programInputTokenInput
+	/*function() {
 		
 		if('gon' in window && gon.program != undefined && gon.program != null)
 		{				
@@ -231,14 +291,14 @@ $( document ).ready(
 			$(".programInput").tokenInput("/program",
 			{tokenLimit: 1});
 		}	
-	}
+	}*/
 );
 
 
 //note the click case below exists because when taken to page after clicking input boxes aren't processed by topkeninput, this ensures that these are at least when clicked
 $( document ).on( "focus", ".programInput", function() {
-
-	if('gon' in window && gon.program != undefined && gon.program != null)
+	programInputTokenInput
+	/*if('gon' in window && gon.program != undefined && gon.program != null)
 	{
 		program = gon.program
 		
@@ -250,11 +310,29 @@ $( document ).on( "focus", ".programInput", function() {
 	{
 		$(".programInput").tokenInput("/program",
 		{tokenLimit: 1});
-	}
+	}*/
 });
 
+function projManagerTokenInput() {
+	if('gon' in window && gon.projManager != undefined && gon.projManager != null)
+	{				
+	  	$(".projManager").tokenInput("/person",
+		{prePopulate: gon.projManager,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".projManager").tokenInput("/person",
+		{tokenLimit: 1});
+	}	
+}
+
+http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links
+$(document).on('page:load', projManagerTokenInput);
+
 $( document ).ready(
-	function() {
+	projManagerTokenInput
+	/*function() {
 		
 		if('gon' in window && gon.projManager != undefined && gon.projManager != null)
 		{				
@@ -267,11 +345,29 @@ $( document ).ready(
 			$(".projManager").tokenInput("/person",
 			{tokenLimit: 1});
 		}	
-	}
+	}*/
 );
 
+function progManagerAdminTokenInput() {
+		
+	if('gon' in window && gon.projManagerAdmin != undefined && gon.projManagerAdmin != null)
+	{				
+	  	$(".projManagerAdmin").tokenInput("/person",
+		{prePopulate: gon.projManagerAdmin,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".projManagerAdmin").tokenInput("/person",
+		{tokenLimit: 1});
+	}	
+}
+$(document).on('page:load', progManagerAdminTokenInput);
+
+
 $( document ).ready(
-	function() {
+	progManagerAdminTokenInput
+/*	function() {
 		
 		if('gon' in window && gon.projManagerAdmin != undefined && gon.projManagerAdmin != null)
 		{				
@@ -284,12 +380,30 @@ $( document ).ready(
 			$(".projManagerAdmin").tokenInput("/person",
 			{tokenLimit: 1});
 		}	
-	}
+	}*/
 );
 
 
+function projectControllerTokenInput() {
+		
+	if('gon' in window && gon.projManager != undefined && gon.projManager != null)
+	{				
+	  	$(".projController").tokenInput("/person",
+		{prePopulate: gon.projController,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".projController").tokenInput("/person",
+		{tokenLimit: 1});
+	}	
+}
+
+$(document).on('page:load', projectControllerTokenInput);
 
 $( document ).ready(
+	projectControllerTokenInput
+	/*
 	function() {
 		
 		if('gon' in window && gon.projManager != undefined && gon.projManager != null)
@@ -303,7 +417,7 @@ $( document ).ready(
 			$(".projController").tokenInput("/person",
 			{tokenLimit: 1});
 		}	
-	}
+	}*/
 );
 
 
@@ -368,6 +482,5 @@ $( document ).on( "focus", ".siteTask", function() {
 	$(".siteTask").tokenInput("/site/dummy/siteTasks");
 });
 ///////////////////////////////////
-
 
 

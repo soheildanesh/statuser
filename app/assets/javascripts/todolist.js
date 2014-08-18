@@ -1,25 +1,25 @@
-
-$( document ).on( "keyup", ".task", function(e) {
-	//alert("yoooo");
-	var charCode = e.which;
+if(false){
+	$( document ).on( "keyup", ".task", function(e) {
+		//alert("yoooo");
+		var charCode = e.which;
 	
-	if(charCode == 13){
-		$( "#todolistForm" ).submit();	
-	}
+		if(charCode == 13){
+			$( "#todolistForm" ).submit();	
+		}
 		
-});
+	});
 
 
-$( document ).ready(
+	$( document ).ready(
 
-	function(e) {
-		//alert("yooooo");
-		tasks = $(".task");//.eq(0).focus()
-		tasks[tasks.length - 1].focus()
-		console.log("tasks = " +  eval(tasks))
-	}
-);
-
+		function(e) {
+			//alert("yooooo");
+			tasks = $(".task");//.eq(0).focus()
+			tasks[tasks.length - 1].focus()
+			console.log("tasks = " +  eval(tasks))
+		}
+	);
+}
 
 
 
