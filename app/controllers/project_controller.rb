@@ -721,18 +721,20 @@ class ProjectController < ApplicationController
         
         
         okToCreate = true
+        
+        if false #remove this condition for now allow projects be created with partial fields 
+            #make sure all fields have been entered before creating object
+            missingKey = ""
+            @project.each do |key, value|
+              if value.nil?
+                  okToCreate = false
+                  missingKey = key
+              elsif value.to_s.empty?
+                  okToCreate = false
+                  missingKey = key
+              end
 
-        #make sure all fields have been entered before creating object
-        missingKey = ""
-        @project.each do |key, value|
-          if value.nil?
-              okToCreate = false
-              missingKey = key
-          elsif value.to_s.empty?
-              okToCreate = false
-              missingKey = key
-          end
-
+            end
         end
 
         if(not okToCreate)
