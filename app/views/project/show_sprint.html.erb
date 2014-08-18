@@ -11,10 +11,10 @@
 		|	
 		<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> <br><br>
 		
-		<%= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%>  
-		|
-		<%= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
-		|
+		<%#= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%>  
+
+		<%#= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
+		
 		<%if @project.has_key? "tasks"%>
 			<%= link_to "Task Spread Sheet", controller: 'tasklist_generator', action: 'show', id: @project['_id']%>  
 		<% else %>			
@@ -23,7 +23,7 @@
 		
 		<% role =get_current_user['role']%>
 		<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>
-			| <%= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
+			<%#= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
 		<% end %>
 
 	</p>
