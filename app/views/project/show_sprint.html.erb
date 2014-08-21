@@ -8,8 +8,11 @@
 	<%#= render partial: 'show', locals: {project:  @project} %>
 	<p>
 		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %> 
-		|	
-		<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> <br><br>
+		<% role =get_current_user['role']%>
+		<% if role == 'admin' %>
+			|	
+			<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> <br><br>
+		<% end %>
 		
 		<%#= link_to "Milestones", controller: 'project', action: 'showMilestones', id: @project['_id']%>  
 
@@ -21,7 +24,7 @@
 			<%= link_to "Upload Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%>  
 		<% end %>
 		
-		<% role =get_current_user['role']%>
+
 		<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>
 			<%#= link_to "Orders",  :controller => 'project', :action => 'indexSprintOrders', :id => @project['_id'] %>  <br>
 		<% end %>
