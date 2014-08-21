@@ -995,10 +995,22 @@ class ProjectController < ApplicationController
             puts( "(endTime - startTime) / 3600 / 24 = #{(endTime - startTime) / 3600 / 24}")
             project['total days'] = Integer((endTime - startTime) / 3600 / 24)
             project['days so far'] = Integer((Time.now - startTime) / 3600 / 24)
-            if project['days so far'] > project['total days']
+            if project['days so far'] >= project['total days']
                 project['percent time passed'] = 100.0
+                
+            elsif Float(project['total days']) <= 0 #if project is one day long or mistakenly start day is set before end day
+                #considering we already know days so far is not bigger than total days then we are either before or on the day of the day long project
+                project['percent time passed'] = 0.0
             else
-                project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+                #if Float(project['total days']) > 0
+                    project['percent time passed'] = Float(project['days so far']) / Float(project['total days']) * 100.0
+                #else #ie project starts and ends in same day so if we are passed the end date it's 100%
+                 #   if project['days so far'] > 1
+                  #      project['percent time passed'] = 100.0
+                  #  else
+                   #     project['percent time passed'] = 0.0
+                #    end
+                #end
             end 
              
             if( not project.has_key? 'tasks') 
