@@ -1,5 +1,5 @@
 
-<% if false%>
+<% if true%>
 project = 
 	<%= @project%> <br><br>
 
@@ -79,7 +79,10 @@ tasks = <%= @tasks%>
 	<hr>
 	
 	<% i = 0 %> 
-	<% for task in @tasks %>
+	<% for tasknum_task in @tasksArray%>
+		<% task = tasknum_task[1] %>
+		<% taskNum = task["task number"].to_i %> 
+	
 		<% if task['task'].nil? %>
 			<%next%>
 		<% end %>
@@ -104,7 +107,8 @@ tasks = <%= @tasks%>
 		<% end %>
 			<%#= task%>
 			<div style="float:left; width:400px;">
-				<%= check_box_tag "[tasks][#{i}]" %>
+				<%#= check_box_tag "[tasks][#{i}]" %>
+				<%= check_box_tag "[tasks][#{taskNum}]" %>
 				<%= task['task'] %> 
 				<%#= task[(i+1).to_s] %> 
 			</div>
@@ -116,7 +120,9 @@ tasks = <%= @tasks%>
 			<div style="float:left; width:200px;">
 				<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
 					<% q = task['quantity'].to_i %>
-					<%= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+					<%#= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+					<%= taskNum %> <-
+					<%= select_tag("quantity_done[#{taskNum}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
 				<% else %>
 					_ 
 				<% end %>
@@ -151,16 +157,17 @@ tasks = <%= @tasks%>
 			</div>
 			
 			<div style="float:left; width:200px;">
-				<%= file_field_tag "[taskFiles][#{i}]" %>
+				<%#= file_field_tag "[taskFiles][#{i}]" %>
+				<%= file_field_tag "[taskFiles][#{taskNum}]" %> <%= taskNum%>
 				<% if task.has_key? 'files'%>
-					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: i, projectId: @project['_id']} %>
+					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: taskNum, projectId: @project['_id']} %>
 				<% end %>
 			</div>
 			
 
 		</div>
 		
-		<%= text_field_tag "[taskComments][#{i}]", task['comment'], style:"width:300px;" %>
+		<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
 
 		<hr>
 		<% i = i+1%>

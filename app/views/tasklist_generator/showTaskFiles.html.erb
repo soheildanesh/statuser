@@ -1,16 +1,19 @@
 <h2> Task Files </h2>
 
-<%if true%>
+<% debug = true%>
+<%if debug%>
 task = <%= @task %><br>
-@task['task number'] = <%= @task['task number'] %>
+#@task['task number'] = <%= @task['task number'] %>
 <% end %>
 <%if  @task.has_key? 'files'%>
 	<% @task['files'].each do |fileNum, fileName|%>
 		
-		key = <%= fileNum %> <br>
-		val = <%= fileName %>
+		<% if debug %>
+			key = <%= fileNum %> <br>
+			val = <%= fileName %>
+		<% end %>
 		
-		<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number'].to_i-1}/#{fileName}"%> 
+		<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number']}/#{fileName}"%> 
 		<hr>
 	<% end %>
 	<%#=link_to 'See Milestone Files' %>
