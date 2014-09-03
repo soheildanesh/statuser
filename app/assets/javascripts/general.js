@@ -199,6 +199,31 @@ $( document ).ready(
 
 
 
+function customerSiteidTokenInput() {
+	
+	//without 'gon' in window, uncaught reference error causing no even the else to be run and allowing free style text instead of tokeninput
+  	if('gon' in window && gon.siteId != undefined && gon.siteId != null)
+	{				
+	  	$(".siteidInput").tokenInput("/site",
+		{prePopulate: gon.siteId,
+		tokenLimit: 1});
+	}
+	else
+	{
+		$(".siteidInput").tokenInput("/site",
+		{tokenLimit: 1});
+	}
+}
+$(document).on('page:load', customerSiteidTokenInput);
+$( document ).ready(
+	customerSiteidTokenInput
+);
+$( document ).on( "focus", ".siteidInput", customerSiteidTokenInput);
+
+
+
+
+
 
 function customerInputTokenInput() {
 	//without 'gon' in window, uncaught reference error causing no even the else to be run and allowing free style text instead of tokeninput
@@ -448,6 +473,7 @@ $( document ).on( "focus", ".personInput", function() {
 });
 
 
+/*
 //http://loopj.com/jquery-tokeninput/
 $( document ).ready(function() {
 	
@@ -472,7 +498,7 @@ $( document ).on( "focus", ".siteidInput", function() {
 	);
 });
 //http://loopj.com/jquery-tokeninput/
-
+*/
 
 $( document ).ready(
 	function() {

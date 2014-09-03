@@ -156,21 +156,13 @@ class SiteController < ApplicationController
             elsif( get_current_user['role'] == 'admin' or true) #NOTE: for now everyone can see all sites, for daily activity report site id autocomplete
                 @allSites = $site_collection.find().to_a.reverse
             else
-                s1 = $site_collection.find({"projMan" =>get_current_user['_id'].to_s}).to_a.reverse
-                s2 = $site_collection.find({constMan:get_current_user['email']}).to_a.reverse
-                s3 = $site_collection.find({copInCharge:get_current_user['email']}).to_a.reverse
-                puts("****")
-                puts(s1)
-                puts(s2)
-                puts(s3)
-                puts("****")
-                @allSites = s1 + s2 + s3
+               
             end    
         end
         
         respond_to do |format|
             format.html
-            format.json { render :json => @allSites.map{ |site| { 'name' => site['customerSiteId'], 'id'=> site['customerSiteId'] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
+            format.json { render :json => @allSites.map{ |site| { 'name' => site['customerSiteId'], 'id'=> site["_id"] } } } #convert to the {id:...,  name:... format that tokeninput.js likes}
         end
     end
 end

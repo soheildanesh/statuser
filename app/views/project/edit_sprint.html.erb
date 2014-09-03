@@ -29,6 +29,13 @@
 		<%= "3SN Customer ID" %><br>
 		<%= text_field_tag "project[customerId]", "", {class: 'textField customerInput required'} %>
 	</p>
+	
+	<% if true %>
+	<p>
+		<%=  "Customer Site ID" %><br>
+		<%= text_field_tag "project[customerSiteId]", "", {class: "required textField siteidInput"} %>
+	</p>
+	<% end %>
 
 	<p>
 		<%=  "3SN Operator ID" %><br>

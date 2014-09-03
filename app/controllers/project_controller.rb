@@ -808,6 +808,13 @@ class ProjectController < ApplicationController
             @projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
         end
         
+        if not (@project['customerSiteId'].nil? or @project['customerSiteId'].empty?)
+            site = $site_collection.find_one({:_id => @project['customerSiteId'].to_i})
+            puts("site = #{site}")
+            gon.siteId = [{ 'name' => site['customerSiteId'], 'id'=> site['_id'].to_s }]
+            #@projectCustomerName = $customer_collection.find_one(:_id => BSON::ObjectId(@project['customerId']))['customerName']
+        end
+        
         if not (@project['projManager'].nil? or @project['projManager'].empty?)
             projManager = $person_collection.find_one({:_id => @project['projManager'].to_i}) #cause proj manager has the incremental ids assigned by controller not bson ids
             gon.projManager = [{ 'name' => projManager['name'], 'id'=> projManager['_id'].to_s }]
