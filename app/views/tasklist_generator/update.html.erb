@@ -79,8 +79,8 @@ tasks = <%= @tasks%>
 	<hr>
 	
 	<% i = 0 %> 
-	<% for tasknum_task in @tasksArray%>
-		<% task = tasknum_task[1] %>
+	<% for task in @tasksArray%>
+		<%# task = tasknum_task[1] %>
 		<% taskNum = task["task number"].to_i %> 
 	
 		<% if task['task'].nil? %>

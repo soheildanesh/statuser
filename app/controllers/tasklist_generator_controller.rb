@@ -32,27 +32,31 @@ class TasklistGeneratorController < ApplicationController
         @project = $project_collection.find({:_id => BSON::ObjectId(params['projectId'].to_s) } ).to_a[0]
         @tasks = @project['tasks']
         if params.has_key? 'sort by start time' and params['sort by start time'] == 'true'
-            @tasks = @tasks.sort_by{ |taskNum, task| task["start date"]}
-            
-            #tasksWithNoStartDate = Array.new
-            #tasksWithStartDate = Array.new
+            #@tasks = @tasks.sort_by{ |taskNum, task| task["start date"]}
+            tasksArr = @tasks.to_a
+            tasksWithNoStartDate = Array.new
+            tasksWithStartDate = Array.new
             #@tasks.each do |taskNum, task|
-            #    if not task.has_key? 'start date'
-            #        tasksWithNoStartDate << task
-            #    else
-            #        tasksWithStartDate << task
-            #    end 
-            #end
-            #tasksWithStartDate.sort!{|x,y| 
-            #    Time.new(x["start date"].to_s.split('-')[0], x["start date"].to_s.split('-')[1], x["start date"].to_s.split('-')[2].split()[0]) <=> Time.new(y["start date"].to_s.split('-')[0], y["start date"].to_s.split('-')[1], y["start date"].to_s.split('-')[2].split()[0])}
+            for tasknum_task in tasksArr
+                task = tasknum_task[1]
+                if not task.has_key? 'start date'
+                    tasksWithNoStartDate << task
+                else
+                    tasksWithStartDate << task
+                end 
+            end
+            tasksWithStartDate.sort!{|x,y| 
+                Time.new(x["start date"].to_s.split('-')[0], x["start date"].to_s.split('-')[1], x["start date"].to_s.split('-')[2].split()[0]) <=> Time.new(y["start date"].to_s.split('-')[0], y["start date"].to_s.split('-')[1], y["start date"].to_s.split('-')[2].split()[0])}
                 
-            #@tasks = tasksWithStartDate.concat tasksWithNoStartDate
+            @tasksArray = tasksWithStartDate.concat tasksWithNoStartDate
+            
             
         elsif params.has_key? 'sort by due date' and params['sort by due date'] == 'true'
-            
+            tasksArr = @tasks.to_a
             tasksWithNoDueDate = Array.new
             tasksWithDueDate = Array.new
-            for task in @tasks
+            for tasknum_task in tasksArr
+                task = tasknum_task[1]
                 if not task.has_key? 'dueDate'
                     tasksWithNoDueDate << task
                 else
@@ -62,7 +66,7 @@ class TasklistGeneratorController < ApplicationController
             tasksWithDueDate.sort!{|x,y| 
                 Time.new(x["dueDate"].to_s.split('-')[0], x["dueDate"].to_s.split('-')[1], x["dueDate"].to_s.split('-')[2].split()[0]) <=> Time.new(y["dueDate"].to_s.split('-')[0], y["dueDate"].to_s.split('-')[1], y["dueDate"].to_s.split('-')[2].split()[0])}
                 
-            @tasks = tasksWithDueDate.concat tasksWithNoDueDate
+            @tasksArray = tasksWithDueDate.concat tasksWithNoDueDate
             
         end
         
@@ -167,7 +171,7 @@ class TasklistGeneratorController < ApplicationController
         end
         
         $project_collection.save(@project)
-        @tasksArray = @tasks.sort
+        @tasksArray = @tasks.values
         
         puts("tasksArray = #{@tasksArray}")
         
@@ -177,7 +181,7 @@ class TasklistGeneratorController < ApplicationController
         projectId = params["id"]
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
         @tasks = @project['tasks']
-        #@tasksArray = @tasks.sort
+        @tasksArray = @tasks.values
         
         render 'update'
     end
