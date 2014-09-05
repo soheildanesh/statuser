@@ -215,7 +215,8 @@ class TasklistGeneratorController < ApplicationController
         @task = @project['tasks'][@taskNum]
         puts(">>> @task = #{@task}")
         @fileName = @task["files"][@fileNum]
-        @task["files"][@fileNum] = "deleted_#{@fileName}_#{Time.now}_#{get_current_user['_id']}"
+        #@task["files"][@fileNum] = "deleted_#{@fileName}_#{Time.now}_#{get_current_user['_id']}"
+        @task["files"].delete(@fileNum)
         $project_collection.save(@project)
 
         
@@ -228,7 +229,9 @@ class TasklistGeneratorController < ApplicationController
         FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")  
         FileUtils.cd("tasknum_#{@taskNum}")  
         puts(">>> @fileName = #{@fileName}")
-        FileUtils.mv("#{@fileName}", "#{@fileName}_deleted_#{Time.now}_by_#{get_current_user['_id']}")
+        FileUtils.mv("#{@fileName}", "deleted_#{Time.now}_by_#{get_current_user['_id']}__#{@fileName}")
+        
+        render 'showTaskFiles'
     end
     
     

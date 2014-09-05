@@ -1,10 +1,18 @@
+<p>
+	<%if @project.has_key? "tasks"%>
+		<%= link_to "Task Spread Sheet", controller: 'tasklist_generator', action: 'show', id: @project['_id']%> <br>
+	<% end %>
+	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%><br>
+</p>	
+
 <h2> Task Files </h2>
 
-<% debug = true%>
+<% debug = false%>
 <%if debug%>
 task = <%= @task %><br>
 #@task['task number'] = <%= @task['task number'] %>
 <% end %>
+<% numFiles = 0%>
 <%if  @task.has_key? 'files'%>
 	<% @task['files'].each do |fileNum, fileName|%>
 		
@@ -13,9 +21,16 @@ task = <%= @task %><br>
 			val = <%= fileName %>
 		<% end %>
 		
-		<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number']}/#{fileName}"%> | 
-		<%= link_to 'delete', {controller: 'tasklist_generator', action: 'deleteTaskFile', id: @project['_id'],  taskNum: @task['task number'], fileNum: fileNum} , method: :delete %>
-		<hr>
+		<% if not fileName.include? 'deleted'%>
+			<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number']}/#{fileName}"%> | 
+			<%= link_to 'delete', {controller: 'tasklist_generator', action: 'deleteTaskFile', id: @project['_id'],  taskNum: @task['task number'], fileNum: fileNum} , method: :delete %>
+			<% numFiles = numFiles + 1%>
+			<hr>
+		<% end %>
+	<% end %>
+	
+	<% if numFiles == 0%>
+		No Files To Display
 	<% end %>
 	<%#=link_to 'See Milestone Files' %>
 <% end %>

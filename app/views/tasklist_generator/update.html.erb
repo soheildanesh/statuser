@@ -122,7 +122,6 @@ tasks = <%= @tasks%>
 					<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
 						<% q = task['quantity'].to_i %>
 						<%#= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
-						<%= taskNum %> <-
 						<%= select_tag("quantity_done[#{taskNum}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
 					<% else %>
 						_ 
@@ -159,8 +158,8 @@ tasks = <%= @tasks%>
 			
 				<div style="float:left; width:200px;">
 					<%#= file_field_tag "[taskFiles][#{i}]" %>
-					<%= file_field_tag "[taskFiles][#{taskNum}]" %> <%= taskNum%>
-					<% if task.has_key? 'files'%>
+					<%= file_field_tag "[taskFiles][#{taskNum}]" %>
+					<% if task.has_key? 'files' and not task['files'].empty? %>
 						<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: taskNum, projectId: @project['_id']} %>
 					<% end %>
 				</div>
