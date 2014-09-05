@@ -3,6 +3,7 @@ class TasklistGeneratorController < ApplicationController
         @projectId = params['id']
     end
     
+    
     def uploadSpreadSheet  
         projectId = params['spreadSheet']['projectId']
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
@@ -22,7 +23,10 @@ class TasklistGeneratorController < ApplicationController
         end
         
         @project['tasks'] = @tasks
-        
+        @tasksArray = @tasks.values
+        if @project.has_key? 'earned value'  
+            @project['earned value'] = 0
+        end
         $project_collection.save( @project )
         
         render 'update'
@@ -119,7 +123,7 @@ class TasklistGeneratorController < ApplicationController
         taskFiles = params['taskFiles']
         
         if not taskFiles.nil?
-           taskFiles.each do |taskNum, taskfile|
+            taskFiles.each do |taskNum, taskfile|
                 FileUtils.cd(Rails.root)
                 FileUtils.cd('public')
                 if(not FileUtils.pwd().split("/").last == "uploads")
@@ -181,17 +185,50 @@ class TasklistGeneratorController < ApplicationController
         projectId = params["id"]
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
         @tasks = @project['tasks']
-        @tasksArray = @tasks.values
+        if not @tasks.nil?
+            @tasksArray = @tasks.values
+        else
+            @tasksArray = nil
+        end
         
         render 'update'
     end
     
+        
     def showTaskFiles
         projectId = params["id"]
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
         @taskNum = params['taskNum']
         @task = @project['tasks'][@taskNum]
         
+    end
+    
+    def deleteTaskFile
+        projectId = params["id"]
+        @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
+        @taskNum = params["taskNum"]
+        @fileNum = params['fileNum']
+        puts(">>> project = #{@project}")
+        puts(">>> taskNum = #{@taskNum}")
+        puts(">>> fileNum = #{@fileNum}")
+        
+        @task = @project['tasks'][@taskNum]
+        puts(">>> @task = #{@task}")
+        @fileName = @task["files"][@fileNum]
+        @task["files"][@fileNum] = "deleted_#{@fileName}_#{Time.now}_#{get_current_user['_id']}"
+        $project_collection.save(@project)
+
+        
+        #rename the file
+        FileUtils.cd(Rails.root)
+        FileUtils.cd('public')
+        if(not FileUtils.pwd().split("/").last == "uploads")
+            FileUtils.cd('uploads')
+        end
+        FileUtils.cd("#{@project['projId3s']}__#{@project['_id'].to_s}")  
+        FileUtils.cd("tasknum_#{@taskNum}")  
+        puts(">>> @fileName = #{@fileName}")
+        FileUtils.mv("#{@fileName}", "#{@fileName}_deleted_#{Time.now}_by_#{get_current_user['_id']}")
     end
     
     

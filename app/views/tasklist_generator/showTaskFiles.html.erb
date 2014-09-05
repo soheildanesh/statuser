@@ -13,8 +13,10 @@ task = <%= @task %><br>
 			val = <%= fileName %>
 		<% end %>
 		
-		<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number']}/#{fileName}"%> 
+		<%=link_to fileName, "/uploads/#{@project['projId3s']}__#{@project['_id']}/tasknum_#{@task['task number']}/#{fileName}"%> | 
+		<%= link_to 'delete', {controller: 'tasklist_generator', action: 'deleteTaskFile', id: @project['_id'],  taskNum: @task['task number'], fileNum: fileNum} , method: :delete %>
 		<hr>
 	<% end %>
 	<%#=link_to 'See Milestone Files' %>
 <% end %>
+

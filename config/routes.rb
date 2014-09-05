@@ -6,6 +6,7 @@ Statuser::Application.routes.draw do
             patch :update
             get :showTaskFiles
             get :sortByTime
+            delete :deleteTaskFile
         end
     end
     

@@ -1,5 +1,5 @@
 
-<% if true%>
+<% if false%>
 project = 
 	<%= @project%> <br><br>
 
@@ -78,100 +78,101 @@ tasks = <%= @tasks%>
 	</div>
 	<hr>
 	
-	<% i = 0 %> 
-	<% for task in @tasksArray%>
-		<%# task = tasknum_task[1] %>
-		<% taskNum = task["task number"].to_i %> 
+	<% i = 0 %>
+	<% if not @tasksArray.nil? %> 
+		<% for task in @tasksArray%>
+			<%# task = tasknum_task[1] %>
+			<% taskNum = task["task number"].to_i %> 
 	
-		<% if task['task'].nil? %>
-			<%next%>
-		<% end %>
-		<% if task['task'].strip.empty? %>
-			<%next%>
-		<% end %>
+			<% if task['task'].nil? %>
+				<%next%>
+			<% end %>
+			<% if task['task'].strip.empty? %>
+				<%next%>
+			<% end %>
 		
-		<% if task.has_key? 'isDone' and task['isDone'] == true %>
-			<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
-				<div style="float:left; width:2000px; height_:100px; background-color:orange;">	
-			<% else %>
-				<div style="float:left; width:2000px; height_:100px; background-color:green;">
-			<% end %>
-		<% else %>
-			<% if task.has_key? 'dueDate' and task['dueDate'] < Time.now %>
-				<div style="float:left; width:2000px; height_:100px; background-color:red;">
-			<% elsif task.has_key? 'start date' and task['start date'] < Time.now %>
-				<div style="float:left; width:2000px; height_:100px; background-color:yellow;">
-			<% else %>
-				<div style="float:left; width:2000px; height_:100px;">
-			<% end %>
-		<% end %>
-			<%#= task%>
-			<div style="float:left; width:400px;">
-				<%#= check_box_tag "[tasks][#{i}]" %>
-				<%= check_box_tag "[tasks][#{taskNum}]" %>
-				<%= task['task'] %> 
-				<%#= task[(i+1).to_s] %> 
-			</div>
-			
-			<div style="float:left; width:200px;">
-				<%= printReplaceEmpty task['quantity'].to_s  %> 
-			</div>
-			
-			<div style="float:left; width:200px;">
-				<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
-					<% q = task['quantity'].to_i %>
-					<%#= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
-					<%= taskNum %> <-
-					<%= select_tag("quantity_done[#{taskNum}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+			<% if task.has_key? 'isDone' and task['isDone'] == true %>
+				<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
+					<div style="float:left; width:2000px; height_:100px; background-color:orange;">	
 				<% else %>
-					_ 
+					<div style="float:left; width:2000px; height_:100px; background-color:green;">
 				<% end %>
-			</div>
+			<% else %>
+				<% if task.has_key? 'dueDate' and task['dueDate'] < Time.now %>
+					<div style="float:left; width:2000px; height_:100px; background-color:red;">
+				<% elsif task.has_key? 'start date' and task['start date'] < Time.now %>
+					<div style="float:left; width:2000px; height_:100px; background-color:yellow;">
+				<% else %>
+					<div style="float:left; width:2000px; height_:100px;">
+				<% end %>
+			<% end %>
+				<%#= task%>
+				<div style="float:left; width:400px;">
+					<%#= check_box_tag "[tasks][#{i}]" %>
+					<%= check_box_tag "[tasks][#{taskNum}]" %>
+					<%= task['task'] %> 
+					<%#= task[(i+1).to_s] %> 
+				</div>
 			
-			<div style="float:left; width:200px;">
-				<% if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty? %>
-					<%= printReplaceEmpty( ( ( Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])  * 1000.0).to_i.to_f / 10.0).to_s)   %> 
+				<div style="float:left; width:200px;">
+					<%= printReplaceEmpty task['quantity'].to_s  %> 
+				</div>
+			
+				<div style="float:left; width:200px;">
+					<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
+						<% q = task['quantity'].to_i %>
+						<%#= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+						<%= taskNum %> <-
+						<%= select_tag("quantity_done[#{taskNum}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
+					<% else %>
+						_ 
+					<% end %>
+				</div>
+			
+				<div style="float:left; width:200px;">
+					<% if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty? %>
+						<%= printReplaceEmpty( ( ( Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])  * 1000.0).to_i.to_f / 10.0).to_s)   %> 
 					
-				<% else %>
-					_
-				<% end %>
+					<% else %>
+						_
+					<% end %>
 				
-				/ <%= printReplaceEmpty( ((task['value percentage'].to_f * 1000).to_i.to_f / 10.0).to_s )  %> 
-			</div>
+					/ <%= printReplaceEmpty( ((task['value percentage'].to_f * 1000).to_i.to_f / 10.0).to_s )  %> 
+				</div>
 			
 			
-			<div style="float:left; width:140px;">
-				<% if task.has_key? 'start date'%>
-					<%= task['start date'].to_s.split()[0]%> 
-				<% else %>
-					<%= " _ "%>
-				<% end %>
+				<div style="float:left; width:140px;">
+					<% if task.has_key? 'start date'%>
+						<%= task['start date'].to_s.split()[0]%> 
+					<% else %>
+						<%= " _ "%>
+					<% end %>
+				</div>
+		
+				<div style="float:left; width:200px;">
+					<% if task.has_key? 'dueDate'%>
+						<%= task['dueDate'].to_s.split()[0]%>
+					<% else %>
+						<%= " _ "%>
+					<% end %>
+				</div>
+			
+				<div style="float:left; width:200px;">
+					<%#= file_field_tag "[taskFiles][#{i}]" %>
+					<%= file_field_tag "[taskFiles][#{taskNum}]" %> <%= taskNum%>
+					<% if task.has_key? 'files'%>
+						<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: taskNum, projectId: @project['_id']} %>
+					<% end %>
+				</div>
+
 			</div>
 		
-			<div style="float:left; width:200px;">
-				<% if task.has_key? 'dueDate'%>
-					<%= task['dueDate'].to_s.split()[0]%>
-				<% else %>
-					<%= " _ "%>
-				<% end %>
-			</div>
-			
-			<div style="float:left; width:200px;">
-				<%#= file_field_tag "[taskFiles][#{i}]" %>
-				<%= file_field_tag "[taskFiles][#{taskNum}]" %> <%= taskNum%>
-				<% if task.has_key? 'files'%>
-					<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: taskNum, projectId: @project['_id']} %>
-				<% end %>
-			</div>
-			
+			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
 
-		</div>
-		
-		<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
-
-		<hr>
-		<% i = i+1%>
-	<% end %>
+			<hr>
+			<% i = i+1%>
+		<% end %>
+	<% end %> 	
 	
 	
 	
@@ -182,7 +183,7 @@ tasks = <%= @tasks%>
 
 
 
-<% if false%>
+<% if false %>
 	---------
 	<%for r in @s.first_row.to_i .. @s.last_row.to_i %>
 		<%#= @s.row(r)%>

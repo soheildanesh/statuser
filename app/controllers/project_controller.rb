@@ -1023,13 +1023,38 @@ class ProjectController < ApplicationController
             if( not project.has_key? 'tasks') 
                 next
             end
+            if( project['tasks'].nil?)
+                next
+            end 
             tasks = project['tasks']
             
             earnedValue = 0.0
+
+            puts(">>> ** tasks pre = #{tasks}")
+
+            #correcting legacy mistake, some task lists were stored as arrays, converting and saving them as hashes septc 4 2014
+            if tasks.class == Array
+                tasksHash = Hash.new
+                puts("converting array of tasks to hash for porj #{project['_id']}")
+                for task in tasks
+                    tasksHash[task["task number"]] = task["task"]
+                end
+                project['tasks'] = tasksHash
+                tasks = tasksHash
+            end
+            #correcting legacy mistake, some task lists were stored as arrays, converting and saving them as hashes septc 4 2014
             
-            for task in tasks
+            puts(">>> ** project = #{project}")
+            puts(">>> ** tasks = #{tasks}")
+            
+            
+            
+            tasks.each do |taskNum, task|
+            #for task in tasks
+                puts(">>> ** task = #{task}, hash = #{task.class}")
                 if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty?
                     earnedValue = earnedValue + Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])
+                    puts("earnedValue = #{earnedValue}")
                 end
             end
 

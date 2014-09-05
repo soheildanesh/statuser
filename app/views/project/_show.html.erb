@@ -1,5 +1,5 @@
 
-
+<%#= project%><br><br>
 <div style="width:3500px;">
 	<hr style="margin:0px;">
 	<div style="width:3500px; _background-color:#CEF6CE;">
@@ -52,8 +52,13 @@
 		</div>
 		
 		<div class='wSmall'  style="__background-color:#CEF6CE;">
-			
-			<%= printReplaceEmpty project["customerSiteId"].to_s %>
+			<%#= printReplaceEmpty project["customerSiteId"].to_s %>
+			<% site = $site_collection.find({"_id" => project['customerSiteId'].to_i}).to_a[0] %>
+			<% if site == nil%>
+				_
+			<% else %>
+				<%= printReplaceEmpty site['customerSiteId']%>
+			<% end %>
 			<%#= printReplaceEmpty project["numDoneTasks"].to_s %>  <%#=  printReplaceEmpty project["numTasks"].to_s %> 
 		</div>
 
