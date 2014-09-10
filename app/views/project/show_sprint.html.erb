@@ -20,7 +20,7 @@
 		<%#= link_to "Plan", controller: 'project', action: 'showPlan', id: @project['_id']%>  
 		
 		<%if @project.has_key? "tasks"%>
-			<%= link_to "Task Spread Sheet", controller: 'tasklist_generator', action: 'show', id: @project['_id']%>  
+			<%= link_to "Task List", controller: 'tasklist_generator', action: 'show', id: @project['_id']%>  
 		<% else %>			
 			<%= link_to "Upload Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%>  
 		<% end %>

@@ -1,6 +1,6 @@
 <p>
 	<%if @project.has_key? "tasks"%>
-		<%= link_to "Task Spread Sheet", controller: 'tasklist_generator', action: 'show', id: @project['_id']%> <br>
+		<%= link_to "Task List", controller: 'tasklist_generator', action: 'show', id: @project['_id']%> <br>
 	<% end %>
 	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%><br>
 </p>	
