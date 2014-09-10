@@ -1,5 +1,5 @@
 <%= link_to "Back To Project", {controller: 'project', action: 'show', id: @project['_id'].to_s}, {style: "color:green;"} %>
-<%= role = get_current_user['role'] %>
+<% role = get_current_user['role'] %>
 <h1>Editing Project</h1>
  
 <%= form_for :project, url: {controller: 'project', action: 'update', id: @project['_id']}, method: :patch do |f| %>
