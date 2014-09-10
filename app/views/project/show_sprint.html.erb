@@ -9,7 +9,7 @@
 	<p>
 		<%= link_to "Back to Projects List",  :controller => 'project', :action => 'index' %> 
 		<% role =get_current_user['role']%>
-		<% if role == 'admin' %>
+		<% if true or role == 'admin' %>
 			|	
 			<%= link_to 'Edit', {action: 'edit', id: @project['_id']}%> 
 		<% end %>

@@ -1,77 +1,82 @@
 <%= link_to "Back To Project", {controller: 'project', action: 'show', id: @project['_id'].to_s}, {style: "color:green;"} %>
-
+<%= role = get_current_user['role'] %>
 <h1>Editing Project</h1>
  
 <%= form_for :project, url: {controller: 'project', action: 'update', id: @project['_id']}, method: :patch do |f| %>
 	
-	<p>
-		<%= f.label :proj, 'Project ID'%><br>
-		<%= text_field_tag "project[projId3s]", "#{@project['projId3s']}" %>
-	</p>
+	<% if role == 'admin' or role == 'project manager'%>
 	
-	<p>
-		<%= "3SN Program" %><br>
-		<%= text_field_tag "project[program]", "", {class: 'textField programInput required'} %>
-	</p>
+		<p>
+			<%= f.label :proj, 'Project ID'%><br>
+			<%= text_field_tag "project[projId3s]", "#{@project['projId3s']}" %>
+		</p>
 	
-	<p>
-		<%=  "3SN Project Name" %><br>
-		<%= text_field_tag "project[projName]", "#{@project['projName']}", {class: 'textField required'} %>
-		<%#= printReplaceEmpty @project['projName']%>
-	</p>
+		<p>
+			<%= "3SN Program" %><br>
+			<%= text_field_tag "project[program]", "", {class: 'textField programInput required'} %>
+		</p>
 	
-	<p>
-		<%= "3SN Project Type" %><br>
-		<%= text_field_tag "project[projType]", "", {class: 'textField projTypeInput required'} %>
-	</p>
+		<p>
+			<%=  "3SN Project Name" %><br>
+			<%= text_field_tag "project[projName]", "#{@project['projName']}", {class: 'textField required'} %>
+			<%#= printReplaceEmpty @project['projName']%>
+		</p>
 	
-	<p>
-		<%= "3SN Customer ID" %><br>
-		<%= text_field_tag "project[customerId]", "", {class: 'textField customerInput required'} %>
-	</p>
+		<p>
+			<%= "3SN Project Type" %><br>
+			<%= text_field_tag "project[projType]", "", {class: 'textField projTypeInput required'} %>
+		</p>
 	
-	<% if true %>
-	<p>
-		<%=  "Customer Site ID" %><br>
-		<%= text_field_tag "project[customerSiteId]", "", {class: "required textField siteidInput"} %>
-	</p>
+		<p>
+			<%= "3SN Customer ID" %><br>
+			<%= text_field_tag "project[customerId]", "", {class: 'textField customerInput required'} %>
+		</p>
+	
+		<% if true %>
+		<p>
+			<%=  "Customer Site ID" %><br>
+			<%= text_field_tag "project[customerSiteId]", "", {class: "required textField siteidInput"} %>
+		</p>
+		<% end %>
+
+		<p>
+			<%=  "3SN Operator ID" %><br>
+			<%= text_field_tag "project[operatorId]", @project['operatorId'], {class: 'textField required'} %>
+		</p>
+
+		<p>
+			<%=  "3SN Project Manager" %><br>
+			<%= text_field_tag "project[projManager]", "", {class: 'textField projManager required'} %>	
+		</p>
+	
+		<p>
+			<%=  "3SN Project Manager Admin" %><br>
+			<%= text_field_tag "project[project manager admin]", "", {class: 'textField projManagerAdmin required'} %>	
+		</p>
+	
+		<p>
+			<%=  "3SN Project Controller" %><br>
+			<%= text_field_tag "project[projController]", "", {class: 'textField projController required'} %>	
+		</p>
 	<% end %>
-
-	<p>
-		<%=  "3SN Operator ID" %><br>
-		<%= text_field_tag "project[operatorId]", @project['operatorId'], {class: 'textField required'} %>
-	</p>
-
-	<p>
-		<%=  "3SN Project Manager" %><br>
-		<%= text_field_tag "project[projManager]", "", {class: 'textField projManager required'} %>	
-	</p>
 	
-	<p>
-		<%=  "3SN Project Manager Admin" %><br>
-		<%= text_field_tag "project[project manager admin]", "", {class: 'textField projManagerAdmin required'} %>	
-	</p>
-	
-	<p>
-		<%=  "3SN Project Controller" %><br>
-		<%= text_field_tag "project[projController]", "", {class: 'textField projController required'} %>	
-	</p>
-	
-	<p>
-		<%= f.label :startDate, "Start Date" %><br>
-		<%= f.date_select :startDate, selected: @startDate ,class: "required textField" %>
-		<%#= f.text_field :startDate%>
-	</p>
+	<% if role == 'admin' or role == 'project manager' or role == 'project controller'%>
+		<p>
+			<%= f.label :startDate, "Start Date" %><br>
+			<%= f.date_select :startDate, selected: @startDate ,class: "required textField" %>
+			<%#= f.text_field :startDate%>
+		</p>
 	
 	
-	<p>
-		<%= f.label :endDate, "End Date" %><br>
-		<%= f.date_select :endDate, selected: @endDate ,class: "required textField" %>
-		<%#= f.text_field :startDate%>
-	</p>
+		<p>
+			<%= f.label :endDate, "End Date" %><br>
+			<%= f.date_select :endDate, selected: @endDate ,class: "required textField" %>
+			<%#= f.text_field :startDate%>
+		</p>
 	
-	<p>
-		<%= f.submit "Save Project" , class: '_disabledTillFilled' , _disabled:"_disabled"%>
-	</p>
+		<p>
+			<%= f.submit "Save Project" , class: '_disabledTillFilled' , _disabled:"_disabled"%>
+		</p>
+	<% end %>
 	
 <% end %>

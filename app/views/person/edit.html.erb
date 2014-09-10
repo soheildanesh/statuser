@@ -1,6 +1,6 @@
 <h2> Edit User Form:</h2>
-<%= @person %>
-<%= @roleHash%>
+<%#= @person %>
+<%#= @roleHash%>
 <%= form_for :person, url: {controller: 'person', action: 'update', id: @person['_id']}, method: :patch do |f| %>
 <p>
 	<%= f.label :email, "Email" %>

@@ -784,7 +784,7 @@ class ProjectController < ApplicationController
     
     def edit
         role = get_current_user['role']
-        if not( role == 'admin' or role == 'project manager' )#or role == 'project controller')
+        if not( role == 'admin' or role == 'project manager' or role == 'project controller')
             flash[:error] = "User not authorized"
             redirect_to action: 'index'
             return
@@ -911,26 +911,19 @@ class ProjectController < ApplicationController
         end
         
         
-        if(not get_current_user.nil?)
-             if(not get_current_user['role'] == 'admin')
-                 flash[:notice] = "Have to be admin user for this"
-                 render '/login_session/new'
-                 return
-             end
-        else
-            flash[:notice] = "Have to be logged in for this"
-            render '/login_session/new'
-            return
-        end
-        
-        
-        
         #find and remove record to be updated
         record = $project_collection.find({:_id => BSON::ObjectId( params['id']) } ).to_a[0]
         
         params['project'].each do |key, value| 
             if key == '_id'
                 next
+            end
+            
+            #project controller may only change the start and end dates of a project
+            if role == 'projcet controller' 
+                if not key.include? 'startDate' or not key.include? 'endDate'
+                    next
+                end
             end
             record[key] = value
         end
