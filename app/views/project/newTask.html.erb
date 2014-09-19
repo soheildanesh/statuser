@@ -1,0 +1,13 @@
+New Task:
+
+<%#= form_for :project, url:{conroller:'project', action:'createNewTask', id: @project['_id']}, method: "PATCH", style: "float:left;" do |f| %>
+
+<%= form_tag({controller: 'project', action: 'createNewTask', id: @project['_id']}, {method: :patch,  remote: false}) do %>
+
+	<%= text_field_tag "task" ,"", style:"width:300px;" %><br>
+
+	Task Type:<br>
+	<%= select_tag("task type", options_for_select([['Change Order', 'change order']]), {include_blank: 'none'} ) %>
+	
+	<%= submit_tag "Submit"%>
+<% end %>

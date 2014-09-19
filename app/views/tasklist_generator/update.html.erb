@@ -1,5 +1,5 @@
-
-<% if false%>
+<%# THIS IS REALLY BOTH UPDATE AND SHOW %>
+<% if true%>
 project = 
 	<%= @project%> <br><br>
 
@@ -8,7 +8,8 @@ tasks = <%= @tasks%>
 
 <p>
 	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%><br>
-	<%= link_to "Upload New Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%>  
+	<%= link_to "Upload New Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%> <br> 
+	<%= link_to "New Task", controller: 'project', action: 'newTask', id: @project['_id']%>
 	
 </p>	
 
@@ -90,6 +91,14 @@ tasks = <%= @tasks%>
 			<% if task['task'].strip.empty? %>
 				<%next%>
 			<% end %>
+			
+			
+			<% get_current_user['role'] == "admin" or get_current_user['role'] == "project manager"%>
+			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
+			<%if task.has_key? 'task type' and task['task type'] == "change request"%>		
+				<% %>
+			
+			<% end %>
 		
 			<% if task.has_key? 'isDone' and task['isDone'] == true %>
 				<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
@@ -163,11 +172,29 @@ tasks = <%= @tasks%>
 						<%= link_to 'Show Task Files', {action: 'showTaskFiles', taskNum: taskNum, projectId: @project['_id']} %>
 					<% end %>
 				</div>
+				
+				
+				<div style="float:left; width:200px;">
+					<%if task.has_key? 'task type' and task['task type'] == "change request"%>		
+						CHANGE 
+						<% if task['task']['task type'] != nil and task['task']['task type'] == 'change request' %>
+						
+						<% if task.has_key? 'change request approved'%>
+							Approved
+						<% else %>
+							<%= check_box_tag "[tasks][#{taskNum}]['change request approved']" %>
+						<% end %>
+					<% end %>
+				</div>
+
+				
+				
 
 			</div>
 		
-			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
-
+			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %><br>
+			<%if task.has_key? 'task type' and task['task type'] == "change request"%>
+				
 			<hr>
 			<% i = i+1%>
 		<% end %>

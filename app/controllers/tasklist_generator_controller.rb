@@ -84,6 +84,8 @@ class TasklistGeneratorController < ApplicationController
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
         @tasks = @project['tasks']
         
+        
+        #### MODIFY CHECKLIST SELECTED TASKS IF ANY #######
         selectedTasks = params['tasks']
         
         action = params['actionSelect']
@@ -119,7 +121,10 @@ class TasklistGeneratorController < ApplicationController
                  end
             end
         end
+        #### MODIFY CHECKLIST SELECTED TASKS IF ANY #######
         
+        
+        #### STORE ANY UPLOADED TASK FILES ################
         taskFiles = params['taskFiles']
         
         if not taskFiles.nil?
@@ -152,8 +157,9 @@ class TasklistGeneratorController < ApplicationController
             end
                 
         end
+        #### STORE ANY UPLOADED TASK FILES ################
 
-        
+        #### STORE ANY NEW TASK COMMENTS ################
         taskComments = params['taskComments']
         if not taskComments.nil?
            taskComments.each do |taskNum, comment|
@@ -166,18 +172,20 @@ class TasklistGeneratorController < ApplicationController
                @tasks[taskNum]['comment'] = comment
            end 
         end
+        #### STORE ANY NEW TASK COMMENTS ################        
         
+        
+        #### UPDAT QUANITY DONE IF ANY UPDATED ##########
         quantity_done = params['quantity_done']        
         if not quantity_done.nil?
             quantity_done.each do |taskNum, qdone|
                 @tasks[taskNum]['quantity_done'] = qdone
             end 
         end
+        #### UPDAT QUANITY DONE IF ANY UPDATED ##########
         
         $project_collection.save(@project)
         @tasksArray = @tasks.values
-        
-        puts("tasksArray = #{@tasksArray}")
         
     end
     

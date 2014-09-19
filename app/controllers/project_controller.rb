@@ -18,7 +18,23 @@ class ProjectController < ApplicationController
     
     
     
-    ######
+    
+    ####### TASK LIST RELATED FUNCTIONS#########
+    def newTask
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+    end
+
+    
+    def createNewTask
+        @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
+        numExistingTasks = @project['tasks'].size 
+        newTaskNum = numExistingTasks+1
+        @project['tasks'][newTaskNum.to_s] = {"task number" => newTaskNum.to_s, "task" => params['task']}
+        $project_collection.save(@project)
+        
+        redirect_to controller: 'tasklist_generator', action: 'show', id: @project['_id']
+    end
+    ####### i think at least some of this below stuff is for the old task list system ######
     def indexUnfinishedTasks
         @project = $project_collection.find({:_id => BSON::ObjectId(params['id']) } ).to_a[0]
         
@@ -111,6 +127,7 @@ class ProjectController < ApplicationController
         
         redirect_to controller: 'todolist', action: 'show', id: id
     end
+    ####### TASK LIST RELATED FUNCTIONS#########
 
 
     #sprint

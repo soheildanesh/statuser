@@ -76,6 +76,9 @@ Statuser::Application.routes.draw do
             get :indexUnfinishedTasks
             get :rescheduleTaskChooseNewDay
             patch :rescheduleTaskAssignToNewDay
+            post :addNewTask
+            get :newTask
+            patch :createNewTask
         end
     end
     
