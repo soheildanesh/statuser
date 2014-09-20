@@ -1,8 +1,10 @@
 <%# THIS IS REALLY BOTH UPDATE AND SHOW %>
-<% if true%>
+<% if false%>
 project = 
 	<%= @project%> <br><br>
+<% end %>
 
+<% if false %>
 tasks = <%= @tasks%>
 <% end %>
 
@@ -79,12 +81,23 @@ tasks = <%= @tasks%>
 	</div>
 	<hr>
 	
+	
+	<% #### PRINT ALL TASKS ######### %>
 	<% i = 0 %>
 	<% if not @tasksArray.nil? %> 
 		<% for task in @tasksArray%>
-			<%# task = tasknum_task[1] %>
+			
+			<% ###DEBUG %>
+			<% if false %>
+				<%= "task = #{task}"%>
+			<% end %>
+			<% ###DEBUG %>
+		
 			<% taskNum = task["task number"].to_i %> 
+			
 	
+			
+			<% ######### CHOOSE WHICH TASKS TO SHOW ##### %>
 			<% if task['task'].nil? %>
 				<%next%>
 			<% end %>
@@ -92,13 +105,18 @@ tasks = <%= @tasks%>
 				<%next%>
 			<% end %>
 			
-			
-			<% get_current_user['role'] == "admin" or get_current_user['role'] == "project manager"%>
-			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %>
-			<%if task.has_key? 'task type' and task['task type'] == "change request"%>		
-				<% %>
-			
+			<%if task.has_key? 'task type' and task['task type'] == "change order"%>	
+				<% if task.has_key? 'change order approved' %>
+					<%# if change request is approved change request is shown like a regular task%>
+					<% changeRequestApproved = true %>
+				<% else %>
+					<%# if change request is not approved only show it to admins or project managers%>
+					<% if not (get_current_user['role'] == "admin" or get_current_user['role'] == "project manager") %>
+						<% next %>
+					<% end %>
+				<% end %>
 			<% end %>
+			<% ######### CHOOSE WHICH PROJECTS TO SHOW ##### %>
 		
 			<% if task.has_key? 'isDone' and task['isDone'] == true %>
 				<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
@@ -175,30 +193,20 @@ tasks = <%= @tasks%>
 				
 				
 				<div style="float:left; width:200px;">
-					<%if task.has_key? 'task type' and task['task type'] == "change request"%>		
-						CHANGE 
-						<% if task['task']['task type'] != nil and task['task']['task type'] == 'change request' %>
-						
-						<% if task.has_key? 'change request approved'%>
-							Approved
+					<%if task.has_key? 'task type' and task['task type'] == "change order"%>		
+						<% if changeRequestApproved %>
+							CR / APPROVED
 						<% else %>
-							<%= check_box_tag "[tasks][#{taskNum}]['change request approved']" %>
+							CR / <%= link_to "Approve CR", {controller: 'project', action: 'approveChangeOrder', id: @project['_id'], taskNum: taskNum} , {method: :post} %>
 						<% end %>
 					<% end %>
 				</div>
-
-				
-				
-
 			</div>
-		
-			<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %><br>
-			<%if task.has_key? 'task type' and task['task type'] == "change request"%>
-				
 			<hr>
 			<% i = i+1%>
 		<% end %>
-	<% end %> 	
+	<% end %>
+	<% #### PRINT ALL TASKS ######### %>
 	
 	
 	

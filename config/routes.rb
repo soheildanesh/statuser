@@ -79,6 +79,7 @@ Statuser::Application.routes.draw do
             post :addNewTask
             get :newTask
             patch :createNewTask
+            post :approveChangeOrder
         end
     end
     
