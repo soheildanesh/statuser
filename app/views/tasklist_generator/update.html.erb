@@ -144,11 +144,10 @@ tasks = <%= @tasks%>
 			<% ######### CHOOSE TASK BACKGROUND COLOR ##### %>
 				<%#= task%>
 				<div style="float:left; width:<%=taskNumberColWidth%>px;">
-					<%= task["task number"]%>
+					<%= task["task number"]%> <%= check_box_tag "[tasks][#{taskNum}]" %> 
 				</div>
 				<div style="float:left; width:400px;">
-					<%#= check_box_tag "[tasks][#{i}]" %>
-					<%= check_box_tag "[tasks][#{taskNum}]" %>
+					
 					<%= task['task'] %> 
 					<%#= task[(i+1).to_s] %> 
 				</div>
@@ -160,7 +159,6 @@ tasks = <%= @tasks%>
 				<div style="float:left; width:200px;">
 					<% if task.has_key? 'quantity' and not task['quantity'].nil? %>
 						<% q = task['quantity'].to_i %>
-						<%#= select_tag("quantity_done[#{i}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
 						<%= select_tag("quantity_done[#{taskNum}]", options_for_select(Array(1..q), task['quantity_done'] ), {include_blank: 'none'} ) %>
 					<% else %>
 						_ 
@@ -215,8 +213,8 @@ tasks = <%= @tasks%>
 				</div>
 			</div>
 			
-			<div style="position:relative; left:<%=taskNumberColWidth%>px;">
-				<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:300px;" %><br>
+			<div style="position:relative; left:<%=taskNumberColWidth%>px; width:500px;">
+				<%= text_field_tag "[taskComments][#{taskNum}]", task['comment'], style:"width:500px;",  placeholder: 'Comments and notes ...' %><br>
 			</div>
 			<hr>
 			<% i = i+1%>
