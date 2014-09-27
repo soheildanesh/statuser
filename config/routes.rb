@@ -7,6 +7,7 @@ Statuser::Application.routes.draw do
             get :showTaskFiles
             get :sortByTime
             delete :deleteTaskFile
+            patch :uploadUpdateSpreadSheet
         end
     end
     

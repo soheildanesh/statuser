@@ -2,8 +2,47 @@ class TasklistGeneratorController < ApplicationController
     def new
         @projectId = params['id']
     end
+
+
+    #UPLOAD TASK SPREAD SHEET CONTAINING MODIFICATIONS TO EXISTING TASK LIST (E.G. CHANGE REQUEST)
+    #COLUMS (IN SPREAD SHEET): TASK # , TASK DESC. , UNIT, QUANTITY, PERCENTAGE OF TOTAL PRICE
+    #FINDS TASK IN PROJECT TASKS THAT MATCH TASK #, UPDATES DESCRIPTION, QUANTITY AND TOTAL PRICE PERCENTAGE BUT NOT THINGS THAT MIGHT HAVE BEEN SET BY PROJECT MANAGER/COORDINATOR SUCH AS QUANTITY DONE OR START/DUE DATES
+    def uploadUpdateSpreadSheet
+        projectId = params['spreadSheet']['projectId']
+        @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
+          
+        uploaded_io = params['spreadSheet']['taskFile']
+        @s = open_spreadsheet(uploaded_io)
+        
+        updatedTasks = Hash.new
+        for r in @s.first_row.to_i .. @s.last_row.to_i
+            if not @s.row(r)[0].to_s.empty?
+                updatedTasks[@s.row(r)[0]] = { 'task number' => @s.row(r)[0],  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
+            end    
+        end
+        
+        @tasks = @project['tasks']
+        
+        updatedTasks.each do |taskNum, task|
+            if @tasks.has_key? taskNum
+                #Change an already existing task
+                @tasks[taskNum]['task'] = task['task']
+                @tasks[taskNum]['unit'] = task['unit'] 
+                @tasks[taskNum]['quantity'] = task['quantity']
+                @tasks[taskNum]['value percentage'] = task['value percentage']
+            else
+                #Add a new task
+                @tasks[taskNum] = task
+            end
+        end
+        @project['tasks'] = @tasks
+        $project_collection.save(@project)
+        render 'update'
+    end
     
-    
+    #UPLOAD NEW TASK SPREAD SHEET FOR PROJECT
+    #COLUMS (IN SPREAD SHEET): TASK DESC. , UNIT, QUANTITY, PERCENTAGE OF TOTAL PRICE
+    #NOTE: for updating existing task list see uploadUpdateSpreadSheet
     def uploadSpreadSheet  
         projectId = params['spreadSheet']['projectId']
         @project = $project_collection.find({:_id => BSON::ObjectId(projectId.to_s) } ).to_a[0]
@@ -175,14 +214,14 @@ class TasklistGeneratorController < ApplicationController
         #### STORE ANY NEW TASK COMMENTS ################        
         
         
-        #### UPDAT QUANITY DONE IF ANY UPDATED ##########
+        #### UPDATE QUANITY DONE IF ANY UPDATED ##########
         quantity_done = params['quantity_done']        
         if not quantity_done.nil?
             quantity_done.each do |taskNum, qdone|
                 @tasks[taskNum]['quantity_done'] = qdone
             end 
         end
-        #### UPDAT QUANITY DONE IF ANY UPDATED ##########
+        #### UPDATE QUANITY DONE IF ANY UPDATED ##########
         
         $project_collection.save(@project)
         @tasksArray = @tasks.values

@@ -1,0 +1,8 @@
+Upload Change Request Spread Sheet File: <br>
+
+
+<%= form_for 'spreadSheet', url:{conroller: 'tasklist_generator', action:'uploadUpdateSpreadSheet', id: @projectId.to_s }, method: "PATCH", style: "float:left;" do |f| %>
+	<%= f.text_field "projectId", value: @projectId.to_s, style:"display:none;" %>
+	<%= f.file_field "taskFile" %>
+	<%= f.submit "Upload"%>
+<% end %>
