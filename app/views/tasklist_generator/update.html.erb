@@ -4,14 +4,16 @@ project =
 	<%= @project%> <br><br>
 <% end %>
 
-<% if false %>
+<% if true %>
 tasks = <%= @tasks%>
 <% end %>
+
+
 
 <p>
 	<%= link_to 'Back to Project', {controller: 'project', action: 'show', id: @project['_id'].to_s }%><br>
 	<%= link_to "Upload New Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%> <br> 
-		<%= link_to "Upload Change Request Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%> <br> 
+		<%= link_to "Upload Change Request Spread Sheet", controller: 'tasklist_generator', action: 'newUpdateSpreadSheet', id: @project['_id']%> <br> 
 	<%= link_to "New Task", controller: 'project', action: 'newTask', id: @project['_id']%>
 	
 	
@@ -19,7 +21,7 @@ tasks = <%= @tasks%>
 
 
  
-
+<%if true %>
 
 
 <%#= form_tag(controller: "tasklist_generator", action: "update", method: "patch") do %>
@@ -96,7 +98,7 @@ tasks = <%= @tasks%>
 		<% for task in @tasksArray%>
 			
 			<% ###DEBUG %>
-			<% if true %>
+			<% if false %>
 				<%= "task = #{task}"%>
 			<% end %>
 			<% ###DEBUG %>
@@ -244,4 +246,6 @@ tasks = <%= @tasks%>
 			<%= @s.row(r) %> <br>
 		<% end %>
 	<% end %>
+<% end %>
+
 <% end %>

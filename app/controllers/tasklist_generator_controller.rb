@@ -1,5 +1,11 @@
 class TasklistGeneratorController < ApplicationController
+    def 
+    
     def new
+        @projectId = params['id']
+    end
+    
+    def newUpdateSpreadSheet
         @projectId = params['id']
     end
 
@@ -17,7 +23,9 @@ class TasklistGeneratorController < ApplicationController
         updatedTasks = Hash.new
         for r in @s.first_row.to_i .. @s.last_row.to_i
             if not @s.row(r)[0].to_s.empty?
-                updatedTasks[@s.row(r)[0]] = { 'task number' => @s.row(r)[0],  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
+                taskNumber = Integer(@s.row(r)[0]).to_s
+                updatedTasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
+#                updatedTasks[@s.row(r)[0].to_s] = { 'task number' => @s.row(r)[0],  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
             end    
         end
         
@@ -26,6 +34,7 @@ class TasklistGeneratorController < ApplicationController
         updatedTasks.each do |taskNum, task|
             if @tasks.has_key? taskNum
                 #Change an already existing task
+                puts("WE HEAS **** chaning already existing tas")
                 @tasks[taskNum]['task'] = task['task']
                 @tasks[taskNum]['unit'] = task['unit'] 
                 @tasks[taskNum]['quantity'] = task['quantity']
@@ -36,6 +45,10 @@ class TasklistGeneratorController < ApplicationController
             end
         end
         @project['tasks'] = @tasks
+        @tasksArray = @tasks.values
+        if @project.has_key? 'earned value'  
+            @project['earned value'] = 0
+        end
         $project_collection.save(@project)
         render 'update'
     end
@@ -53,7 +66,9 @@ class TasklistGeneratorController < ApplicationController
         @tasks = Hash.new
         for r in @s.first_row.to_i .. @s.last_row.to_i
             if not @s.row(r)[0].to_s.empty?
-                @tasks[r.to_s] = { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
+                taskNumber = Integer(@s.row(r)[0]).to_s
+                @tasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
+                #@tasks[r.to_s] = { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
             end    
         end
         
