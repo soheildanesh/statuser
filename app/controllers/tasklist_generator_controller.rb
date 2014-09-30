@@ -1,12 +1,12 @@
 class TasklistGeneratorController < ApplicationController
-    def 
     
     def new
-        @projectId = params['id']
+        @id = params["id"]
+        @projectId = params["id"]
     end
     
     def newUpdateSpreadSheet
-        @projectId = params['id']
+        @projectId = params["id"]
     end
 
 

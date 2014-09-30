@@ -1,5 +1,7 @@
 Upload Bid File: <br>
-
+params = <%= @params%>
+uhum id = <%= @id %>
+<%= @projectId.to_s %>
 
 <%= form_for 'spreadSheet', url:{conroller: 'tasklist_generator', action:'uploadSpreadSheet', id: @projectId.to_s }, method: "PATCH", style: "float:left;" do |f| %>
 	<%= f.text_field "projectId", value: @projectId.to_s, style:"display:none;" %>
