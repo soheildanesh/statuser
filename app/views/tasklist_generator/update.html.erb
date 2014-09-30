@@ -3,8 +3,9 @@
 project = 
 	<%= @project%> <br><br>
 <% end %>
+<%= get_current_user %>
 
-<% if true %>
+<% if get_current_user['email'] == "soheil.danesh@3snetwork.com" %>
 tasks = <%= @tasks%>
 <% end %>
 
@@ -15,8 +16,6 @@ tasks = <%= @tasks%>
 	<%= link_to "Upload New Task Spread Sheet", controller: 'tasklist_generator', action: 'new', id: @project['_id']%> <br> 
 		<%= link_to "Upload Change Request Spread Sheet", controller: 'tasklist_generator', action: 'newUpdateSpreadSheet', id: @project['_id']%> <br> 
 	<%= link_to "New Task", controller: 'project', action: 'newTask', id: @project['_id']%>
-	
-	
 </p>	
 
 
