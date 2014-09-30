@@ -1,7 +1,6 @@
 class TasklistGeneratorController < ApplicationController
     
     def new
-        @id = params["id"]
         @projectId = params["id"]
     end
     
@@ -24,8 +23,11 @@ class TasklistGeneratorController < ApplicationController
         for r in @s.first_row.to_i .. @s.last_row.to_i
             if not @s.row(r)[0].to_s.empty?
                 taskNumber = Integer(@s.row(r)[0]).to_s
-                updatedTasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
-#                updatedTasks[@s.row(r)[0].to_s] = { 'task number' => @s.row(r)[0],  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
+                
+                if not ( @s.row(r)[1].nil? or  @s.row(r)[1].empty? )
+                    updatedTasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
+                    #updatedTasks[@s.row(r)[0].to_s] = { 'task number' => @s.row(r)[0],  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3], 'value percentage' => @s.row(r)[4]  } 
+                end
             end    
         end
         
@@ -67,8 +69,10 @@ class TasklistGeneratorController < ApplicationController
         for r in @s.first_row.to_i .. @s.last_row.to_i
             if not @s.row(r)[0].to_s.empty?
                 taskNumber = Integer(@s.row(r)[0]).to_s
-                @tasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
-                #@tasks[r.to_s] = { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
+                if not ( @s.row(r)[1].nil? or  @s.row(r)[1].empty? )
+                    @tasks[taskNumber] = { 'task number' => taskNumber,  'task' => @s.row(r)[1], 'unit' => @s.row(r)[2] ,'quantity' => @s.row(r)[3].to_s, 'value percentage' => @s.row(r)[4]  } 
+                    #@tasks[r.to_s] = { 'task number' => r.to_s,  'task' => @s.row(r)[0], 'unit' => @s.row(r)[1] ,'quantity' => @s.row(r)[2], 'value percentage' => @s.row(r)[3]  } 
+                end
             end    
         end
         
