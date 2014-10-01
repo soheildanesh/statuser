@@ -130,9 +130,9 @@ tasks = <%= @tasks%>
 			<% ######### CHOOSE TASK BACKGROUND COLOR ##### %>
 			<% if task.has_key? 'isDone' and task['isDone'] == true %>
 				<% if task.has_key? 'dueDate' and task['dueDate'] < task['marked done at'] #if task was marked done after its due date%>
-					<div style="float:left; width:2000px; height_:100px; background-color:orange;">	
+					<div style="float:left; width:2000px; height_:100px; background-color:green;">	
 				<% else %>
-					<div style="float:left; width:2000px; height_:100px; background-color:green;">
+					<div style="float:left; width:2000px; height_:100px; background-color:lightGreen;">
 				<% end %>
 			<% else %>
 				<% if task.has_key? 'dueDate' and task['dueDate'] < Time.now %>

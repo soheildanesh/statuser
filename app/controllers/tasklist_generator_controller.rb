@@ -36,7 +36,6 @@ class TasklistGeneratorController < ApplicationController
         updatedTasks.each do |taskNum, task|
             if @tasks.has_key? taskNum
                 #Change an already existing task
-                puts("WE HEAS **** chaning already existing tas")
                 @tasks[taskNum]['task'] = task['task']
                 @tasks[taskNum]['unit'] = task['unit'] 
                 @tasks[taskNum]['quantity'] = task['quantity']
