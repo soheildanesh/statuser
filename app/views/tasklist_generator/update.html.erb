@@ -231,19 +231,4 @@ tasks = <%= @tasks%>
 <% end %>
 <br>
 
-
-
-<% if false %>
-	---------
-	<%for r in @s.first_row.to_i .. @s.last_row.to_i %>
-		<%#= @s.row(r)%>
-		<% if @s.row(r)[0].downcase.include? 'antenna install'%>
-			<% #TBD (Antenna Install) <br> TODO put antenna JCR form as an html form maybe %>
-			<%= @s.row(r) %> <br>
-		<% else %>
-			<%= @s.row(r) %> <br>
-		<% end %>
-	<% end %>
-<% end %>
-
 <% end %>
