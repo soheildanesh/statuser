@@ -1072,15 +1072,15 @@ class ProjectController < ApplicationController
             
             
             
+            ### CALCULATE TOTAL EARNED VALUE FOR PROJECT BASED ON NUMBER AND QUANTITY OF TASKS DONE ###
             tasks.each do |taskNum, task|
-            #for task in tasks
-                puts(">>> ** task = #{task}, hash = #{task.class}")
-                if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty?
+                if task.has_key? 'quantity' and not task['quantity'].to_s.empty? and not task['quantity_done'].nil? and not task['quantity_done'].to_s.empty? and task.has_key? 'value percentage' and not task['value percentage'].nil?
                     earnedValue = earnedValue + Float(task['value percentage'])  * Float(task['quantity_done']) / Float(task['quantity'])
                     puts("earnedValue = #{earnedValue}")
                 end
             end
-
+            ### CALCULATE TOTAL EARNED VALUE FOR PROJECT BASED ON NUMBER AND QUANTITY OF TASKS DONE ###
+            
             if false
                 numDoneTasks = 0
                 numTasks = 0
