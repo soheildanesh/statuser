@@ -99,7 +99,7 @@ class SiteController < ApplicationController
 
         #TODO check to see if the people listed in the crew exist in the db
         if(!existing_site.nil?)
-            not get_current_user.now[:notice] = "Site with this ID exists already"
+            not get_current_user[:notice] = "Site with this ID exists already"
         else
             
             #produce an incremented id

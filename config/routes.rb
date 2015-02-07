@@ -85,6 +85,8 @@ Statuser::Application.routes.draw do
         end
     end
     
+    resources :daily_log
+    
     resources :cpo
     
     resources :work_order do

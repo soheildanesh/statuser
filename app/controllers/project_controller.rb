@@ -140,6 +140,12 @@ class ProjectController < ApplicationController
         
         redirect_to controller: 'todolist', action: 'show', id: id
     end
+    
+    def add_daily_log_entry
+      
+    end
+    
+    
     ####### TASK LIST RELATED FUNCTIONS#########
 
 
